@@ -14,7 +14,7 @@ docker pull poria19964214/axe:original
 ```
 Now you can run an interactive docker container:
 ```bash
-docker run -it -v ($pwd):/home/user/ axe:original
+docker run -it -v $(pwd):/home/user/ axe:original
 ```
 Using the `-v` option you use a docker volume where the current directory of your local machine is mapped to the `/home/user/` directory of the container. Any changes to this directory are reflected on both sides. 
 
