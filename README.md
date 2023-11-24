@@ -5,7 +5,7 @@ The AxE project, initiated by Prof. Nima TaheriNejad and his group several years
 ## Installation Using Docker Image
 Clone to AxE repository and change the name of the directory to soc_frame.
 ```bash
-git clone ...
+git clone https://github.com/pouriahassani/AxE.git
 ```
 Run the following in your Ubuntu system to pull the docker image from the docker hub.
 ```bash
