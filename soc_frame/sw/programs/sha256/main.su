@@ -1,0 +1,13 @@
+util.h:18:13:signal_fin	16	static
+util.h:36:13:print_char	32	static
+util.h:44:6:print_str	32	static
+util.h:55:6:print_dec	48	static
+util.h:75:6:print_hex	48	static
+util.h:86:6:nl	16	static
+util.h:93:6:emb_assert	32	static
+main.c:44:24:right_rot	32	static
+main.c:53:13:init_buf_state	32	static
+main.c:63:12:calc_chunk	48	static
+main.c:127:6:calc_sha_256	480	static
+main.c:273:12:test	80	static
+main.c:291:6:my_main	32	static

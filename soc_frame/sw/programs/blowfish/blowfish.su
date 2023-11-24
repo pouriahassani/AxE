@@ -1,0 +1,4 @@
+blowfish.c:331:17:F	48	static
+blowfish.c:350:6:Blowfish_Encrypt	48	static
+blowfish.c:380:6:Blowfish_Decrypt	48	static
+blowfish.c:412:6:Blowfish_Init	64	static
