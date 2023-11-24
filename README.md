@@ -1,4 +1,3 @@
-```markdown
 # AxE
 
 Brief description or purpose of the project.
