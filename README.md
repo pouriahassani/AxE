@@ -3,19 +3,22 @@
 The AxE project, initiated by Prof. Nima TaheriNejad and his group several years ago, is a long-term exploration of an SoC incorporating both exact and approximate CPU cores. This repository presents the SoC modules and the environment for assessing the design. The "soc_frame" directory serves as a framework tailored for easy adaptation in a test environment, encompassing Verilog hardware designs, executable C software, and a streamlined build system. This framework supports PicoRV32 and PiXoRV32 CPUs with approximate multiplication, the framework is designed for simplicity and compatibility with both Single-Processor SoCs (SPSoCs) and Multi-Processor SoCs (MPSoCs). Python-based build tools automate the test environment setup, while Verilator aids in hardware simulation. The README provides detailed installation instructions. We strongly recommend using the docker image, as all the tools are already installed and ready to explore the SoC.
 
 ## Installation Using Docker Image
-Clone to AxE repository and change the name of the directory to soc_frame.
+Clone to AxE repository and move to the cloned repo:
 ```bash
 git clone https://github.com/pouriahassani/AxE.git
+cd AxE
 ```
-Run the following in your Ubuntu system to pull the docker image from the docker hub.
+Run the following in your Ubuntu system to pull the docker image from the docker hub:
 ```bash
 docker pull poria19964214/axe:original
 ```
-Now you can run an interactive docker container
+Now you can run an interactive docker container:
 ```bash
-docker run -it -v ($pwd):/home/user/ 
+docker run -it -v ($pwd):/home/user/ axe:original
 ```
 Using the `-v` option you use a docker volume where the current directory of your local machine is mapped to the `/home/user/` directory of the container. Any changes to this directory are reflected on both sides. 
+
+## Installation without docker image
 ### Prerequisites
 - Ubuntu 18.04
 - Set the username to "user" (without quotation)
@@ -89,6 +92,4 @@ sudo make install
 ## Note
 
 The simulation method described in the videos is not visible to the debugger. To debug, bypass `main.py` and modify `run_mpsoc.py`. Debug it in a suitable IDE, such as VSCode.
-```
 
-This format uses the `<details>` HTML tag to create collapsible sections, making it neater and more organized. Copy and paste this into your README file in your GitHub repository.
