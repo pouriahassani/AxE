@@ -6,18 +6,20 @@ SMALL = rv32i
 BIG = rv32im
 
 SRC = 
-LIBS = ../../_libs
+LIBS1 = ../../_libs
 #~ PROG = ./square_mmult/
-
-INC = -I$(LIBS)
-
+LIBS2 = /opt/riscv32i/riscv32-unknown-elf/include/c++/8.2.0
+LIBS3 = /opt/riscv32i/riscv32-unknown-elf/include/c++/8.2.0/riscv32-unknown-elf
+LIBS4 = /usr/include/c++/7
+INC = -I$(LIBS1) -I$(LIBS2) -I$(LIBS3) -I$(LIBS4)
+# not working yet
 # CFLAGS
 
-OPT = O0
+OPT = O0 
 WARN = Wall
 
-OTHER = -pedantic -ffreestanding -fstack-usage
-
+OTHER = -march=rv32im -mabi=ilp32  -gnu98 -pedantic -ffreestanding -fstack-usage
+# not working yet
 CFLAGS = -$(WARN) -$(OPT) $(OTHER) $(INC)
 #~ CFLAGS = -$(WARN) $(OTHER) $(INC)
 

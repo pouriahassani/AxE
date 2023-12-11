@@ -102,7 +102,7 @@ int main(int argc, char** argv, char** env) {
     
     VL_PRINTF( "\n" );
     VL_PRINTF( "--------------------\n" );
-    VL_PRINTF( "starting 2x2_16\n" );
+    VL_PRINTF( "starting 2x2_16_approx\n" );
     VL_PRINTF( "--------------------\n" );
     VL_PRINTF( "\n" );
     
@@ -135,14 +135,23 @@ int main(int argc, char** argv, char** env) {
         {
             if ( 1 == top->trap )
             {
+                for ( int i = 0; i < 1000000000; i++)
+                {
+                    /* delay the print */
+                }
                 VL_PRINTF( "trap\n" );
             }
             
             if ( 1 == top->trap_nodes )
             {
+                for ( int i = 0; i < 1000000000; i++)
+                {
+                    /* delay the print */
+                }
+                
                 VL_PRINTF( "trap nodes\n" );
             }
-            
+
             // -----------------------------------------------------------------
             // uart
             // -----------------------------------------------------------------
@@ -221,11 +230,17 @@ int main(int argc, char** argv, char** env) {
             }
         }
         
+
+        if ((main_time % 1000000 == 0 ))
+        {
+            // VL_PRINTF("Another 1 million clock!\n");
+        } 
+
         // ---------------------------------------------------------------------
         // end of the simulation
         // ---------------------------------------------------------------------
         
-        if ( main_time == 10000000000 )
+        if ( main_time == 1000000000000 )
         {
             VL_PRINTF( "\n" );
             VL_PRINTF( "--------------------\n" );

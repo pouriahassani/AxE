@@ -17,9 +17,9 @@
 
 
 
-//~ #define DBG_NODES_BUSY
+ #define DBG_NODES_BUSY
 
-//~ #define DBG_NODES_FINISHED
+ #define DBG_NODES_FINISHED
 
 // check the steps taken to find out which prgs are still active.
 
@@ -38,8 +38,8 @@
 //~ #define DBG_DISCHARGING
 
 
-//~ #define DBG_GET_NODE
-//~ #define DBG_ESTIMATE_EXECUTION_TIME
+#define DBG_GET_NODE
+#define DBG_ESTIMATE_EXECUTION_TIME
 
 
 //~ #define DBG_EVENT_QUEUE

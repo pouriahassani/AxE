@@ -11,6 +11,8 @@ from memory import *
 from software_program import *
 from software_controller import *
 
+# os.environ['OMP_NUM_THREADS'] = '4'
+
 class Simulator:
     
     # --------------------------------------------------------------------------
@@ -62,14 +64,16 @@ class Simulator:
         # if the output should be printed or returned
         
         if prnt:
-            
+            os.environ['OMP_NUM_THREADS'] = '4'
             os.system( " ".join(call) )
+            # ../systems/2x2_16_priority_input_approx/obj_dir/Vtop
             
         else:
-            proc = subprocess.run( call, stdout=subprocess.PIPE )
+            proc = subprocess.run( call, stdout=subprocess.PIPE, stderr=subprocess.PIPE )
             
             stdout = proc.stdout.decode("utf-8")
-            
+            stderr = proc.stderr.decode("utf-8")
+            print(proc.returncode, proc.stderr)
             stdout_l = stdout.split("\n")
             del stdout_l[-1]
             

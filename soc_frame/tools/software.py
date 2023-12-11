@@ -62,6 +62,7 @@ class Software:
     
     def compl( self, stack_pointer ):
         
+        # if (self.name != 'SobelFilter-master'):
         os.system( "make -C " + self.path_base + self.name + "/ " + " " + self.arch + " STACK_POINTER=" + stack_pointer + " > /dev/null" )
         
     

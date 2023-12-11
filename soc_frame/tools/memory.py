@@ -47,7 +47,7 @@ class Memory:
     # --------------------------------------------------------------------------
     
     def save( self, memory_file_path ):
-        
+        # print(self.prgs)
         write_dict_to_json( self.prgs, memory_file_path )
         
     
@@ -112,9 +112,10 @@ class Memory:
             
             prg_list.append( prg )
             
-        
+        print(prg_list)
         prg_list.sort()
-        
+        print("sorted prg_list:  ")
+        print(prg_list)
         return prg_list
         
     
@@ -130,47 +131,90 @@ class Memory:
     # after running this method all the prgs stored in the dict have a stack
     # pointer set that is not wasting any memory.
     
-    def pack_prgs( self, sim, prgs_lst, arch_dict ):
+    def pack_prgs( self, sim, prgs_lst, arch_dict, which_arch ):
         
         # we iterate over every prg and for each prg every arch
-        
-        for prg_name in prgs_lst:
+        print("pack_prgs")
+        prg_dict={}
+        arch_node_lst = []
+        for i in range(len(which_arch)):
+            if which_arch[i] == '0':
+                arch_node_lst.append('rv32i')
+            else:
+                arch_node_lst.append('rv32im')
+        print(arch_node_lst)
+
+        for k,v in zip(prgs_lst,arch_node_lst): 
+            prg_dict[k]=v
+
+        for prg_name, arch in prg_dict.items():
             
-            self.prgs[ prg_name ] = {}
+                self.prgs[ prg_name ] = {}
             
-            for arch, sys in arch_dict.items():
-                
-                self.prgs[ prg_name ][ arch ] = {}
+           
+                if arch == 'rv32i':
+                    self.prgs[prg_name][list(arch_dict.keys())[0]] = {}
+                # self.prgs[ prg_name ][ arch ] = {}
                 
                 # here we are using software objects. this means, that the
                 # program is read from the filesystem and not the dict of
                 # the memory object!
                 
-                prg = Program( prg_name, arch )
+                    prg = Program( prg_name, list(arch_dict.keys())[0] )
                 
                 # clean the output and compile with some default stack pointer
                 # that should be high enough
-                
-                prg.clean()
-                prg.compl( "0x00010000" )
+                # what is the sufficient value for a 128 x 128 image?
+                    prg.clean()
+                    prg.compl( "0x00010000" )
                 
                 # a simulation is run with an arg that outputs the memory usage
                 
-                memory_usage = sim.run( sys, prg, [MEM_PACKER_OUTPUT_MEMORY] )
+                    memory_usage = sim.run( list(arch_dict.values())[0], prg, [MEM_PACKER_OUTPUT_MEMORY] )
                 
-                sp = prg.get_stack_pointer( memory_usage )
+                    sp = prg.get_stack_pointer( memory_usage )
                 
                 # the program has to be compiled again using the new stack
                 # pointer. this is the program that is then read and stored in
                 # the dict of the memory.
                 
-                prg.clean()
-                prg.compl( sp )
+                    prg.clean()
+                    prg.compl( sp )
                 
-                self.prgs[ prg_name ][ arch ][ "sp" ] = sp
-                self.prgs[ prg_name ][ arch ][ "hex" ] = prg.read()
-            
+                    self.prgs[ prg_name ][ list(arch_dict.keys())[0] ][ "sp" ] = sp
+                    self.prgs[ prg_name ][ list(arch_dict.keys())[0] ][ "hex" ] = prg.read()
         
+                if arch == 'rv32im':
+                    self.prgs[prg_name][list(arch_dict.keys())[1]] = {}
+                # self.prgs[ prg_name ][ arch ] = {}
+                
+                # here we are using software objects. this means, that the
+                # program is read from the filesystem and not the dict of
+                # the memory object!
+                
+                    prg = Program( prg_name, list(arch_dict.keys())[1] )
+                
+                # clean the output and compile with some default stack pointer
+                # that should be high enough
+                # what is the sufficient value for a 128 x 128 image?
+                    prg.clean()
+                    prg.compl( "0x00010000" )
+                
+                # a simulation is run with an arg that outputs the memory usage
+                
+                    memory_usage = sim.run( list(arch_dict.values())[1], prg, [MEM_PACKER_OUTPUT_MEMORY] )
+                
+                    sp = prg.get_stack_pointer( memory_usage )
+                
+                # the program has to be compiled again using the new stack
+                # pointer. this is the program that is then read and stored in
+                # the dict of the memory.
+                
+                    prg.clean()
+                    prg.compl( sp )
+                
+                    self.prgs[ prg_name ][ list(arch_dict.keys())[1] ][ "sp" ] = sp
+                    self.prgs[ prg_name ][ list(arch_dict.keys())[1] ][ "hex" ] = prg.read()
     
     # --------------------------------------------------------------------------
     # pack
@@ -179,7 +223,7 @@ class Memory:
     # here the actual memory file is created. the result is a .hex file where
     # all the instructions of all the prgs are included.
     
-    def pack( self, arch_lst, dst, first = "" ):
+    def pack( self, which_arch, dst, first = "" ):
         
         filler = "00000000"
         filler_arr = [ filler ]
@@ -190,24 +234,46 @@ class Memory:
         
         # it might be necessary to put a prg at the beginning like the
         # controller software.
-        
+        print(first)
         if ( first != "" ):
             
             prgs_lst.insert( 0, prgs_lst.pop( prgs_lst.index(first) ) )
             
-        
-        for prg in prgs_lst:
-            
-            for arch in arch_lst:
-                
+        ########## Here was A PREDIFINED IMPLEMENTATION
+        ###### EACH PROGRAM RUNS ON ONE NODE 
+        ######### AFTER PREVIOUS NODE FINISHED
+        ############ SECOND NODE DOES RUN THEM AGAIN!
+        ###################
+        ##### now we want to run specific program on specific node
+        ######################
+        prg_dict={}
+        arch_node_lst = []
+        which_arch = ['1', *which_arch]
+        for i in range(len(which_arch)):
+            if which_arch[i] == '0':
+                arch_node_lst.append('rv32i')
+            else:
+                arch_node_lst.append('rv32im')
+        print(arch_node_lst)
+
+        for k,v in zip(prgs_lst,arch_node_lst): 
+            prg_dict[k]=v
+
+        print(prg_dict)
+        print("prgs_lst in memory.pack():")
+       
+        for prg, arch in prg_dict.items():
+            # print(prg)
+            # for arch in arch_node_lst:
+            # print(arch)    
                 # this is a somewhat dirty fix for prgs that only have one arch.
                 # this is true for the controller software.
                 
-                try:
+            try:
                     
-                    prg_hex = self.prgs[ prg ][ arch ][ "hex" ]
+                prg_hex = self.prgs[ prg ][ arch ][ "hex" ]
                     
-                except KeyError: continue
+            except KeyError: continue
                 
                 # 1. add the instructions of the prg
                 # 2. find the number of words needed to fill up the gap to
@@ -221,24 +287,24 @@ class Memory:
                 # you know it should be at line 199, then this is not wrong as
                 # the text editor starts counting at 1 and not 0.
                 
-                #~ print( "---" )
-                #~ print( "current length of mem: " + str( len(mem) ) )
-                #~ print( "adding n lines of prg: " + str( len(prg_hex) ) )
+                # print( "---" )
+                # print( "current length of mem: " + str( len(mem) ) )
+                # print( "adding n lines of prg: " + str( len(prg_hex) ) )
                 
-                mem.extend( prg_hex )
-                
-                #~ print( "new length of mem: " + str( len(mem) ) )
-                
-                missing = ( addr_to_index( self.prgs[ prg ][ arch ][ "sp" ] ) ) - len( prg_hex )
-                
-                #~ print( "n lines to fill until the stack pointer is reached: " + str( missing ) )
-                
-                mem.extend( filler_arr * int(missing) )
-                
-                #~ print( "new length of mem: " + str( len(mem) ) )
-                
+            mem.extend( prg_hex )
             
-        
+            #~ print( "new length of mem: " + str( len(mem) ) )
+            
+            missing = ( addr_to_index( self.prgs[ prg ][ arch ][ "sp" ] ) ) - len( prg_hex )
+            
+            #~ print( "n lines to fill until the stack pointer is reached: " + str( missing ) )
+            
+            mem.extend( filler_arr * int(missing) )
+            
+            #~ print( "new length of mem: " + str( len(mem) ) )
+        # print(self.prgs)
+            
+        # print(mem)
         mem_f = open( dst, "w" )
         
         for i,l in enumerate( mem ):

@@ -95,8 +95,10 @@ class Program( Software ):
                     
                     new_l.append( l )
                 
-            
-            sp_min = min(new_l)
+                sp_min = min(new_l)
+                #if this line didn't work; comment it and uncomment the below line.
+                #this part is messy!
+            # sp_min = min(new_l)
             
         else:
             

@@ -87,7 +87,7 @@ class Controller( Software ):
     # TODO:
     # we could get the arch_lst from the memory object
     
-    def create_prg_define( self, arch_lst, mem, offset = 0, intervals_dict = None, exec_interval_modifier = 1 ):
+    def create_prg_define( self, which_arch, arch_lst, mem, offset = 0, intervals_dict = None, exec_interval_modifier = 1 ):
         
         define_lst = []
         
@@ -112,29 +112,41 @@ class Controller( Software ):
             
             define_lst.append( '\tprgs[' + str(i) + '].name = "' + prg + '";' )
             
-            for arch in arch_lst:
-                
+            # for arch in arch_lst:
+            # for j in range(len(which_arch)):
+            if which_arch[i] == '0':
+                arch = 'rv32i'    
                 prg_hex = mem.prgs[ prg ][ arch ][ "hex" ]
-                
-                # to following statement creates a line like:
-                # prgs[ 0 ].addr[ RV32I ] = PROG_NORX_RV32I;
-                
+                    
+                    # to following statement creates a line like:
+                    # prgs[ 0 ].addr[ RV32I ] = PROG_NORX_RV32I;
+                    
                 define_lst.append( '\tprgs[' + str(i) + '].addr[ARCH_' + arch.upper() + '] = ' + str( index_to_addr( index ) ) + '; // index: ' + str(index) + ' size: ' + str( len(prg_hex) ) )
                 
                 index += addr_to_index( mem.prgs[ prg ][ arch ][ "sp" ] )
-                
+            if which_arch[i] == '1':
+                arch = 'rv32im'    
+                prg_hex = mem.prgs[ prg ][ arch ][ "hex" ]
+                    
+                    # to following statement creates a line like:
+                    # prgs[ 0 ].addr[ RV32I ] = PROG_NORX_RV32I;
+                    
+                define_lst.append( '\tprgs[' + str(i) + '].addr[ARCH_' + arch.upper() + '] = ' + str( index_to_addr( index ) ) + '; // index: ' + str(index) + ' size: ' + str( len(prg_hex) ) )
+                    
+                index += addr_to_index( mem.prgs[ prg ][ arch ][ "sp" ] )
+                        
             
-            for arch in arch_lst:
+            # for arch in arch_lst:
                 
                 define_lst.append( '\tprgs[' + str(i) + '].exec_t[ARCH_' + arch.upper() + '] = 0;' )
                 
             
-            for arch in arch_lst:
+            # for arch in arch_lst:
                 
                 define_lst.append( '\tprgs[' + str(i) + '].exec_inv[ARCH_' + arch.upper() + '] = 0;' )
                 
             
-            for arch in arch_lst:
+            # for arch in arch_lst:
                 
                 define_lst.append( '\tprgs[' + str(i) + '].exec_e[ARCH_' + arch.upper() + '] = 0;' )
                 

@@ -1,4 +1,29 @@
 
+
+import os
+import json
+import sys
+
+import logging
+import logging.handlers
+
+from defines import *
+
+from func_files import *
+from func_addr import *
+
+from memory import *
+from simulator import *
+
+from system import *
+from system_spsoc import *
+from system_mpsoc import *
+
+from software import *
+from software_program import *
+from software_controller import *
+#################
+
 import json
 
 import configparser
@@ -32,7 +57,7 @@ prefix = "\t\t\t\t>>>>>>>>"
 # the simulation that the memory compression runs is on a single core system,
 # so no controller is needed.
 
-def memory_compression( sim, prgs_lst ):
+def memory_compression( sim, prgs_lst, which_arch ):
     
     # create objects
     # ---------------------------------------
@@ -58,105 +83,105 @@ def memory_compression( sim, prgs_lst ):
         ,"rv32im" : sys_mem_packer_rv32im
         
     }
-    
+    # print(list(arch_dict.keys())[0])
     # get prg sizes/stack pointers
     # ---------------------------------------
     
     print( "\t\t\t\t>>>>>>>>calling mem.pack_prgs" )
     
-    mem.pack_prgs( sim, prgs_lst, arch_dict )
-    
+    mem.pack_prgs( sim, prgs_lst, arch_dict, which_arch )
+    # mem.pack_prgs( sim, prgs_lst, arch_dict_im)
     return mem
     
 
 # NOT USED ANYMORE
 
-def timing_estimation( sim, controller_size, mem_file_name, node_arch_lst ):
+# def timing_estimation( sim, controller_size, mem_file_name, node_arch_lst ):
     
-    print( "\t\t\t\t>>>>>>>>running timing estimation" )
+#     print( "\t\t\t\t>>>>>>>>running timing estimation" )
     
-    mem = Memory()
+#     mem = Memory()
     
-    intervals_dict = {}
+#     intervals_dict = {}
     
-    # make sure that the memory has is loaded
+#     # make sure that the memory has is loaded
     
-    mem.load( mem_file_name )
-    print( prefix + "loaded memory with the file name: " + mem_file_name )
+#     mem.load( mem_file_name )
+#     print( prefix + "loaded memory with the file name: " + mem_file_name )
     
-    # obviously the controller does not have any timing information on the
-    # prgs. so don't use them in the controller software.
+#     # obviously the controller does not have any timing information on the
+#     # prgs. so don't use them in the controller software.
     
-    con_te = Controller( "_timing_estimation", "rv32i" )
-    print( prefix + "created controller" )
+#     con_te = Controller( "_timing_estimation", "rv32i" )
+#     print( prefix + "created controller" )
     
-    con_te.create_node_define( node_arch_lst )
-    print( prefix + "created node define using the node_arch_lst" )
+#     con_te.create_node_define( node_arch_lst )
+#     print( prefix + "created node define using the node_arch_lst" )
     
-    con_te.create_prg_define( arch_lst, mem, index )
-    print( prefix + "created prog define" )
+#     con_te.create_prg_define( arch_lst, mem, index )
+#     print( prefix + "created prog define" )
     
-    # set the node that should run the prg
-    # we chose an i node for this as we are more interested in the worst case
+#     # set the node that should run the prg
+#     # we chose an i node for this as we are more interested in the worst case
     
-    node_to_use = 0
+#     node_to_use = 0
     
-    if ( "i" in node_arch_lst ):
+#     if ( "i" in node_arch_lst ):
         
-        node_to_use = node_arch_lst.index( "i" )
+#         node_to_use = node_arch_lst.index( "i" )
         
     
-    con_te.set_define( "defines", "NODE_TO_USE", str(node_to_use) )
+#     con_te.set_define( "defines", "NODE_TO_USE", str(node_to_use) )
     
-    prgs_lst = mem.get_prgs_lst()
+#     prgs_lst = mem.get_prgs_lst()
     
-    # the timing estimation in simulation has been disabled
+#     # the timing estimation in simulation has been disabled
     
-    for i,prg in enumerate( prgs_lst ):
+#     for i,prg in enumerate( prgs_lst ):
         
-        #~ # get a fresh copy obj of the prgs
+#         #~ # get a fresh copy obj of the prgs
         
-        mem.load( mem_file_name )
+#         mem.load( mem_file_name )
         
-        # prepare the controller
+#         # prepare the controller
         
-        con_te.clean()
-        con_te.set_define( "defines", "PRG_TO_RUN", str(i) )
-        con_te.compl( index_to_addr( controller_size ) )
+#         con_te.clean()
+#         con_te.set_define( "defines", "PRG_TO_RUN", str(i) )
+#         con_te.compl( index_to_addr( controller_size ) )
         
-        # prepare the memory
+#         # prepare the memory
         
-        # TODO the following method calls could be added to a func
+#         # TODO the following method calls could be added to a func
         
-        mem.include( con_te, index_to_addr( controller_size ) )
-        mem.pack( arch_lst, "test.hex", "_timing_estimation" )
+#         mem.include( con_te, index_to_addr( controller_size ) )
+#         mem.pack( arch_lst, "test.hex", "_timing_estimation" )
         
-        # run the simulation and extract the lines of the output we are
-        # interested in. this is the name of the prg and the execution time.
+#         # run the simulation and extract the lines of the output we are
+#         # interested in. this is the name of the prg and the execution time.
         
-        result = sim.run( sys, "test.hex", SIM_NO_ARGS, SIM_RETURN_OUTPUT )
-        # intervals_dict[ result[5] ] = ( int(result[ -2 ]) * 2 )
-        intervals_dict[ result[-5] ] = ( int(result[ -2 ]) )
+#         result = sim.run( sys, "test.hex", SIM_NO_ARGS, SIM_RETURN_OUTPUT )
+#         # intervals_dict[ result[5] ] = ( int(result[ -2 ]) * 2 )
+#         intervals_dict[ result[-5] ] = ( int(result[ -2 ]) )
         
-        # print( str(result[-5] ) )
-        # print( str(int(result[-2])))
+#         # print( str(result[-5] ) )
+#         # print( str(int(result[-2])))
         
-        # print( str(result) )
-        # exit()
+#         # print( str(result) )
+#         # exit()
         
-        # break
+#         # break
     
-    # con.create_prg_define( arch_lst, mem, index )
+#     # con.create_prg_define( arch_lst, mem, index )
     
     
-    print( json.dumps(intervals_dict, indent=4, sort_keys=True) )
+#     print( json.dumps(intervals_dict, indent=4, sort_keys=True) )
     
-    # make sure the memory does not exist anymore. who knows where python
-    # might float this around in the ether.
+#     # make sure the memory does not exist anymore. who knows where python
+#     # might float this around in the ether.
     
-    del mem
+#     del mem
     
-    return intervals_dict
+#     return intervals_dict
     
 
 # ------------------------------------------------------------------------------
@@ -164,6 +189,7 @@ def timing_estimation( sim, controller_size, mem_file_name, node_arch_lst ):
 # ------------------------------------------------------------------------------
 
 config_name = sys.argv[1]
+# config_name = '_2x2_main.conf'
 
 config = configparser.ConfigParser()
 config.read_file( open( config_name ) )
@@ -208,8 +234,11 @@ if what_to_run == "prgs":
     print( "\t\t\t\t>>>>>>>>running prgs" )
     
     prgs_str = config.get( "prgs", "prgs_lst" )
-    prgs_lst = prgs_str.split( "\n" )
-    
+    prgs_lst = prgs_str.split( "," )
+    print("\t\t\t\t programs list: ")
+    print(prgs_lst)
+    which_arch = config.get("prgs","which_arch")
+    which_arch = which_arch.split(",")
 elif what_to_run == "tasks":
     
     print( "\t\t\t\t>>>>>>>>running tasks" )
@@ -257,7 +286,12 @@ print( "\t\t\t\t>>>>>>>>pick controller estimations" )
 # set here.
 
 #~ controller_size_addr = 16380; # 0x3FFC
-controller_size_addr = 32764; # 0x7FFC
+# ### this might be the reason system crashes on large images!!!
+## Keep an eye on it.
+### NO ITS NOT #### REASON IS 25048 HARD CODED INTO VTOP__TRACE.CPP 
+### NO ITS NOT HARD CODED ===> DELETE OBJ_DIR +++ CHANGE MEM_SIZE ====> THEN RE-RUN
+controller_size_addr = 32764 # 0x7FFC
+# controller_size_addr = 131056
 controller_size = controller_size_addr / 4
 
 controller_size = int(controller_size)
@@ -298,7 +332,7 @@ print( "\t\t\t\t>>>>>>>>compiled system" )
 
 print( "\t\t\t\t>>>>>>>>will run memory compression" )
 
-mem = memory_compression( sim, prgs_lst )
+mem = memory_compression( sim, prgs_lst, which_arch )
 mem.save( config_name + "_prgs.json" )
 
 # you could also load a .json file that has been generated before
@@ -318,7 +352,7 @@ con = Controller( controller_name, "rv32im" )
 
 con.create_controller_define( save_mode_at, start_charging_at, stop_charging_at )
 con.create_node_define( node_arch_lst )
-con.create_prg_define( arch_lst, mem, index, None, exec_interval_modifier )
+con.create_prg_define( which_arch, arch_lst, mem, index, None, exec_interval_modifier )
 
 # we read solar charging data from a spreadsheet that is used to simulate a
 # charging battery.
@@ -358,7 +392,7 @@ mem.save( config_name + "_prgs_with_controller.json" )
 # controller_name is going to be the first prg at addr 0.
 # the others will be ordered by their name.
 
-mem.pack( arch_lst, "test.hex", controller_name )
+mem.pack( which_arch, "test.hex", controller_name )
 
 # ------------------------------------------------------------------------------
 # 
