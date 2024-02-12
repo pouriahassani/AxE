@@ -13,9 +13,9 @@
 //~ parameter MEM_SIZE = 14194304 + 1;
 //~ parameter MEM_SIZE = ( 17 * 262144 ) + 1;
 
-//~ `define MEM_SIZE ( ( 17 * 262144 ) + 1 )
+// `define MEM_SIZE ( ( 17 * 262144 ) + 1 )
 
 //`define MEM_SIZE ( (3 * 25048) + 1 )
 //`define MEM_SIZE ( (3 * 2048) + 1 )
 
-`define MEM_SIZE ( 100192 )
+`define MEM_SIZE ( 120192 )

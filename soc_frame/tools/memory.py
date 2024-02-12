@@ -64,7 +64,7 @@ class Memory:
         
         self.prgs[ prg.name ][ prg.arch ][ "sp" ] = sp
         self.prgs[ prg.name ][ prg.arch ][ "hex" ] = prg.read()
-    
+        
     # --------------------------------------------------------------------------
     # info
     # --------------------------------------------------------------------------
@@ -171,7 +171,8 @@ class Memory:
                 # a simulation is run with an arg that outputs the memory usage
                 
                     memory_usage = sim.run( list(arch_dict.values())[0], prg, [MEM_PACKER_OUTPUT_MEMORY] )
-                
+                    print("this i memory_usage")
+                    print(memory_usage)
                     sp = prg.get_stack_pointer( memory_usage )
                 
                 # the program has to be compiled again using the new stack

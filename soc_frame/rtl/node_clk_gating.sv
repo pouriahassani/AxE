@@ -62,6 +62,7 @@ module node #(
     
     picorv32_if_wrapper
     #(
+        .NODE_ID (ID+1),
          .ENABLE_MUL ( BIG )
         ,.ENABLE_DIV ( BIG )
     )
@@ -126,7 +127,7 @@ module node #(
     
     self_awareness
     #(
-         .ID( ID )
+         .ID( ID+1 )
     )
     self_awareness_inst
     (
@@ -161,7 +162,7 @@ module node #(
     
     bridge_slave
     #(
-         .ID( ID )
+         .ID( ID+1 )
         
         ,.SEND_TO( SEND_TO )
     )

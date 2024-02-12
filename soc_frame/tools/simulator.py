@@ -38,10 +38,10 @@ class Simulator:
         
         if args is None: args = []
         
-        call = [ "../systems/"+sys.name+"/obj_dir/Vtop" ]
+        call = [ "/home/user/soc_frame/systems/"+sys.name+"/obj_dir/Vtop" ]
         call.extend( args )
         
-        #~ print( str( call ) )
+        print( str( call ) )
         
         # create the necessary hex file and copy it to a place where the
         # memory can find it.
@@ -62,7 +62,7 @@ class Simulator:
             
         
         # if the output should be printed or returned
-        
+        print(call)  
         if prnt:
             os.environ['OMP_NUM_THREADS'] = '4'
             os.system( " ".join(call) )
@@ -76,7 +76,6 @@ class Simulator:
             print(proc.returncode, proc.stderr)
             stdout_l = stdout.split("\n")
             del stdout_l[-1]
-            
             return stdout_l
             
         
@@ -94,10 +93,10 @@ class Simulator:
     # --------------------------------------------------------------------------
     
     def set_hex( self, src ):
-        
+        print("\nset_hex here\n",src)
         logging.debug( "set_hex" )
         
-        dst = "../mem.hex"
+        dst = "/home/user/soc_frame/mem.hex"
         
         logging.debug( "src: " + src )
         logging.debug( "dst: " + dst )

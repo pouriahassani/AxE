@@ -10,14 +10,14 @@
 
 // ich bekomme einen array von archs indicis wo der erste die preferred arch
 // ist. den geh ich dann durch.
-
+#define DBG_GET_NODE
 int node_get( int *preferred_archs, int prg_i )
 {
     
     
     
 #ifdef DBG_GET_NODE
-    print_str( "get node\n" );
+    // print_str( "get node\n" );
 #endif
     
     
@@ -50,18 +50,25 @@ int node_get( int *preferred_archs, int prg_i )
         // ich hole mir den arch index mit masks[ arch_i ] aus dem array von den
         // preferred archs. damit schau ich dann bei archs nach wie die
         // node_mask aussieht.
+
+        // I get the arch index with masks[ arch_i ] from the array of the
+        // preferred archs. With that, I then look at archs to see what the
+        // node_mask looks like.
         
         arch_i = preferred_archs[ preferred_arch_i ];
         
         
         
 #ifdef DBG_GET_NODE
-        //~ print_str( "arch: " );
-        //~ print_dec( arch_i );
+        print_str_dec_n("prefered arch id: ",preferred_arch_i);
+        print_str_dec_n("prefered arch: ",preferred_archs[ preferred_arch_i ]);
+        print_str_dec_n( "arch: ",arch_i );
+        // print_dec_n( arch_i );
+        print_str_dec_n("node_mask",archs[ arch_i ].node_mask);
+        // print_str( " - mask: " );
+        print_bin( archs[ arch_i ].node_mask, 8 );
+        print_bin( state_nodes, 8 );
         
-        //~ print_str( " - mask: " );
-        //~ print_bin( archs[ arch_i ].node_mask, 8 );
-        //~ nl();
 #endif
         
         
@@ -71,7 +78,7 @@ int node_get( int *preferred_archs, int prg_i )
         
         // while nodes_state_curr is not 0 there are some idle nodes that can
         // be used
-        
+        print_str_dec_n("nodes_state_curr: ",nodes_state_curr);
         while ( 0 != nodes_state_curr )
         {
             // if we find a that is idle
@@ -93,9 +100,9 @@ int node_get( int *preferred_archs, int prg_i )
                     
                     
 #ifdef DBG_GET_NODE
-                    print_str( "found node_i: " );
-                    print_dec( nodes_i_curr );
-                    nl();
+                    print_str_dec_n( "found node_i: ",nodes_i_curr );
+                    // print_dec( nodes_i_curr );
+                    // nl();
 #endif
                     
                     
@@ -108,9 +115,9 @@ int node_get( int *preferred_archs, int prg_i )
                     
                     
 #ifdef DBG_GET_NODE
-                    print_str( "not enough charge node_i: " );
-                    print_dec( nodes_i_curr );
-                    nl();
+                    print_str_dec_n( "not enough charge node_i: ",nodes_i_curr );
+                    // print_dec( nodes_i_curr );
+                    // nl();
 #endif
                     
                     
@@ -142,9 +149,9 @@ void nodes_charge( unsigned int charge )
     
     
 #ifdef DBG_CHARGING
-    print_str( "charging\n" );
-    print_dec( charge );
-    nl();
+    // print_str( "charging\n" );
+    // print_dec( charge );
+    // nl();
 #endif
     
     
@@ -157,10 +164,10 @@ void nodes_charge( unsigned int charge )
         
         
 #ifdef DBG_CHARGING
-        print_dec( i );
-        print_str( ": " );
-        print_dec( nodes[ i ].charge );
-        print_str( " -> \n" );
+        // print_dec( i );
+        // print_str( ": " );
+        // print_dec( nodes[ i ].charge );
+        // print_str( " -> \n" );
 #endif
         
         
@@ -170,8 +177,8 @@ void nodes_charge( unsigned int charge )
         
         
 #ifdef DBG_CHARGING
-        print_dec( nodes[ i ].charge );
-        nl();
+        // print_dec( nodes[ i ].charge );
+        // nl();
 #endif
         
         
@@ -201,14 +208,14 @@ void node_discharge( int node_i, int prg_i )
     
     
 #ifdef DBG_DISCHARGING
-    print_str( "discharging\n" );
-    print_dec( to_discharge );
-    nl();
+    // print_str( "discharging\n" );
+    // print_dec( to_discharge );
+    // nl();
     
-    print_dec( node_i );
-    print_str( ": " );
-    print_dec( nodes[ node_i ].charge );
-    print_str( " -> \n" );
+    // print_dec( node_i );
+    // print_str( ": " );
+    // print_dec( nodes[ node_i ].charge );
+    // print_str( " -> \n" );
 #endif
     
     
@@ -218,8 +225,8 @@ void node_discharge( int node_i, int prg_i )
     
     
 #ifdef DBG_DISCHARGING
-    print_dec( nodes[ node_i ].charge );
-    nl();
+    // print_dec( nodes[ node_i ].charge );
+    // nl();
 #endif
     
     
@@ -240,20 +247,20 @@ void nodes_report_charges( char* event, int charge )
 {
     int i = 0;
     
-    print_str( event );
-    print_str( ";" );
-    print_dec( charge );
-    print_str( ";" );
+    // print_str( event );
+    // print_str( ";" );
+    // print_dec( charge );
+    // print_str( ";" );
     
     for ( i = 0; i < NUM_NODES; i++ )
     {
-        print_dec( i );
-        print_str( ";" );
-        print_dec( nodes[ i ].charge );
-        print_str( ";" );
+        // print_dec( i );
+        // print_str( ";" );
+        // print_dec( nodes[ i ].charge );
+        // print_str( ";" );
     }
     
-    nl();
+    // nl();
 }
 
 //------------------------------------------------------------------------------
@@ -285,9 +292,9 @@ unsigned int get_finished_nodes( unsigned int nodes_busy_prev )
     
     
 #ifdef DBG_NODES_FINISHED
-    print_bin( nodes_busy_prev ,  5 ); nl();
-    print_bin( nodes_busy_curr ,  5 ); nl();
-    print_bin( nodes_finished  , 16 ); nl();
+    // print_bin( nodes_busy_prev ,  5 ); nl();
+    // print_bin( nodes_busy_curr ,  5 ); nl();
+    // print_bin( nodes_finished  , 16 ); nl();
 #endif
     
     
@@ -311,9 +318,9 @@ void node_set_busy( int node_i )
     
     
 #ifdef DBG_NODES_BUSY
-    print_str( "nodes_busy: " );
-    print_bin( nodes_busy, 5 );
-    nl();
+    // print_str( "nodes_busy: " );
+    // print_bin( nodes_busy, 5 );
+    // nl();
 #endif
     
     
@@ -326,6 +333,9 @@ void node_assign_prg( int node_i, int prg_i )
     
     // remember which prg the node is running and that the prg
     // as well as the node is active
-    
+    // print_str_n("node_assign_prg: ");
+
+    print_str_str_n("node_assign_prg" , prgs[prg_i].name);
+    // print_dec(prg_i);
     nodes[node_i].prg = prg_i;
 }

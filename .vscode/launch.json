@@ -1,0 +1,36 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Current File",
+            "python":"/usr/bin/python3.8",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/soc_frame/tools/run_mpsoc.py",
+            "console": "integratedTerminal",
+            "args": ["/home/user/soc_frame/tools/_2x2_main.conf"],
+            "cwd": "${workspaceFolder}"
+        }
+        ,
+    {
+      "name": "C/C++",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/soc_frame/sw/controller/main.c",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ],
+      "preLaunchTask": "build_c_project"
+    }
+    ]
+}

@@ -10,7 +10,6 @@ import json
 # read a file and return all the lines as a lsit
 
 def file_readlines( path ):
-    
     f = open( path, "r" )
     l = f.readlines()
     f.close()

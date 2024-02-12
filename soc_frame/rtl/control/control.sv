@@ -10,7 +10,7 @@
 ***************************************************************************** */
 
 // this module can activate the nodes and set the AXI address offsets.
-
+`define DEBUG_CONTROL
 module control #()
 (
      input clk
@@ -221,7 +221,7 @@ begin : control_proc
             
 `ifdef DEBUG_CONTROL
             
-            $display( "pico_sel: %d", pico_sel );
+            // $display( "pico_sel: %d", pico_sel );
             $display( "awaddr: %b", latched_awaddr );
             
 `endif
@@ -256,7 +256,7 @@ begin : control_proc
                 if ( latched_wdata == 0 )
                     $display( ";%d,%d,fin;", counter_global, node_sel );
                 else
-                    $display( ";%d,p%h,%d;", counter_global, latched_wdata, node_sel );
+                    $display( "Contro set prg:;%d,p%h,%d;", counter_global, latched_wdata, node_sel );
                 
                 // check for overflow
                 
@@ -309,7 +309,7 @@ begin : control_proc
                 
             end
             
-            $display( "get prg for pico %d", pico_sel );
+            // $display( "get prg for pico %d", pico_sel );
             
             //~ if (
                 //~ ( latched_araddr[ INDEX_PROG ] == 1'b1 ) &&
@@ -320,7 +320,7 @@ begin : control_proc
             if ( latched_araddr[ INDEX_COUNT_GLOBAL ] == 1'b1 )
             begin
                 
-                $display( "get prg for pico %d", pico_sel );
+                // $display( "get prg for pico %d", pico_sel );
                 $display( "global time" );
                 
             end

@@ -22,7 +22,7 @@
 // `define DEBUGNETS
 // `define DEBUGREGS
 // `define DEBUGASM
-//`define DEBUG
+`define DEBUG
 
 `ifdef DEBUG
   `define debug(debug_command) debug_command
@@ -55,6 +55,7 @@
  ***************************************************************/
 
 module picorv32 #(
+	parameter NODE_ID = 0,
 	parameter [ 0:0] ENABLE_COUNTERS = 1,
 	parameter [ 0:0] ENABLE_COUNTERS64 = 1,
 	parameter [ 0:0] ENABLE_REGS_16_31 = 1,
@@ -144,6 +145,7 @@ module picorv32 #(
 	output reg        trace_valid,
 	output reg [35:0] trace_data
 );
+
 	localparam integer irq_timer = 0;
 	localparam integer irq_ebreak = 1;
 	localparam integer irq_buserror = 2;
@@ -196,6 +198,7 @@ module picorv32 #(
 		end
 	end
 `endif
+
 
 	task empty_statement;
 		// This task is used by the `assert directive in non-formal mode to
@@ -832,10 +835,10 @@ module picorv32 #(
 	always @(posedge clk) begin
 		if (dbg_next) begin
 			if (&dbg_insn_opcode[1:0])
-				$display("DECODE: 0x%08x 0x%08x %0s", dbg_insn_addr, dbg_insn_opcode, dbg_ascii_instr ? dbg_ascii_instr : "UNKNOWN");
+				$display("DECODE Node[%d]: 0x%08x 0x%08x %0s",NODE_ID, dbg_insn_addr, dbg_insn_opcode, dbg_ascii_instr ? dbg_ascii_instr : "UNKNOWN");
 				//~ $display("DECODE: 0x%08x 0x%08x %-0s", dbg_insn_addr, dbg_insn_opcode, dbg_ascii_instr ? dbg_ascii_instr : "UNKNOWN");
 			else
-				$display("DECODE: 0x%08x     0x%04x %0s", dbg_insn_addr, dbg_insn_opcode[15:0], dbg_ascii_instr ? dbg_ascii_instr : "UNKNOWN");
+				$display("DECODE Node[%d]: 0x%08x     0x%04x %0s",NODE_ID, dbg_insn_addr, dbg_insn_opcode[15:0], dbg_ascii_instr ? dbg_ascii_instr : "UNKNOWN");
 				//~ $display("DECODE: 0x%08x     0x%04x %-0s", dbg_insn_addr, dbg_insn_opcode[15:0], dbg_ascii_instr ? dbg_ascii_instr : "UNKNOWN");
 		end
 	end
@@ -1469,15 +1472,15 @@ module picorv32 #(
 				//~ reg_out <= 32'h 0000_9C40;
 				reg_out <= STACKADDR;
 			end
-            
-            
+            		 
+
 			cpu_state <= cpu_state_fetch;
 		end else
 		(* parallel_case, full_case *)
 		case (cpu_state)
 			cpu_state_trap: begin
 				trap <= 1;
-                //~ $display( "trapppp" );
+                `debug($display( "trap node %d", NODE_ID );)
 			end
 
 			cpu_state_fetch: begin
@@ -1860,6 +1863,18 @@ module picorv32 #(
 							trace_data <= (irq_active ? TRACE_IRQ : 0) | TRACE_ADDR | ((reg_op1 + decoded_imm) & 32'hffffffff);
 						end
 						reg_op1 <= reg_op1 + decoded_imm;
+
+						`ifdef DEBUG                    
+							$display("DECODE Node[%d]: 0x%08x 0x%08x %0s",NODE_ID, dbg_insn_addr, dbg_insn_opcode, dbg_ascii_instr ? dbg_ascii_instr : "UNKNOWN");
+                    		$display( "\n0x%08x ==>  0x%08x Node[%d] cpu write ",reg_op2,reg_op1,NODE_ID);
+							if((dbg_insn_addr == 32'h0000357c) && (NODE_ID == 0)) begin
+								$display("print writes: 0x%08x (%c) with instr address: 0x%08x %0s",reg_op2,reg_op2,dbg_insn_addr,dbg_ascii_instr);
+							end
+							if((dbg_insn_addr == 32'h0000361c) && (NODE_ID == 0)) begin
+								$display("print writes: 0x%08x (%c) with instr address: 0x%08x %0s",reg_op2,reg_op2,dbg_insn_addr,dbg_ascii_instr);
+							end
+						`endif
+
 						set_mem_do_wdata = 1;
 					end
 					if (!mem_do_prefetch && mem_done) begin
@@ -2460,6 +2475,7 @@ endmodule
  ***************************************************************/
 
 module picorv32_axi #(
+	parameter NODE_ID = 0,
 	parameter [ 0:0] ENABLE_COUNTERS = 1,
 	parameter [ 0:0] ENABLE_COUNTERS64 = 1,
 	parameter [ 0:0] ENABLE_REGS_16_31 = 1,
@@ -2595,6 +2611,7 @@ module picorv32_axi #(
 	);
 
 	picorv32 #(
+		.NODE_ID			 (NODE_ID),
 		.ENABLE_COUNTERS     (ENABLE_COUNTERS     ),
 		.ENABLE_COUNTERS64   (ENABLE_COUNTERS64   ),
 		.ENABLE_REGS_16_31   (ENABLE_REGS_16_31   ),

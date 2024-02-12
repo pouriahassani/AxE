@@ -9,4 +9,4 @@
   
 ***************************************************************************** */
 
-// `define DEBUG_SELF_AWARENESS
+`define DEBUG_SELF_AWARENESS

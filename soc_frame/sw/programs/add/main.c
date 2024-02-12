@@ -4,7 +4,6 @@
 void my_main()
 {
     print_str( "add s\n" );
-    
     int a = 333;
     int b = 444;
     

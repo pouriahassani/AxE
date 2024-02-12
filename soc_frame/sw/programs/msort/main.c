@@ -60,7 +60,7 @@ void my_main() {
 //~ int main() {
 	/* Code to test the MergeSort function. */
     
-    print_str( "msort s\n" );
+    // print_str( "msort s\n" );
 	
 	int A[] = {6,2,3,1,9,10,15,13,12,17}; // creating an array of integers. 
 	//~ int i;
@@ -85,5 +85,5 @@ void my_main() {
         //~ nl();
     //~ }
     
-    print_str( "msort d\n" );
+    // print_str( "msort d\n" );
 }

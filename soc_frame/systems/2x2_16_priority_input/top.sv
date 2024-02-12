@@ -91,15 +91,15 @@
 
 //~ `include "../../rtl/memory_controller.sv"
 `include "../../rtl/memory_controller_priority_input.sv"
-
-`ifdef SYNTHESIS
+// `define SYNTHESIS
+// `ifdef SYNTHESIS
     
     `include "../../rtl/uart/uart.sv"
     
     `include "../../rtl/uart/uart_clk.sv"
     `include "../../rtl/uart/uart_tx.sv"
     
-`endif
+// `endif
 
 module top
 (
@@ -116,7 +116,7 @@ module top
         
         ,output [ `ASCII_WIDTH-1:0 ] buffer_out_data
         ,output buffer_out_valid
-        ,input buffer_recv_busy
+        ,output buffer_recv_busy
         
     `endif
     
@@ -199,7 +199,7 @@ module top
     // O U T P U T
     // -------------------------------------------------------------------------
     
-    `ifdef SYNTHESIS
+    // `ifdef SYNTHESIS
         
         uart
         #(
@@ -217,7 +217,7 @@ module top
             ,.busy( buffer_recv_busy )
         );
         
-    `endif
+    // `endif
     
     ring_buffer
     #(
