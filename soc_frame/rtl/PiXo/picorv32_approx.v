@@ -847,9 +847,9 @@ module picorv32 #(
 	always @(posedge clk) begin
 		if (dbg_next) begin
 			if (&dbg_insn_opcode[1:0])
-				$display("DECODE: 0x%08x 0x%08x %-0s", dbg_insn_addr, dbg_insn_opcode, dbg_ascii_instr ? dbg_ascii_instr : "UNKNOWN");
+				$display("DECODE Node[%d]: 0x%08x 0x%08x %-0s", NODE_ID,dbg_insn_addr, dbg_insn_opcode, dbg_ascii_instr ? dbg_ascii_instr : "UNKNOWN");
 			else
-				$display("DECODE: 0x%08x     0x%04x %-0s", dbg_insn_addr, dbg_insn_opcode[15:0], dbg_ascii_instr ? dbg_ascii_instr : "UNKNOWN");
+				$display("DECODE Node[%d]: 0x%08x     0x%04x %-0s",NODE_ID, dbg_insn_addr, dbg_insn_opcode[15:0], dbg_ascii_instr ? dbg_ascii_instr : "UNKNOWN");
 		end
 	end
 `endif
@@ -1869,6 +1869,10 @@ module picorv32 #(
 							trace_data <= (irq_active ? TRACE_IRQ : 0) | TRACE_ADDR | ((reg_op1 + decoded_imm) & 32'hffffffff);
 						end
 						reg_op1 <= reg_op1 + decoded_imm;
+						`ifdef DEBUG                    
+							$display("DECODE Node[%d]: 0x%08x 0x%08x %0s",NODE_ID, dbg_insn_addr, dbg_insn_opcode, dbg_ascii_instr ? dbg_ascii_instr : "UNKNOWN");
+                    		$display( "\n0x%08x ==>  0x%08x Node[%d] cpu write ",reg_op2,reg_op1,NODE_ID);
+						`endif
 						set_mem_do_wdata = 1;
 					end
 					if (!mem_do_prefetch && mem_done) begin
