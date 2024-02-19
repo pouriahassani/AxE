@@ -60,6 +60,7 @@
  ***************************************************************/
 
 module picorv32 #(
+	parameter NODE_ID = 0,
 	parameter [ 0:0] ENABLE_COUNTERS = 1,
 	parameter [ 0:0] ENABLE_COUNTERS64 = 1,
 	parameter [ 0:0] ENABLE_REGS_16_31 = 1,
@@ -2701,6 +2702,7 @@ endmodule
  ***************************************************************/
 
 module picorv32_axi #(
+	parameter NODE_ID = 0,
 	parameter [ 0:0] ENABLE_COUNTERS = 1,
 	parameter [ 0:0] ENABLE_COUNTERS64 = 1,
 	parameter [ 0:0] ENABLE_REGS_16_31 = 1,
@@ -2832,6 +2834,7 @@ module picorv32_axi #(
 	);
 
 	picorv32 #(
+		.NODE_ID (NODE_ID),
 		.ENABLE_COUNTERS     (ENABLE_COUNTERS     ),
 		.ENABLE_COUNTERS64   (ENABLE_COUNTERS64   ),
 		.ENABLE_REGS_16_31   (ENABLE_REGS_16_31   ),

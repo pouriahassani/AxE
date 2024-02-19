@@ -34,4 +34,4 @@ prgs_func.h:291:5:prg_is_running	32	static
 arch_func.h:8:6:archs_get_preferred	32	static
 queue_func.h:2:6:queue_build_event_queue	32	static
 main.c:183:5:amul	32	static
-main.c:191:6:my_main	48	static
+main.c:191:6:my_main	64	static

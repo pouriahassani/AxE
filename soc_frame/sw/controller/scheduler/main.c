@@ -290,7 +290,7 @@ void my_main()
     ///-------------------------------------------------------------------------
     
     queue_build_event_queue();
-    
+    QUEUE_SIZE = queue_index;
     ///-------------------------------------------------------------------------
     /// 2. estimate energy requirement
     ///-------------------------------------------------------------------------
@@ -311,7 +311,7 @@ void my_main()
     cnt = GET_COUNTER_GLOBAL_RESET;
     
     int node_index = 0;
-    
+    int queue_index_no_loop = 0;
     while ( 1 == 1 )
     {
         // get the next event and wait for it
@@ -319,7 +319,7 @@ void my_main()
         j = queue[ queue_index ].cnt;
         i = queue[ queue_index ].event;
         // print_str( "in the while loop\n" );
-        // print_str_n( "J: " );
+        print_str_dec_n( "Queue size is: ",QUEUE_SIZE );
         print_str_dec_n("J: ",j);  
         print_str_dec_n("I: ",i); 
         // print_dec_n( j );
@@ -334,9 +334,9 @@ void my_main()
         {
             cnt = GET_COUNTER_GLOBAL;
         }
-        
+        queue_index_no_loop+=1;
         queue_index += 1;
-        
+        queue_index = queue_index % QUEUE_SIZE;
         // print_dec( cnt );
         // nl();
         
@@ -381,7 +381,8 @@ void my_main()
             
             if ( 1 == prg_running )
             {
-                // print_str( "pr\n" );
+                print_str_dec_n( "prg_is_runninge: ",queue_index_no_loop );
+                print_str_dec_n("prg running id is: ",i);
                 continue;
             }
             
@@ -445,12 +446,12 @@ void my_main()
             print_str_dec_n("queue index here: ",queue_index);
             print_str_dec_n("node index: ",node_index);
             print_str_dec_n("Value of I: ",i);
-            if(i>1)
-            i=1;
-            if(i==0)
-            node_index=0;
-            else
-            node_index=1;
+            // if(i>1)
+            // i=1;
+            // if(i==0)
+            // node_index=0;
+            // else
+            // node_index=1;
             // i = 0;
             // node_index = 0
             node_assign_prg( node_index, i );

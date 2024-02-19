@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "unordered_map": "c",
-        "queue_func.h": "c"
+        "queue_func.h": "c",
+        "snipmath.h": "c",
+        "string_view": "c"
     }
 }
