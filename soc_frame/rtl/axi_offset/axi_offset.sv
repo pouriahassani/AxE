@@ -10,7 +10,7 @@
 ***************************************************************************** */
 
 // this module simply changes the AXI address.
-
+`define  axi_offset_DBG
 module axi_offset
 #(
      parameter OFFSET = 0
@@ -22,7 +22,7 @@ module axi_offset
     
     ,input [ `AXI_ADDR_WIDTH-1:0 ] offset
 );
-
+logic self_awareness_node_flag;
 always_comb
 begin : axi_offset_proc
     
@@ -31,7 +31,14 @@ begin : axi_offset_proc
     
     if ( USE_PARAMETER == 1 ) m_axi.awaddr  = s_axi.awaddr + OFFSET;
     else                      m_axi.awaddr  = s_axi.awaddr + offset;
-    
+
+ // Set a flag to indicate SELF_AWARENESS Node condition
+    if ( USE_PARAMETER != 1 )
+     self_awareness_node_flag = (m_axi.awaddr == offset);
+    else 
+      self_awareness_node_flag = 0;
+    if(m_axi.awaddr  == offset) 
+      m_axi.awaddr  = s_axi.awaddr - offset;
     m_axi.awprot  = s_axi.awprot ;
     
     m_axi.wvalid  = s_axi.wvalid ;
@@ -58,5 +65,18 @@ begin : axi_offset_proc
     s_axi.rresp   = m_axi.rresp  ;
     
 end
+
+// `ifdef axi_offset_DBG
+//   // Procedural block to display debug information
+//   always begin
+//       if (self_awareness_node_flag) begin
+
+//               // $display("SELF_AWARENESS set address");
+//                $display("Selfaware address 0x%08x is being written with data %c transfered to address 0x%08x\n",m_axi.awaddr,s_axi.wdata,m_axi.awaddr);
+//               // Additional debug information if needed
+
+//       end
+//   end
+// `endif
 
 endmodule

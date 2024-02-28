@@ -11,4 +11,4 @@ util.h:167:6:print_hex	32	static
 util.h:178:6:print_bin	48	static
 util.h:190:6:nl	16	static
 util.h:197:6:emb_assert	32	static
-main.c:2:6:my_main	32	static
+main.c:2:6:my_main	48	static

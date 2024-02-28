@@ -213,7 +213,7 @@ void my_main()
     // nl();
     
     cnt = GET_COUNTER_GLOBAL;
-    
+
     // print_str( "t0: " );
     // print_dec( cnt );
     // nl();
@@ -339,7 +339,8 @@ void my_main()
         queue_index = queue_index % QUEUE_SIZE;
         // print_dec( cnt );
         // nl();
-        
+        if(queue_index_no_loop>QUEUE_SIZE)
+            break;
         ///---------------------------------------------------------------------
         /// 
         /// event

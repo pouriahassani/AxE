@@ -174,7 +174,7 @@ begin : self_awareness_proc
                 
 `ifdef DEBUG_SELF_AWARENESS
                     
-                    $display( "SELF_AWARENESS: got program at addr: %h", latched_rdata );
+                    $display( "SELF_AWARENESS Node[%d]: got program at addr: %h",ID, latched_rdata );
                     
 `endif
                 
@@ -203,7 +203,7 @@ begin : self_awareness_proc
                 
 `ifdef DEBUG_SELF_AWARENESS
                     
-                    $display( "SELF_AWARENESS: FIN" );
+                    $display( "SELF_AWARENESS: FIN Node[%d]",ID );
                     
 `endif
                 

@@ -4,8 +4,8 @@
 
 void init_prgs( prg_t *prgs )
 {
-	prgs[0].name = "CRC32";
-	prgs[0].addr[ARCH_RV32IM] = 0x1fff0; // index: 32764 size: 2712
+	prgs[0].name = "emptymain1";
+	prgs[0].addr[ARCH_RV32IM] = 0x1fff0; // index: 32764 size: 3046
 	prgs[0].exec_t[ARCH_RV32IM] = 0;
 	prgs[0].exec_inv[ARCH_RV32IM] = 0;
 	prgs[0].exec_e[ARCH_RV32IM] = 0;
@@ -14,7 +14,7 @@ void init_prgs( prg_t *prgs )
 	prgs[0].overflows = 0;
 
 	prgs[1].name = "qsort";
-	prgs[1].addr[ARCH_RV32IM] = 0x24ad0; // index: 37556 size: 2668
+	prgs[1].addr[ARCH_RV32IM] = 0x25020; // index: 37896 size: 2668
 	prgs[1].exec_t[ARCH_RV32IM] = 0;
 	prgs[1].exec_inv[ARCH_RV32IM] = 0;
 	prgs[1].exec_e[ARCH_RV32IM] = 0;

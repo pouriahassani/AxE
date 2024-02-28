@@ -272,11 +272,12 @@ void prg_set_active( int prg_i )
     
     
     
-#ifdef DBG_PRGS_ACTIVE
-    // print_str( "prgs_active: " );
+// #ifdef DBG_PRGS_ACTIVE
+    print_str_dec_n( "prgs_active: ",prgs_active );
+    print_str_dec_n( "prgs_active i: ",prg_i );
     // print_bin( prgs_active, 5 );
     // nl();
-#endif
+// #endif
     
     
     
@@ -296,11 +297,14 @@ int prg_is_running( int prg_i )
         // as the exec again variable has already been set the next
         // time the execution of the prog is attemted is already
         // set.
-        
+        print_str_dec_n( "is running prgs_active: ",prgs_active );
+        print_str_dec_n( "is running prgs_active i: ",prg_i );
         return 1;
     }
     else
     {
+        print_str_dec_n( "not running prgs_active: ",prgs_active );
+        print_str_dec_n( "not running prgs_active i: ",prg_i );
         return 0;
     }
 }

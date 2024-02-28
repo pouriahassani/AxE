@@ -54,7 +54,8 @@ assign full = full_r;
 // wenn out, in einholt ist es leer
 // wenn in, out einholt ist es voll
 
-
+// when out overtakes in, it's empty
+// when in overtakes out, it's full
 // der sender wartet immer
 
 always @ ( posedge clk )
@@ -94,7 +95,9 @@ begin : ring_buffer_proc
                 p_in = p_in + 1;
             
             // wenn wir den out pointer erreicht haben sind wir full
-            
+
+// When we have reached the 'out' pointer, we are full.
+
             if ( p_in == p_out )
                 full_r = 1'b1;
             

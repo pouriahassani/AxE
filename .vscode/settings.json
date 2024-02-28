@@ -3,6 +3,7 @@
         "unordered_map": "c",
         "queue_func.h": "c",
         "snipmath.h": "c",
-        "string_view": "c"
+        "string_view": "c",
+        "cstdio": "c"
     }
 }
