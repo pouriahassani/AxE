@@ -89,7 +89,41 @@ sudo make install
 
 </details>
 
+## Acknowledgments
+
+This project was initiated and developed by Stefan Huemer during his time as a master's student collaborating with Prof. Nima TaheiNejad's research group. Subsequently, Ahmad Sedigh Baroughi made significant contributions to the project. Presently, Pouria Hasani is actively involved in extending the project.
+
+## Citation
+
+If you use this code in your research, please consider citing the following papers:
+
+```bibtex
+@inproceedings{Baroughi2022AxE,
+  author = {Baroughi, A. S. and Huemer, S. and Shahhoseini, H. S. and TaheriNejad, N.},
+  booktitle = {2022 25th Euromicro Conference on Digital System Design (DSD)},
+  title = {{AxE}: An Approximate-Exact Multi-Processor System-on-Chip Platform},
+  year = {2022},
+  pages = {60--66},
+  doi = {10.1109/DSD57027.2022.00018},
+  keywords = {Energy consumption;Program processors;Digital systems;Approximate computing;Gray-scale;Software;Hardware;Approximation Computing;Multi-Processor System-on-Chip (MPSoC);Approximate and Exact MPSoC;Task Mapping;RISC-V},
+}
+```
+[Link to the paper](https://eclectx.org/Publications/2022_DSD_AxEmpsoc.pdf)
+
+```bibtex
+@inproceedings{HuemerBST23,
+  author = {Huemer, Sini and Baroughi, Ahmad Sadigh and Shahhoseini, Hadi Shahriar and TaheriNejad, Nima},
+  title = {Approximation-aware Task Partitioning on an Approximate-Exact MPSoC ({AxE})},
+  booktitle = {{IEEE} Nordic Circuits and Systems Conference, NorCAS 2023, Aalborg, Denmark, October 31 - Nov. 1, 2023},
+  year = {2023},
+  pages = {1--7},
+  publisher = {{IEEE}},
+  doi = {10.1109/NORCAS58970.2023.10305464},
+  url = {https://doi.org/10.1109/NorCAS58970.2023.10305464},
+}
+```
+[Link to the paper](https://eclectx.org/Publications/C50.pdf)
+
 ## Note
 
 The simulation method described in the videos is not visible to the debugger. To debug, bypass `main.py` and modify `run_mpsoc.py`. Debug it in a suitable IDE, such as VSCode.
-
