@@ -1,0 +1,4 @@
+memmgr.c:47:6:memmgr_init	16	static
+memmgr.c:102:22:get_mem_from_pool	48	static
+memmgr.c:137:7:memmgr_alloc	48	static
+memmgr.c:206:6:memmgr_free	48	static

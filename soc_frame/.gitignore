@@ -1,0 +1,6 @@
+.directory
+mem.hex
+systems/*/obj_dir/
+tools/logs/
+tools/__pycache__/
+sw/*/*/rv32im_*

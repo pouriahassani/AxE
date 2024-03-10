@@ -1,0 +1,34 @@
+
+./rv32i_main.elf:     file format elf32-littleriscv
+
+SYMBOL TABLE:
+00000000 l    d  .text	00000000 .text
+000003f0 l    d  .rodata	00000000 .rodata
+00000000 l    d  .comment	00000000 .comment
+00000000 l    d  .debug_aranges	00000000 .debug_aranges
+00000000 l    d  .debug_info	00000000 .debug_info
+00000000 l    d  .debug_abbrev	00000000 .debug_abbrev
+00000000 l    d  .debug_line	00000000 .debug_line
+00000000 l    d  .debug_str	00000000 .debug_str
+00000000 l    df *ABS*	00000000 /tmp/ccJOj6Jl.o
+00000094 l       .text	00000000 loop
+00000000 l    df *ABS*	00000000 main.c
+00000098 g     F .text	000002e8 spmv
+00007e5c g       *ABS*	00000000 __global_pointer$
+00000380 g     F .text	0000004c my_main
+00004ee8 g     O .rodata	000007d0 x
+0000765c g       .rodata	00000000 __SDATA_BEGIN__
+000056b8 g     O .rodata	000007d4 ptr
+000003f0 g     O .rodata	0000257c val
+000003cc g     F .text	00000024 .hidden __mulsi3
+0000296c g     O .rodata	0000257c idx
+0000765c g       .rodata	00000000 __BSS_END__
+0000765c g       .rodata	00000000 __bss_start
+0000000c g       .text	00000000 main
+00000000 g       .text	00000000 my_start
+0000765c g       .rodata	00000000 __DATA_BEGIN__
+0000765c g       .rodata	00000000 _edata
+0000765c g       .rodata	00000000 _end
+00005e8c g     O .rodata	000007d0 verify_data
+
+
