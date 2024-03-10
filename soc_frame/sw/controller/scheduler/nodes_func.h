@@ -10,8 +10,6 @@
 
 // ich bekomme einen array von archs indicis wo der erste die preferred arch
 // ist. den geh ich dann durch.
-// I receive an array of arch indices where the first one is the preferred arch.
-// I then go through it.
 #define DBG_GET_NODE
 int node_get( int *preferred_archs, int prg_i )
 {
@@ -103,8 +101,7 @@ int node_get( int *preferred_archs, int prg_i )
                     
 #ifdef DBG_GET_NODE
                     print_str_dec_n( "found node_i: ",nodes_i_curr );
-                    print_str_dec_n("Node charge: ",nodes[ nodes_i_curr ].charge );
-                    print_str_dec_n("prg energy: ",prgs[ prg_i ].exec_e[ arch_i ] );
+                    // print_dec( nodes_i_curr );
                     // nl();
 #endif
                     

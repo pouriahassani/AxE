@@ -18,10 +18,20 @@
 // to keep everything working with O0 an additional instruction is needed to
 // read the result from the register. this is done by adding 0 to x10.
 
+// __attribute__((noinline))
+// int amul(int rd, int rs1, int rs2)
+// {
+    // asm __volatile__ (".word 0xFEC5857F\n");
+    // asm __volatile__ ("addi %0, x10, 0" : "=r" (rd));
+    // 
+    // return rd;
+// }
+
+
 __attribute__((noinline))
-int amul(int rd, int rs1, int rs2)
+int fpadd(int rd, int rs1, int rs2)
 {
-    asm __volatile__ (".word 0xFEC5857F\n");
+    asm __volatile__ (".word 0x00C5850B\n");
     asm __volatile__ ("addi %0, x10, 0" : "=r" (rd));
     
     return rd;
@@ -42,17 +52,19 @@ void my_main()
     // The messeges are detected by the debugger module and further processed
     // by the simulation environment (sim_main.cpp under configurations)
     
-    print_str( "mul s\n" );
-    
-    int a = 333;
-    int b = 444;
-    
+    // print_str( "mul s\n" );
+    // int a = 333;
+    // int b = 444;
+    int a = 0x3F9E0652; // 1.2345679
+    int b = 0x3DCCCCCD; // 0.1
+
     int pro = 0;
     int pro_appr = 0;
     
-    pro = a * b;
-    pro_appr = amul( pro_appr, a, b );
-    
+    // pro = a + b;
+    // pro_appr = amul( pro_appr, a, b );
+    pro_appr = fpadd( pro_appr, a, b);
+
     print_str("exact\n");
     print_dec(pro);
     nl();

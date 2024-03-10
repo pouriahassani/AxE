@@ -120,7 +120,7 @@ begin : axi_detector_proc
     
     // wir legen nur die default axi signale an fuer das was uns interessiert
     // sonst werden diese einfach durch geleitet.
-   // "We only provide the default AXI signals for what interests us, otherwise they are simply passed through."
+    
     if ( DETECT_WRITE == 1 )
     begin
         s_axi.s_default_write_req();

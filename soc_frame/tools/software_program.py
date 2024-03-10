@@ -98,7 +98,15 @@ class Program( Software ):
                 # sp_min = min(new_l)
                 #if this line didn't work; comment it and uncomment the below line.
                 #this part is messy!
-            sp_min = min(new_l)
+                if(len(new_l)):
+                    sp_min = min(new_l)
+                else:
+                    sp_min = 0
+            if(len(new_l)):
+                sp_min = min(new_l)
+            else:
+                sp_min = 0
+            # sp_min = min(new_l)
             
         else:
             

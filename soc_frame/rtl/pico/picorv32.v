@@ -1863,7 +1863,6 @@ module picorv32 #(
 							trace_data <= (irq_active ? TRACE_IRQ : 0) | TRACE_ADDR | ((reg_op1 + decoded_imm) & 32'hffffffff);
 						end
 						reg_op1 <= reg_op1 + decoded_imm;
-						// if(reg_op1 == 32'h00000000)
 
 						`ifdef DEBUG                    
 							$display("DECODE Node[%d]: 0x%08x 0x%08x %0s",NODE_ID, dbg_insn_addr, dbg_insn_opcode, dbg_ascii_instr ? dbg_ascii_instr : "UNKNOWN");
