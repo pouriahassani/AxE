@@ -1,0 +1,34 @@
+
+./rv32im_main.elf:     file format elf32-littleriscv
+
+SYMBOL TABLE:
+00000000 l    d  .text	00000000 .text
+000003c4 l    d  .rodata	00000000 .rodata
+0000140c l    d  .data	00000000 .data
+00000000 l    d  .comment	00000000 .comment
+00000000 l    d  .debug_aranges	00000000 .debug_aranges
+00000000 l    d  .debug_info	00000000 .debug_info
+00000000 l    d  .debug_abbrev	00000000 .debug_abbrev
+00000000 l    d  .debug_line	00000000 .debug_line
+00000000 l    d  .debug_frame	00000000 .debug_frame
+00000000 l    d  .debug_str	00000000 .debug_str
+00000000 l    df *ABS*	00000000 /tmp/ccYL6fGO.o
+00000094 l       .text	00000000 loop
+00000000 l    df *ABS*	00000000 main.c
+000003c4 l     O .rodata	00000024 gx.2411
+000003e8 l     O .rodata	00000024 gy.2412
+00040d0c g       *ABS*	00000000 __global_pointer$
+000002f4 g     F .text	000000d0 my_main
+0004150c g       .data	00000000 __SDATA_BEGIN__
+0000140c g     O .data	00000100 elaine_512_input
+0004150c g       .data	00000000 __BSS_END__
+0000150c g     O .data	00040000 elaine_512_golden_output
+0004150c g       .data	00000000 __bss_start
+0000000c g       .text	00000000 main
+00000000 g       .text	00000000 my_start
+0000140c g       .data	00000000 __DATA_BEGIN__
+0004150c g       .data	00000000 _edata
+0004150c g       .data	00000000 _end
+00000098 g     F .text	0000025c sobel_filter
+
+
