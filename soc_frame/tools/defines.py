@@ -1,10 +1,10 @@
 
-PATH_CONTROLLERS = "../sw/controller/"
+PATH_CONTROLLERS = "/home/user/soc_frame/sw/controller/"
 #~ PATH_PRGS = "../sw/programs/"
-PATH_PRGS = "../sw/tasks/"
-PATH_TASKS = "../sw/tasks/"
+PATH_PRGS = "/home/user/soc_frame/sw/programs/"
+PATH_TASKS = "/home/user/soc_frame/sw/tasks/"
 
-PATH_SYSS = "../systems/"
+PATH_SYSS = "/home/user/soc_frame/systems/"
 
 # arguments for memory packer
 

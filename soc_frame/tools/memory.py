@@ -64,7 +64,7 @@ class Memory:
         
         self.prgs[ prg.name ][ prg.arch ][ "sp" ] = sp
         self.prgs[ prg.name ][ prg.arch ][ "hex" ] = prg.read()
-    
+        
     # --------------------------------------------------------------------------
     # info
     # --------------------------------------------------------------------------
@@ -166,12 +166,13 @@ class Memory:
                 # that should be high enough
                 # what is the sufficient value for a 128 x 128 image?
                     prg.clean()
-                    prg.compl( "0x00010000" )
+                    prg.compl( "0x01000000" )
                 
                 # a simulation is run with an arg that outputs the memory usage
                 
                     memory_usage = sim.run( list(arch_dict.values())[0], prg, [MEM_PACKER_OUTPUT_MEMORY] )
-                
+                    print("this i memory_usage")
+                    print(memory_usage)
                     sp = prg.get_stack_pointer( memory_usage )
                 
                 # the program has to be compiled again using the new stack
@@ -198,7 +199,7 @@ class Memory:
                 # that should be high enough
                 # what is the sufficient value for a 128 x 128 image?
                     prg.clean()
-                    prg.compl( "0x00010000" )
+                    prg.compl( "0x01000000" )
                 
                 # a simulation is run with an arg that outputs the memory usage
                 

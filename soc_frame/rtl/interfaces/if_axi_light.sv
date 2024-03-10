@@ -10,7 +10,7 @@
 ***************************************************************************** */
 
 // AXI Light interface.
-
+`define DEBUG_SELF_AWARENESS
 interface if_axi_light
 #(
      AXI_DATA_WIDTH = 0
@@ -138,6 +138,8 @@ interface if_axi_light
         
         // wenn die daten valid sind, dann sagt der master, dass er die
         // daten genommen hat (mit rready)
+        // If the data is valid, the master indicates that it has taken the data (with rready).
+
         
         if ( rvalid == 1'b1 )
         begin
@@ -145,7 +147,11 @@ interface if_axi_light
             
             t_rdata = rdata;
             t_rresp = rresp;
-            
+
+            // `ifdef DEBUG_SELF_AWARENESS                    
+            //     $display( "axi light read_resp_wait: %h", rdata );                    
+            // `endif
+
             done = 1'b1;
         end
         

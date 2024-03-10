@@ -4,12 +4,12 @@
 // estimate execution time
 // 
 //------------------------------------------------------------------------------
-
+#define DBG_ESTIMATE_EXECUTION_TIME 
 void prgs_estimate_execution_times()
 {
     int i = 0;
     int j = 0;
-    
+    print_str_dec_n("prgs_estimate_execution_times: ",NUM_PRGS);
     int node_to_use = 0;
     
     for ( i = 0; i < NUM_ARCHS; i++ )
@@ -17,7 +17,9 @@ void prgs_estimate_execution_times()
         preferred_archs[ 0 ] = i;
         
         node_to_use = node_get( preferred_archs, i );
-        
+        print_str_dec_n("node to use:", node_to_use);
+        if(node_to_use > NUM_NODES || node_to_use < 0)
+            continue;
         for ( j = 0; j < NUM_PRGS; j++ )
         {
             prg_estimate_execution_time( node_to_use, j );
@@ -40,9 +42,11 @@ void prg_estimate_execution_time( int node_i, int prg_i )
     
     
 #ifdef DBG_ESTIMATE_EXECUTION_TIME
-    print_str( "exec time of: " );
-    print_str( prgs[ prg_i ].name );
-    nl();
+    print_str_str_n( "exec time of: ",prgs[ prg_i ].name );
+    print_str_dec_n( "exec time on: ",node_i );
+    print_str_dec_n( "exec time of prg_i: ",prg_i );
+    // print_str( prgs[ prg_i ].name );
+    // nl();
 #endif
     
     int cnt_start = 0;
@@ -74,7 +78,7 @@ void prg_estimate_execution_time( int node_i, int prg_i )
     prgs[ prg_i ].exec_t[ nodes[ node_i].arch ] = cnt_diff;
     
     // exec interval
-    
+    print_str_dec_n( "exec time of: ",cnt_diff );
     prgs[ prg_i ].exec_inv[ nodes[ node_i].arch ] = cnt_diff * 2;
 }
 
@@ -123,9 +127,9 @@ void prgs_estimate_energy_requirements()
     
     for ( i = 0; i < NUM_ARCHS; i++ )
     {
-        print_str( "n" );
-        print_dec( i );
-        nl();
+        // print_str( "n" );
+        // print_dec( i );
+        // nl();
         
         for ( j = 0; j < NUM_PRGS; j++ )
         {
@@ -146,8 +150,8 @@ void estimate_energy_requirement( int arch_i, int prg_i )
     
     int milli_sec = 0;
     
-    print_str( "p" );
-    print_dec( prg_i );
+    // print_str( "p" );
+    // print_dec( prg_i );
     
     // calc time
     // ( exec_t * 4 ) / 100000 = milliseconds
@@ -155,18 +159,18 @@ void estimate_energy_requirement( int arch_i, int prg_i )
     milli_sec = prgs[ prg_i ].exec_t[ arch_i ] * 4;
     milli_sec /= 100000;
     
-    print_str( " t: " );
-    print_dec( milli_sec );
+    // print_str( " t: " );
+    // print_dec( milli_sec );
     
     // calc energy
     // milli_sec * power = millijouls
     
     prgs[ prg_i ].exec_e[ arch_i ] = milli_sec * archs[ arch_i ].power;
     
-    print_str( " - e: " );
-    print_dec( prgs[ prg_i ].exec_e[ arch_i ] );
+    // print_str( " - e: " );
+    // print_dec( prgs[ prg_i ].exec_e[ arch_i ] );
     
-    nl();
+    // nl();
 }
 
 //------------------------------------------------------------------------------
@@ -231,7 +235,7 @@ void prgs_check_if_finished()
     
     
 #ifdef DBG_PRGS_ACTIVE
-    print_bin( prgs_active, 5 ); nl();
+    // print_bin( prgs_active, 5 ); nl();
 #endif
     
     
@@ -269,9 +273,9 @@ void prg_set_active( int prg_i )
     
     
 #ifdef DBG_PRGS_ACTIVE
-    print_str( "prgs_active: " );
-    print_bin( prgs_active, 5 );
-    nl();
+    // print_str( "prgs_active: " );
+    // print_bin( prgs_active, 5 );
+    // nl();
 #endif
     
     

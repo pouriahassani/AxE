@@ -39,6 +39,7 @@ module controller #(
     
     picorv32_if_wrapper
     #(
+        .NODE_ID (ID),
          .ENABLE_MUL ( 1 )
         ,.ENABLE_DIV ( 1 )
     )

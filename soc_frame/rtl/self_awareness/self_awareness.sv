@@ -133,7 +133,11 @@ begin : self_awareness_proc
             
             m_axi.read_req( addr_id, latched_arprot, done );
             if ( done == 1'b1 ) state = READ_WAIT;
-            
+            // `ifdef DEBUG_SELF_AWARENESS
+                    
+            //         $display( "SELF_AWARENESS: READ State: %h", latched_rdata );
+                    
+            // `endif
         end
         
         // ---------------------------------------------------------------------
@@ -145,6 +149,11 @@ begin : self_awareness_proc
             
             m_axi.read_resp_wait( latched_rdata, latched_rresp, done );
             if ( done == 1'b1 ) state = EVAL;
+            // `ifdef DEBUG_SELF_AWARENESS
+                    
+            //     $display( "SELF_AWARENESS: READ_WAIT State: %h", latched_rdata );
+                    
+            // `endif
             
         end
         
@@ -216,6 +225,11 @@ begin : self_awareness_proc
             
             m_axi.write_req( addr_id, latched_awprot, 0, latched_wstrb, done );
             if ( done == 1'b1 ) state = WRITE_WAIT;
+            // `ifdef DEBUG_SELF_AWARENESS
+                    
+            //     $display( "SELF_AWARENESS: WRITE State: %h", latched_rdata );
+                    
+            // `endif
             
         end
         
@@ -228,7 +242,11 @@ begin : self_awareness_proc
             
             m_axi.write_resp_wait( latched_bresp, done );
             if ( done == 1'b1 ) state = READ;
-            
+            // `ifdef DEBUG_SELF_AWARENESS
+                    
+            //     $display( "SELF_AWARENESS: WRITE_WAIT State: %h", latched_rdata );
+                    
+            // `endif
         end
         
         // ---------------------------------------------------------------------

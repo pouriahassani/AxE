@@ -43,24 +43,75 @@ void signal_kill_sim()
 void print_char(char ch);
 inline void print_char(char ch)
 {
-    *((volatile int*)OUTPORT) = ch;
+    // *((volatile int*)OUTPORT) = ch;
 }
 
 // str
 // -------------------------------------
-
-void print_str(const char *p)
+void print_str_str_n( const char *p,const char * t )
 {
     while (*p != 0)
     {
         *((volatile int*)OUTPORT) = *(p++);
     }
+    
+    *((volatile int*)OUTPORT) = '\t';
+
+    while (*t != 0)
+    {
+        *((volatile int*)OUTPORT) = *(t++);
+    }
+    *((volatile int*)OUTPORT) = '\n';
+}
+void print_str_dec_n( const char *T,unsigned int val )
+{
+    while (*T != 0)
+    {
+        *((volatile int*)OUTPORT) = *(T++);
+    }
+    char buffer[10];
+    char *p = buffer;
+    
+
+    while (val || p == buffer)
+    {
+        *(p++) = val % 10;
+        val = val / 10;
+    }
+    
+    // as the digits have been collected beginning with the least significant
+    // one the output is running in reverse order
+    
+    while (p != buffer)
+    {
+        *((volatile int*)OUTPORT) = '0' + *(--p);
+    }
+    *((volatile int*)OUTPORT) = '\n';
+
+}
+
+void print_str(const char *p)
+{
+    // while (*p != 0)
+    // {
+    //     *((volatile int*)OUTPORT) = *(p++);
+    // }
+    // *((volatile int*)OUTPORT) = '\n';
+}
+
+void print_str_n(const char *p)
+{
+    while (*p != 0)
+    {
+        *((volatile int*)OUTPORT) = *(p++);
+    }
+    *((volatile int*)OUTPORT) = '\n';
 }
 
 // dec
 // -------------------------------------
 
-void print_dec(unsigned int val)
+void print_dec_n(unsigned int val)
 {
     char buffer[10];
     char *p = buffer;
@@ -82,6 +133,32 @@ void print_dec(unsigned int val)
     {
         *((volatile int*)OUTPORT) = '0' + *(--p);
     }
+    *((volatile int*)OUTPORT) = '\n';
+}
+
+void print_dec(unsigned int val)
+{
+    // char buffer[10];
+    // char *p = buffer;
+    
+    // // val % 10 returns the last digit
+    // // val / 10 discards the last digit and allows the extraction of the next
+    // // one
+    
+    // while (val || p == buffer)
+    // {
+    //     *(p++) = val % 10;
+    //     val = val / 10;
+    // }
+    
+    // // as the digits have been collected beginning with the least significant
+    // // one the output is running in reverse order
+    
+    // while (p != buffer)
+    // {
+    //     *((volatile int*)OUTPORT) = '0' + *(--p);
+    // }
+    // *((volatile int*)OUTPORT) = '\n';
 }
 
 // hex
@@ -89,10 +166,10 @@ void print_dec(unsigned int val)
 
 void print_hex(unsigned int val, int digits)
 {
-    for (int i = (4*digits)-4; i >= 0; i -= 4)
-    {
-        *((volatile int*)OUTPORT) = "0123456789ABCDEF"[(val >> i) % 16];
-    }
+    // for (int i = (4*digits)-4; i >= 0; i -= 4)
+    // {
+    //     *((volatile int*)OUTPORT) = "0123456789ABCDEF"[(val >> i) % 16];
+    // }
 }
 
 // binary
@@ -104,6 +181,7 @@ void print_bin(unsigned int val, int bits)
     {
         *((volatile int*)OUTPORT) = '0' + ((char)( 1 & (val >> i) ));
     }
+    *((volatile int*)OUTPORT) = '\n';
 }
 
 // newline
@@ -111,16 +189,16 @@ void print_bin(unsigned int val, int bits)
 
 void nl()
 {
-    print_str("\n");
+    // print_str("\n");
 }
 
 // print_assert
 // -------------------------------------
 void emb_assert( unsigned int line, const char *file, const char *exp )
 {
-    print_dec( line );
-    print_str( file );
-    print_str( exp );
+    // print_dec( line );
+    // print_str( file );
+    // print_str( exp );
     
     //~ nl();
     

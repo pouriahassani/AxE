@@ -19,3 +19,4 @@
 //`define MEM_SIZE ( (3 * 2048) + 1 )
 
 `define MEM_SIZE ( 100192 )
+

@@ -18,4 +18,4 @@
 //`define MEM_SIZE ( (3 * 25048) + 1 )
 //`define MEM_SIZE ( (3 * 2048) + 1 )
 // sobel 8x8 needs this much memory!!!
-`define MEM_SIZE ( 120192 )
+`define MEM_SIZE ( 32019200 )

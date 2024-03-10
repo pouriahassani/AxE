@@ -480,155 +480,65 @@ void my_main()
  3e0:	00008067          	ret
 
 000003e4 <__mulsi3>:
-/* Our RV64 64-bit routine is equivalent to our RV32 32-bit routine.  */
-# define __muldi3 __mulsi3
-#endif
-
-FUNC_BEGIN (__muldi3)
-  mv     a2, a0
  3e4:	00050613          	mv	a2,a0
-  li     a0, 0
  3e8:	00000513          	li	a0,0
-.L1:
-  andi   a3, a1, 1
  3ec:	0015f693          	andi	a3,a1,1
-  beqz   a3, .L2
  3f0:	00068463          	beqz	a3,3f8 <__mulsi3+0x14>
-  add    a0, a0, a2
  3f4:	00c50533          	add	a0,a0,a2
-.L2:
-  srli   a1, a1, 1
  3f8:	0015d593          	srli	a1,a1,0x1
-  slli   a2, a2, 1
  3fc:	00161613          	slli	a2,a2,0x1
-  bnez   a1, .L1
  400:	fe0596e3          	bnez	a1,3ec <__mulsi3+0x8>
-  ret
  404:	00008067          	ret
 
 00000408 <__divsi3>:
-  li    t0, -1
-  beq   a1, t0, .L20
-#endif
-
-FUNC_BEGIN (__divdi3)
-  bltz  a0, .L10
  408:	06054063          	bltz	a0,468 <__umodsi3+0x10>
-  bltz  a1, .L11
  40c:	0605c663          	bltz	a1,478 <__umodsi3+0x20>
 
 00000410 <__udivsi3>:
-  /* Since the quotient is positive, fall into __udivdi3.  */
-
-FUNC_BEGIN (__udivdi3)
-  mv    a2, a1
  410:	00058613          	mv	a2,a1
-  mv    a1, a0
  414:	00050593          	mv	a1,a0
-  li    a0, -1
  418:	fff00513          	li	a0,-1
-  beqz  a2, .L5
  41c:	02060c63          	beqz	a2,454 <__udivsi3+0x44>
-  li    a3, 1
  420:	00100693          	li	a3,1
-  bgeu  a2, a1, .L2
  424:	00b67a63          	bgeu	a2,a1,438 <__udivsi3+0x28>
-.L1:
-  blez  a2, .L2
  428:	00c05863          	blez	a2,438 <__udivsi3+0x28>
-  slli  a2, a2, 1
  42c:	00161613          	slli	a2,a2,0x1
-  slli  a3, a3, 1
  430:	00169693          	slli	a3,a3,0x1
-  bgtu  a1, a2, .L1
  434:	feb66ae3          	bltu	a2,a1,428 <__udivsi3+0x18>
-.L2:
-  li    a0, 0
  438:	00000513          	li	a0,0
-.L3:
-  bltu  a1, a2, .L4
  43c:	00c5e663          	bltu	a1,a2,448 <__udivsi3+0x38>
-  sub   a1, a1, a2
  440:	40c585b3          	sub	a1,a1,a2
-  or    a0, a0, a3
  444:	00d56533          	or	a0,a0,a3
-.L4:
-  srli  a3, a3, 1
  448:	0016d693          	srli	a3,a3,0x1
-  srli  a2, a2, 1
  44c:	00165613          	srli	a2,a2,0x1
-  bnez  a3, .L3
  450:	fe0696e3          	bnez	a3,43c <__udivsi3+0x2c>
-.L5:
-  ret
  454:	00008067          	ret
 
 00000458 <__umodsi3>:
-FUNC_END (__udivdi3)
-
-FUNC_BEGIN (__umoddi3)
-  /* Call __udivdi3(a0, a1), then return the remainder, which is in a1.  */
-  move  t0, ra
  458:	00008293          	mv	t0,ra
-  jal   __udivdi3
  45c:	fb5ff0ef          	jal	ra,410 <__udivsi3>
-  move  a0, a1
  460:	00058513          	mv	a0,a1
-  jr    t0
  464:	00028067          	jr	t0
-FUNC_END (__umoddi3)
-
-  /* Handle negative arguments to __divdi3.  */
-.L10:
-  neg   a0, a0
  468:	40a00533          	neg	a0,a0
-  bgez  a1, .L12      /* Compute __udivdi3(-a0, a1), then negate the result.  */
  46c:	0005d863          	bgez	a1,47c <__umodsi3+0x24>
-  neg   a1, a1
  470:	40b005b3          	neg	a1,a1
-  j     __udivdi3     /* Compute __udivdi3(-a0, -a1).  */
  474:	f9dff06f          	j	410 <__udivsi3>
-.L11:                 /* Compute __udivdi3(a0, -a1), then negate the result.  */
-  neg   a1, a1
  478:	40b005b3          	neg	a1,a1
-.L12:
-  move  t0, ra
  47c:	00008293          	mv	t0,ra
-  jal   __udivdi3
  480:	f91ff0ef          	jal	ra,410 <__udivsi3>
-  neg   a0, a0
  484:	40a00533          	neg	a0,a0
-  jr    t0
  488:	00028067          	jr	t0
 
 0000048c <__modsi3>:
-FUNC_END (__divdi3)
-
-FUNC_BEGIN (__moddi3)
-  move   t0, ra
  48c:	00008293          	mv	t0,ra
-  bltz   a1, .L31
  490:	0005ca63          	bltz	a1,4a4 <__modsi3+0x18>
-  bltz   a0, .L32
  494:	00054c63          	bltz	a0,4ac <__modsi3+0x20>
-.L30:
-  jal    __udivdi3    /* The dividend is not negative.  */
  498:	f79ff0ef          	jal	ra,410 <__udivsi3>
-  move   a0, a1
  49c:	00058513          	mv	a0,a1
-  jr     t0
  4a0:	00028067          	jr	t0
-.L31:
-  neg    a1, a1
  4a4:	40b005b3          	neg	a1,a1
-  bgez   a0, .L30
  4a8:	fe0558e3          	bgez	a0,498 <__modsi3+0xc>
-.L32:
-  neg    a0, a0
  4ac:	40a00533          	neg	a0,a0
-  jal    __udivdi3    /* The dividend is hella negative.  */
  4b0:	f61ff0ef          	jal	ra,410 <__udivsi3>
-  neg    a0, a1
  4b4:	40b00533          	neg	a0,a1
-  jr     t0
  4b8:	00028067          	jr	t0

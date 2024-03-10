@@ -4,6 +4,7 @@
 // A simple test program to run on the controller.
 
 #define MAX_HALF ( 0x7FFFFFFF )
+#define DBG_EVENT_QUEUE
 
 #include "debug.h"
 
@@ -29,7 +30,7 @@
 #include "prgs_func.h"
 #include "arch_func.h"
 #include "queue_func.h"
-
+// #include <std.h>
 
 
 // period_in_s = 1 / ( MHz * 1.000.000 )
@@ -192,7 +193,7 @@ void my_main()
     int i = 0;
     int j = 0;
     
-    print_str( "start\n" );
+    print_str_n( "start the scheduler");
     
     int a = 123;
     int b = 456;
@@ -201,21 +202,21 @@ void my_main()
     int pro_appr = 0;
     
     pro = a * b;
-    pro_appr = amul( pro_appr, a, b );
+    // pro_appr = amul( pro_appr, a, b );
+    pro_appr = a*b;
+    // print_str("exact\n");
+    // print_dec(pro);
+    // nl();
     
-    print_str("exact\n");
-    print_dec(pro);
-    nl();
-    
-    print_str("approx\n");
-    print_dec(pro_appr);
-    nl();
+    // print_str("approx\n");
+    // print_dec(pro_appr);
+    // nl();
     
     cnt = GET_COUNTER_GLOBAL;
     
-    print_str( "t0: " );
-    print_dec( cnt );
-    nl();
+    // print_str( "t0: " );
+    // print_dec( cnt );
+    // nl();
 // /////
 //   int y[R];
 //     for (int aa = 0; aa < R; aa++)
@@ -252,34 +253,34 @@ void my_main()
 /////
     cnt = GET_COUNTER_GLOBAL;
     
-    print_str( "t0: " );
-    print_dec( cnt );
-    nl();
-    nl();
+    // print_str( "t0: " );
+    // print_dec( cnt );
+    // nl();
+    // nl();
     
     // -------------------------------------------------------------------------
     // init
     // -------------------------------------------------------------------------
     
     init_nodes( nodes );
-    print_str("nodes set\n");
+    // print_str("nodes set\n");
     init_prgs( prgs );
-    print_str("prgs set\n");
+    // print_str("prgs set\n");
     init_archs( archs );
-    print_str("archs set\n");
+    // print_str("archs set\n");
     init_charges( charges );
-    print_str("charges set\n");
+    // print_str("charges set\n");
     // -------------------------------------------------------------------------
     // running timing estimations
     // -------------------------------------------------------------------------
     
-    print_str( "timing estimations\n" );
-    nl();
+    // print_str( "timing estimations\n" );
+    // nl();
     
     prgs_estimate_execution_times();
     
-    nl();
-    print_str( "timing estimations -> done\n" );
+    // nl();
+    // print_str( "timing estimations -> done\n" );
     
     SET_LEDS_STATUS = 0x2;
     SET_TRIGGERS = 0x2;
@@ -289,7 +290,7 @@ void my_main()
     ///-------------------------------------------------------------------------
     
     queue_build_event_queue();
-    
+    QUEUE_SIZE = queue_index;
     ///-------------------------------------------------------------------------
     /// 2. estimate energy requirement
     ///-------------------------------------------------------------------------
@@ -310,18 +311,22 @@ void my_main()
     cnt = GET_COUNTER_GLOBAL_RESET;
     
     int node_index = 0;
-    
+    int queue_index_no_loop = 0;
     while ( 1 == 1 )
     {
         // get the next event and wait for it
-        
+        // printf("\nin while loop");
         j = queue[ queue_index ].cnt;
         i = queue[ queue_index ].event;
-        
-        print_dec( j );
-        print_str( ": " );
-        print_dec( i );
-        nl();
+        // print_str( "in the while loop\n" );
+        print_str_dec_n( "Queue size is: ",QUEUE_SIZE );
+        print_str_dec_n("J: ",j);  
+        print_str_dec_n("I: ",i); 
+        // print_dec_n( j );
+        // print_str_n( "I: " );
+        // print_dec_n( i );
+        print_str_n( "D" );
+        // nl();
         
         cnt = GET_COUNTER_GLOBAL;
         
@@ -329,11 +334,11 @@ void my_main()
         {
             cnt = GET_COUNTER_GLOBAL;
         }
-        
+        queue_index_no_loop+=1;
         queue_index += 1;
-        
-        print_dec( cnt );
-        nl();
+        queue_index = queue_index % QUEUE_SIZE;
+        // print_dec( cnt );
+        // nl();
         
         ///---------------------------------------------------------------------
         /// 
@@ -345,7 +350,7 @@ void my_main()
         
         if ( QUEUE_CHARGING_EVENT == i )
         {
-            print_str( "charging event\n" );
+            // print_str( "charging event\n" );
             
             nodes_charge( charges[ charges_i ] );
             
@@ -353,9 +358,9 @@ void my_main()
         }
         else
         {
-            print_str( ",p" );
-            print_dec( i );
-            print_str( "," );
+            // print_str( ",p" );
+            // print_dec( i );
+            // print_str( "," );
             
             //--------------------------------------------------------------
             // check which prgs are finished
@@ -376,13 +381,14 @@ void my_main()
             
             if ( 1 == prg_running )
             {
-                print_str( "pr\n" );
+                print_str_dec_n( "prg_is_runninge: ",queue_index_no_loop );
+                print_str_dec_n("prg running id is: ",i);
                 continue;
             }
             
             // the program is idle, it can be executed now.
             
-            print_str( "pi" );
+            // print_str( "pi" );
             
             //--------------------------------------------------------------
             // skip
@@ -398,7 +404,7 @@ void my_main()
             {
                 prgs[i].skip_cnt_down = prgs[i].skip_after;
                 
-                print_str( "sk\n" );
+                // print_str( "sk\n" );
                 continue;
             }
 #endif
@@ -417,13 +423,13 @@ void my_main()
             
             if ( -1 == node_index )
             {
-                print_str( "nn\n" );
+                // print_str( "nn\n" );
                 continue;
             }
             
-            print_str( ",n" );
-            print_dec( node_index );
-            nl();
+            // print_str( ",n" );
+            // print_dec( node_index );
+            // nl();
             
             //----------------------------------------------------------
             // node_discharge
@@ -434,13 +440,26 @@ void my_main()
             //----------------------------------------------------------
             // node_assign_prg
             //----------------------------------------------------------
-            
+            // print_str("N");
+            // print_dec(node_index);
+            // print_str("I");
+            print_str_dec_n("queue index here: ",queue_index);
+            print_str_dec_n("node index: ",node_index);
+            print_str_dec_n("Value of I: ",i);
+            // if(i>1)
+            // i=1;
+            // if(i==0)
+            // node_index=0;
+            // else
+            // node_index=1;
+            // i = 0;
+            // node_index = 0
             node_assign_prg( node_index, i );
             prg_set_active( i );
             node_set_busy( node_index );
             
             
-            
+          
 #ifdef EN_SKIPPING
             // update skip cnt
             // watch out that the cnt does not go neg
@@ -456,7 +475,7 @@ void my_main()
         }
     }
     
-    print_str( "done\n" );
+    // print_str( "done\n" );
     
     signal_fin();
     

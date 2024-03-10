@@ -10,7 +10,7 @@
   Copyright (C) 2019 Stefan Huemer <stefan@huemer.tech>
   
 ***************************************************************************** */
-
+`define SIMULATION
 module bram_controller
 #()
 (
@@ -61,9 +61,16 @@ reg[ `AXI_DATA_WIDTH-1:0 ] rdata_temp;
 
 reg done = 1'b0;
 
+    `ifdef SIMULATION
+        always @(posedge bram_write) begin       
+            $display("\n0x%08x ==>  0x%08x Write to Bram", bram_wdata, bram_addr); 
+        end
+    `endif
+
+
 always @ ( posedge clk )
 begin : proc_bram_controller
-    
+
     if ( ! res_n )
     begin
         

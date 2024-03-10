@@ -9,7 +9,7 @@
   
 ***************************************************************************** */
 
-`define N0_ARCH ( `RV32I )
+`define N0_ARCH ( `RV32IM )
 `define N1_ARCH ( `RV32IM )
 `define N2_ARCH  ( 1'b1 )
 `define N3_ARCH  ( 1'b1 )

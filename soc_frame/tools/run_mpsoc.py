@@ -291,7 +291,7 @@ print( "\t\t\t\t>>>>>>>>pick controller estimations" )
 ### NO ITS NOT #### REASON IS 25048 HARD CODED INTO VTOP__TRACE.CPP 
 ### NO ITS NOT HARD CODED ===> DELETE OBJ_DIR +++ CHANGE MEM_SIZE ====> THEN RE-RUN
 controller_size_addr = 32764 # 0x7FFC
-# controller_size_addr = 131056
+controller_size_addr = 131056
 controller_size = controller_size_addr / 4
 
 controller_size = int(controller_size)
@@ -357,7 +357,7 @@ con.create_prg_define( which_arch, arch_lst, mem, index, None, exec_interval_mod
 # we read solar charging data from a spreadsheet that is used to simulate a
 # charging battery.
 
-charges_f = open( "solar/final.csv", "r" )
+charges_f = open( "/home/user/soc_frame/tools/solar/final.csv", "r" )
 charges_l = charges_f.readlines()
 
 # remove newlines
@@ -377,9 +377,10 @@ con.compl( index_to_addr( controller_size ) )
 
 # add compiled controller to memory
 # ---------------------------------------
-
+memsch = Memory()
 mem.include( con, index_to_addr( controller_size ) )
-
+memsch.include( con, index_to_addr( controller_size ) )
+memsch.save("shchexbin.json")
 mem.save( config_name + "_prgs_with_controller.json" )
 
 # like before, an already created memory file can be loaded.

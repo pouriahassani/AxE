@@ -26,7 +26,7 @@ class System:
     
     def get_path_dir( self ):
         
-        return self.path_base + "/" + self.name + "/"
+        return self.path_base  + self.name + "/"
     
     # DEPRECATED
     
@@ -48,7 +48,7 @@ class System:
     # --------------------------------------------------------------------------
     
     def compl( self ):
-        
+        print(self.get_dir_path())
         os.system( "make -C " + self.get_dir_path() )
         
     

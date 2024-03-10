@@ -160,18 +160,37 @@ int main(int argc, char** argv, char** env) {
             {
                 // the controller software signals termination by sending some
                 // ascii control char
-                
-                if ( 0x04 == top->buffer_out_data )
-                {
-                    int i = 0;
-                    for ( i = 0; i < buffer_index; i++ )
+               
+                buffer[buffer_index] = top->buffer_out_data;
+                buffer_index++;
+
+                // If the received character is the end of string character
+                if (top->buffer_out_data == '\n') {
+                     VL_PRINTF( "buffer: ");
+                    // VL_PRINTF("%s", buffer);
+                    for (size_t i = 0; i < buffer_index; i++)
                     {
-                        VL_PRINTF( "%c", buffer[ i ] );
+                        VL_PRINTF("%c", buffer[i]);
                     }
-                    
-                    VL_PRINTF( "kill me\n" );
-                    break;
+                    for (size_t i = 0; i < 1000; i++)
+                    {
+                        buffer[i] = 0;
+                    }
+                    buffer_index = 0;  // Reset the buffer index for the next string
                 }
+
+
+                // if ( 0x04 == top->buffer_out_data )
+                // {
+                //     int i = 0;
+                //     for ( i = 0; i < buffer_index; i++ )
+                //     {
+                //         VL_PRINTF( "%c", buffer[ i ] );
+                //     }
+                    
+                //     VL_PRINTF( "kill me\n" );
+                //     break;
+                // }
                 
                 // *( buffer++ ) = (char)top->buffer_out_data;
                 // buffer += (char)top->buffer_out_data;
@@ -182,7 +201,7 @@ int main(int argc, char** argv, char** env) {
                 
                 //~ buffer_index += 1;
                 
-                VL_PRINTF( "%c", top->buffer_out_data );
+                // VL_PRINTF( "%c", top->buffer_out_data );
             }
 
             // -----------------------------------------------------------------

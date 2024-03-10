@@ -29,7 +29,7 @@ CONFIGURATION = test_single_vivado
 #~ CONFIGURATION = noc_two_nodes
 #~ CONFIGURATION = noc_three_nodes
 #~ CONFIGURATION = mult_no_noc_interface
-#~ CONFIGURATION = mult_noc_interface
+#~ CONFIGURATION = mult_noc_interfaceveri
 #~ CONFIGURATION = test
 
 DIR = ./configurations/$(CONFIGURATION)

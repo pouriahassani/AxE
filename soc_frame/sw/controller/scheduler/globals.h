@@ -8,7 +8,7 @@ int charges[ NUM_CHARGES ];
 unsigned int charges_i = 0;
 
 int queue_index = 0;
-
+int QUEUE_SIZE = 0;
 unsigned int cnt_prev = 0;
 unsigned int cnt = 0;
 

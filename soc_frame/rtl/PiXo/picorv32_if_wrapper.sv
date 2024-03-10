@@ -14,6 +14,7 @@
 
 module picorv32_if_wrapper
 #(
+    parameter NODE_ID = 0,
      parameter ENABLE_MUL = 0
     ,parameter ENABLE_DIV = 0
     
@@ -33,6 +34,7 @@ module picorv32_if_wrapper
     
     picorv32_axi
     #(
+        .NODE_ID( NODE_ID ),
          .PROGADDR_RESET( 32'h 0000_0000 ) // just to be sure
         ,.STACKADDR( STACKADDR )
         
