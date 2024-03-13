@@ -7,7 +7,7 @@ SYMBOL TABLE:
 0014fb48 l    d  .sdata	00000000 .sdata
 0014fb50 l    d  .bss	00000000 .bss
 00000000 l    d  .comment	00000000 .comment
-00000000 l    df *ABS*	00000000 /tmp/ccw7ecaV.o
+00000000 l    df *ABS*	00000000 /tmp/ccRHo92x.o
 000000dc l       .text	00000000 loop
 00000000 l    df *ABS*	00000000 memmgr.c
 0014fb50 l     O .bss	00000008 base

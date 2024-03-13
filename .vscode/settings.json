@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "*.tcc": "c",
+        "memory_resource": "c",
+        "limits": "c"
+    }
+}
