@@ -474,7 +474,7 @@ float temp;
 
   *bp=(unsigned char *)malloc(516);
   *bp=*bp+258;
-
+  FILE* fd = fopen("brightend_data.txt","wt"); 
   for(k=-256;k<257;k++)
   {
     temp=((float)k)/((float)thresh);
@@ -483,6 +483,7 @@ float temp;
       temp=temp*temp*temp;
     temp=100.0*exp(-temp);
     *(*bp+k)= (uchar)temp;
+    fprintf(fd,"%f\n",temp);
   }
 }
 

@@ -768,3 +768,16 @@ void intToString(int num, char* str) {
         num /= 10;
     }
 }
+
+int floatToInt(float32_t x){
+    if(extractExponent(x)<127)  
+        return 0;
+
+    int y = extractFraction(x) | 0x800000;
+    if(extractExponent(x) > 159)
+        return -1;
+    if(extractExponent(x) > 150 && extractExponent(x) < 159)
+        return y << (extractExponent(x) - 150);
+   
+    return y>>(150 - extractExponent(x) );
+};

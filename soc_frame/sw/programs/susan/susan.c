@@ -1198,19 +1198,21 @@ void setup_brightness_lut(bp,thresh,form)
   int   thresh, form;
 {
 int   k;
-float temp;
-
-  *bp=(unsigned char *)malloc(516);
+float32_t temp;
+char* k_string;
+char* thresh_string;
   *bp=*bp+258;
 
   for(k=-256;k<257;k++)
   {
-    temp=((float)k)/((float)thresh);
-    temp=temp*temp;
-    if (form==6)
-      temp=temp*temp*temp;
-    temp=100.0*exp(-temp);
-    *(*bp+k)= (uchar)temp;
+    intToString(k,k_string);
+    temp=float_divide(stringToFloat(k_string),stringToFloat(thresh_string));
+    temp=float_mul(temp,temp);
+    if (form==6){
+      temp = float_mul(float_mul(temp,temp),temp);
+    }
+    temp=float_mul(stringToFloat("100.0"),power(stringToFloat("2.74"),float_sub(stringToFloat("1"),temp)));
+    *(*bp+k)= (uchar)floatToInt(temp);
   }
 }
 
@@ -1376,32 +1378,37 @@ int   i, j;
 
   for(i=0; i<*x_size; i++)   /* copy *in into tmp_image */{
      for(j=0; j<*y_size; j++){
-        tmp_image[border+i][border+j] = data[i][j];
-        printf("\n%d %d",border+i,border+j);
+        tmp_image[7+i][7+j] = data[i][j];
+        // printf("\n%d %d",7+i,7+j);
      }
   }
     
 
-  for(i=0; i<border; i++) /* copy top and bottom rows; invert as many as necessary */
+  for(i=0; i<7; i++) /* copy top and bottom rows; invert as many as necessary */
   {
     for(j=0; j<*y_size; j++) /* copy top and bottom rows; invert as many as necessary */
     {
-        tmp_image[*x_size+border+i][border+j] = data[*x_size][j];
-        tmp_image[border+i][border+j] = data[0][j];
+        tmp_image[6-i][7+j] = data[7+i][j];
+        tmp_image[*x_size + 7+i][7+j] = data[*x_size - i-1][j];
     }
   }
 
-  for(i=0; i<*x_size; i++) /* copy top and bottom rows; invert as many as necessary */
+  for(i=0; i<border; i++) /* copy top and bottom rows; invert as many as necessary */
   {
-    for(j=0; j<border; j++) /* copy top and bottom rows; invert as many as necessary */
+    for(j=0; j<*x_size+2*border; j++) /* copy top and bottom rows; invert as many as necessary */
     {
-        tmp_image[border+i][j] = data[i][0];
-        tmp_image[border+i][border + *y_size + j] = data[*y_size][j];
+        tmp_image[7 - i - 1][j] = tmp_image[7 + i][j];
+        tmp_image[7+i+*x_size][j] = tmp_image[7 - i - 1 +*x_size][j];
     }
   }
-
-  *x_size+=2*border;  /* alter image size */
-  *y_size+=2*border;
+for(i=0;i<90;i++){
+  for(j=0;j<109;j++){
+    printf("%d ",tmp_image[i][j]);
+  }
+  printf("\n");
+}
+  *x_size+=2*7;  /* alter image size */
+  *y_size+=2*7;
   *in=tmp_image;      /* repoint in */
 
 }
@@ -1419,9 +1426,9 @@ void susan_smoothing(three_by_three,in,dt,x_size,y_size,bp)
 float temp;
 int   n_max, increment, mask_size,
       i,j,x,y,area,brightness,tmp,centre,tmp_image[90][109];
-uchar *ip, *dp, *dpt, *cp, *out=in;
+uchar *ip, *dpt, *cp, *out=in;
 TOTAL_TYPE total;
-
+uchar dp[225];
 /* }}} */
 
   /* {{{ setup larger image and border sizes */
@@ -1440,18 +1447,17 @@ TOTAL_TYPE total;
   {     /* large Gaussian masks */
     /* {{{ setup distance lut */
 
-  n_max = (mask_size*2) + 1;
+  n_max = 15;
 
   increment = x_size - n_max;
 
-  dp     = (unsigned char *)malloc(n_max*n_max);
   dpt    = dp;
   temp   = -16;
 
   for(i=-mask_size; i<=mask_size; i++)
     for(j=-mask_size; j<=mask_size; j++)
     {
-      x = (int) (stri(100.0) * exp( ((float)((i*i)+(j*j))) / temp ));
+      x = (int) (100.0 * exp( ((float)((i*i)+(j*j))) / temp ));
       *dpt++ = (unsigned char)x;
     }
 
@@ -2653,13 +2659,12 @@ main(argc, argv)
 {
 /* {{{ vars */
 
-
-uchar   *bp, *mid;
+uchar in[90][109];
+uchar   bp[516], *mid;
 float  dt=4.0;
 int    *r,
        argindex=3,
        bt=20,
-       in[90][109],
        principle=0,
        thin_post_proc=1,
        three_by_three=0,
