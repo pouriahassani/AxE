@@ -323,39 +323,6 @@ module picorv32 #(
 	    .pcpi_ready(pcpi_fpmul_ready)
 	);	
 
-	// fp_execute_stage1 pcpi_fpmul (
-	    // .clk(clk),
-		// .reset(0),
-		// .wb_rollback_en(0),
-		// .wb_rollback_thread_idx(0),
-		// .of_operand1(0),
-		// .of_operand2(0),
-		// .of_mask_value(0),
-		// .of_instruction_valid(0),
-		// .of_instruction(0),
-		// .of_thread_idx(0),
-		// .of_subcycle(0),
-		// .fx1_instruction_valid(0),
-		// .fx1_instruction(0),
-		// .fx1_mask_value(0),
-		// .fx1_thread_idx(0),
-		// .fx1_subcycle(0),
-		// .fx1_result_inf(0),
-		// .fx1_result_nan(0),
-		// .fx1_equal(0),
-		// .fx1_ftoi_lshift(0),
-		// .fx1_significand_le(0),
-		// .fx1_significand_se(0),
-		// .fx1_se_align_shift(0),
-		// .fx1_add_exponent(0),
-		// .fx1_logical_subtract(0),
-		// .fx1_add_result_sign(0),
-		// .fx1_multiplicand(0),
-		// .fx1_multiplier(0),
-		// .fx1_mul_exponent(0),
-		// .fx1_mul_underflow(0),
-		// .fx1_mul_sign(0)
-	// );
 
 
 
@@ -2480,7 +2447,7 @@ module picorv32_pcpi_fast_mul #(
 
 	always @(posedge clk) begin
 		if (instr_any_mul && !(EXTRA_MUL_FFS ? active[3:0] : active[1:0])) begin
-			$display("ACTIVE: picorv32_pcpi_fast_mul");
+			// $display("ACTIVE: picorv32_pcpi_fast_mul");
 			if (instr_rs1_signed)
 				rs1 <= $signed(pcpi_rs1);
 			else
@@ -2552,7 +2519,7 @@ module picorv32_pcpi_mul_approx (
                 // 		$display("I am in approx mul clk");
                 // `endif
 				if (active) begin
-						$display("ACTIVE: picorv32_pcpi_mul_approx");
+						// $display("ACTIVE: picorv32_pcpi_mul_approx");
                         pcpi_ready <= 1;
                         pcpi_wr <= 1;
                         //~ pcpi_rd <= pcpi_rs1 * pcpi_rs2;
@@ -2841,9 +2808,11 @@ endmodule
 /***************************************************************
  * picorv32_pcpi_fpmul
  ***************************************************************/
-//floating point multiplier as coprocessor on pcpi. Uses custom instructions (not RV32F). 
-module picorv32_pcpi_fpmul (
-        input             clk,
+//IEEE Floating Point Multiplier (Single Precision)
+//Copyright (C) Jonathan P Dawson 2013
+//2013-12-12
+module picorv32_pcpi_fpmul(
+	    input             clk,
         input             resetn,
         input             pcpi_valid,
         input      [31:0] pcpi_insn,
@@ -2854,20 +2823,255 @@ module picorv32_pcpi_fpmul (
         output reg        pcpi_wait,
         output reg        pcpi_ready
 	);
-        wire active = pcpi_valid && pcpi_insn[6:0] == 7'b1111111 && pcpi_insn[31:25] == 7'b1111111;
 
-        always @(posedge clk or negedge resetn) begin
-                pcpi_ready <= 0;
-                pcpi_wr <= 0;
-                pcpi_wait <= 0;
-				if (active) begin
-						$display("ACTIVE: picorv32_pcpi_fpmul");
-                        pcpi_ready <= 1;
-                        pcpi_wr <= 1;
-                        // ~ pcpi_rd <= pcpi_rs1 * pcpi_rs2;
-                end
+  //Internal variables
+  // custom instruction (R-Type) for invoking a Floating Point Addition on a PCPI Co-Processor
+  wire active = pcpi_valid && pcpi_insn[6:0] == 7'b0001011 && pcpi_insn[31:25] == 7'b0000001; //TODO: Change instruction to something else custom
+  reg       s_output_z_stb;
+  reg       [31:0] s_output_z;
+  reg       s_input_a_ack;
+  reg       s_input_b_ack;
+
+  reg       [3:0] state;
+  parameter get_operands  = 4'd0,
+            unpack        = 4'd1,
+            special_cases = 4'd2,
+            normalise_a   = 4'd3,
+            normalise_b   = 4'd4,
+            multiply_0    = 4'd5,
+            multiply_1    = 4'd6,
+            normalise_1   = 4'd7,
+            normalise_2   = 4'd8,
+            round         = 4'd9,
+            pack          = 4'd10,
+            put_z         = 4'd11;
+
+  reg       [31:0] a, b, z;
+  reg       [23:0] a_m, b_m, z_m;
+  reg       [9:0] a_e, b_e, z_e;
+  reg       a_s, b_s, z_s;
+  reg       guard, round_bit, sticky;
+  reg       [47:0] product;
+
+  always @(posedge clk)
+  begin
+
+    case(state)
+
+      get_operands:
+      begin
+        s_input_a_ack <= 1;
+		s_input_b_ack <= 1;
+        if (s_input_a_ack && s_input_b_ack && active) begin
+		//   $display("ACTIVE: picorv32_pcpi_fpmul");
+          a <= pcpi_rs1;
+          b <= pcpi_rs2;
+		  s_input_a_ack <= 0;
+          s_input_b_ack <= 0;
+        //   $display("a = %h", a);
+		//   $display("b = %h", b);
+          state <= unpack;
         end
+      end
+
+      unpack:
+      begin
+        a_m <= a[22 : 0];
+        b_m <= b[22 : 0];
+        a_e <= a[30 : 23] - 127;
+        b_e <= b[30 : 23] - 127;
+        a_s <= a[31];
+        b_s <= b[31];
+        state <= special_cases;
+      end
+
+      special_cases:
+      begin
+        //if a is NaN or b is NaN return NaN 
+        if ((a_e == 128 && a_m != 0) || (b_e == 128 && b_m != 0)) begin
+          z[31] <= 1;
+          z[30:23] <= 255;
+          z[22] <= 1;
+          z[21:0] <= 0;
+          state <= put_z;
+        //if a is inf return inf
+        end else if (a_e == 128) begin
+          z[31] <= a_s ^ b_s;
+          z[30:23] <= 255;
+          z[22:0] <= 0;
+          //if b is zero return NaN
+          if (($signed(b_e) == -127) && (b_m == 0)) begin
+            z[31] <= 1;
+            z[30:23] <= 255;
+            z[22] <= 1;
+            z[21:0] <= 0;
+          end
+          state <= put_z;
+        //if b is inf return inf
+        end else if (b_e == 128) begin
+          z[31] <= a_s ^ b_s;
+          z[30:23] <= 255;
+          z[22:0] <= 0;
+          //if a is zero return NaN
+          if (($signed(a_e) == -127) && (a_m == 0)) begin
+            z[31] <= 1;
+            z[30:23] <= 255;
+            z[22] <= 1;
+            z[21:0] <= 0;
+          end
+          state <= put_z;
+        //if a is zero return zero
+        end else if (($signed(a_e) == -127) && (a_m == 0)) begin
+          z[31] <= a_s ^ b_s;
+          z[30:23] <= 0;
+          z[22:0] <= 0;
+          state <= put_z;
+        //if b is zero return zero
+        end else if (($signed(b_e) == -127) && (b_m == 0)) begin
+          z[31] <= a_s ^ b_s;
+          z[30:23] <= 0;
+          z[22:0] <= 0;
+          state <= put_z;
+        end else begin
+          //Denormalised Number
+          if ($signed(a_e) == -127) begin
+            a_e <= -126;
+          end else begin
+            a_m[23] <= 1;
+          end
+          //Denormalised Number
+          if ($signed(b_e) == -127) begin
+            b_e <= -126;
+          end else begin
+            b_m[23] <= 1;
+          end
+          state <= normalise_a;
+        end
+      end
+
+      normalise_a:
+      begin
+        if (a_m[23]) begin
+          state <= normalise_b;
+        end else begin
+          a_m <= a_m << 1;
+          a_e <= a_e - 1;
+        end
+      end
+
+      normalise_b:
+      begin
+        if (b_m[23]) begin
+          state <= multiply_0;
+        end else begin
+          b_m <= b_m << 1;
+          b_e <= b_e - 1;
+        end
+      end
+
+      multiply_0:
+      begin
+        z_s <= a_s ^ b_s;
+        z_e <= a_e + b_e + 1;
+        product <= a_m * b_m;
+        state <= multiply_1;
+      end
+
+      multiply_1:
+      begin
+        z_m <= product[47:24];
+        guard <= product[23];
+        round_bit <= product[22];
+        sticky <= (product[21:0] != 0);
+        state <= normalise_1;
+      end
+
+      normalise_1:
+      begin
+        if (z_m[23] == 0) begin
+          z_e <= z_e - 1;
+          z_m <= z_m << 1;
+          z_m[0] <= guard;
+          guard <= round_bit;
+          round_bit <= 0;
+        end else begin
+          state <= normalise_2;
+        end
+      end
+
+      normalise_2:
+      begin
+        if ($signed(z_e) < -126) begin
+          z_e <= z_e + 1;
+          z_m <= z_m >> 1;
+          guard <= z_m[0];
+          round_bit <= guard;
+          sticky <= sticky | round_bit;
+        end else begin
+          state <= round;
+        end
+      end
+
+      round:
+      begin
+        if (guard && (round_bit | sticky | z_m[0])) begin
+          z_m <= z_m + 1;
+          if (z_m == 24'hffffff) begin
+            z_e <=z_e + 1;
+          end
+        end
+        state <= pack;
+      end
+
+      pack:
+      begin
+        z[22 : 0] <= z_m[22:0];
+        z[30 : 23] <= z_e[7:0] + 127;
+        z[31] <= z_s;
+        if ($signed(z_e) == -126 && z_m[23] == 0) begin
+          z[30 : 23] <= 0;
+        end
+        //if overflow occurs, return inf
+        if ($signed(z_e) > 127) begin
+          z[22 : 0] <= 0;
+          z[30 : 23] <= 255;
+          z[31] <= z_s;
+        end
+        state <= put_z;
+      end
+
+      put_z:
+      begin
+        s_output_z_stb <= 1;
+        s_output_z <= z;
+        if (s_output_z_stb) begin
+		//   $display("FPMUL Completed.");
+		//   $display("FPMUL internal input a: %h, internal input b: %h, external output z (s_output_z <= z;): %h, internal output z: %h", a, b, s_output_z, z);
+          s_output_z_stb <= 0;
+          state <= get_operands;
+        end
+      end
+
+    endcase
+
+	if (resetn == 0) begin
+      state <= get_operands;
+      s_input_a_ack <= 0;
+      s_input_b_ack <= 0;
+      s_output_z_stb <= 0;
+	  pcpi_ready <= 0;
+	  pcpi_wait <= 0;
+
+    end
+
+  end
+  // assign input_a_ack = s_input_a_ack;
+  // assign input_b_ack = s_input_b_ack;
+  assign pcpi_wr = s_output_z_stb;
+  assign pcpi_rd = s_output_z;
+
 endmodule
+
 
 
 
@@ -2934,7 +3138,7 @@ module picorv32_pcpi_fpadd(
         s_input_a_ack <= 1;
 		s_input_b_ack <= 1;
         if (s_input_a_ack && s_input_b_ack && active) begin
-		  $display("ACTIVE: picorv32_pcpi_fpadd");
+		//   $display("ACTIVE: picorv32_pcpi_fpadd");
           s_input_a_ack <= 0;
           s_input_b_ack <= 0;
 		  a <= pcpi_rs1;
@@ -3134,8 +3338,8 @@ module picorv32_pcpi_fpadd(
 		pcpi_ready <= 1; //TODO: check if this is correct placement
 		pcpi_wait <= 0;
         if (s_output_z_stb) begin
-		  $display("FPADD Completed.");
-		  $display("input a: %h, input b: %h, output z: %h", pcpi_rs1, pcpi_rs2, s_output_z);
+		//   $display("FPADD Completed.");
+		//   $display("FPADD input a: %h, input b: %h, output z: %h", pcpi_rs1, pcpi_rs2, s_output_z);
           s_output_z_stb <= 0;
           state <= get_operands;
         end
@@ -3219,7 +3423,7 @@ module picorv32_pcpi_div (
 			running <= 0;
 		end else
 		if (start) begin
-			$display("ACTIVE: picorv32_pcpi_div");
+			// $display("ACTIVE: picorv32_pcpi_div");
 			running <= 1;
 			dividend <= (instr_div || instr_rem) && pcpi_rs1[31] ? -pcpi_rs1 : pcpi_rs1;
 			divisor <= ((instr_div || instr_rem) && pcpi_rs2[31] ? -pcpi_rs2 : pcpi_rs2) << 31;

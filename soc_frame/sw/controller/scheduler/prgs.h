@@ -4,7 +4,7 @@
 
 void init_prgs( prg_t *prgs )
 {
-	prgs[0].name = "fpadd";
+	prgs[0].name = "fpmul";
 	prgs[0].addr[ARCH_RV32IM] = 0x1fff0; // index: 32764 size: 1292
 	prgs[0].exec_t[ARCH_RV32IM] = 0;
 	prgs[0].exec_inv[ARCH_RV32IM] = 0;

@@ -19,16 +19,16 @@
 // read the result from the register. this is done by adding 0 to x10.
 
 __attribute__((noinline))
-int amul(int rd, int rs1, int rs2)
+int fpmul(int rd, int rs1, int rs2)
 {
-    asm __volatile__ (".word 0xFEC5857F\n");
-    asm __volatile__ ("addi %0, x10, 0" : "=r" (rd));
+    asm __volatile__ (".word 0x02C5850B\n");
+    asm __volatile__ ("addi %0, x10, 0" : "=r" (rd)); //TODO: what is addi? Assembly? May have to be edited to also designate the custom instruction used (PCPI_FPADD)
     
     return rd;
 }
 
 // The main function has to be called my_main.
-//TODO: Could be buggy, as it has been changed a few times and not re-verified in a simulation.
+
 void my_main()
 {
     // There are a few print functions located in util.h (found in dir _libs).
@@ -41,23 +41,28 @@ void my_main()
     
     // The messeges are detected by the debugger module and further processed
     // by the simulation environment (sim_main.cpp under configurations)
-    
-    print_str( "mul s\n" );
-    int a = 333;
-    int b = 444;
 
-    int pro = 0;
-    int pro_appr = 0;
-    
-    pro = a + b;
-    pro_appr = amul( pro_appr, a, b);
 
-    print_str("exact\n");
-    print_dec(pro);
+
+
+    /*************************************************************************************************************************
+    Sanity test for custom pcpi_fpmul instruction running on PCPI coprocessor called picorv32_pcpi_fpmul
+    **************************************************************************************************************************/
+   //TODO: THIS DIRECTORY IS A STRAIGHT COPY OF THE MUL_APROX BENCHMARK PROGRAM. FILES IN THIS DIRECTORY HERE HAVE NOT BEEN VERIFIED AND WE DO NOT KNOW WHAT THEY DO OR IF THEY MATTER.
+    int fpa = 0x40133333; // 2.3
+    int fpb = 0x3DCCCCCD; // 0.1
+    
+    int fppro = 0;
+    fppro = fpmul( fppro, fpa, fpb);
+
+
+
+    // print_str("exact\n");
+    // print_dec(pro);
     nl();
     
-    print_str("approx\n");
-    print_dec(pro_appr);
+    // print_str("approx\n");
+    print_dec(fppro);
     nl();
     
     print_str( "mul d\n" );
