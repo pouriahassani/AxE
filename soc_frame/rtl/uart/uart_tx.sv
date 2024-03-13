@@ -128,7 +128,7 @@ begin : uart_tx_proc
             // latched_data
             if ( clk_baud_rising == 1'b1 )
             begin
-                $display("The Uart: %c",latched_data);
+                // $display("The Uart: %c",latched_data);
                 tx = 1'b1;
                 state = IDLE;
                 

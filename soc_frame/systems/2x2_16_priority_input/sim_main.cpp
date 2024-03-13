@@ -163,6 +163,7 @@ int main(int argc, char** argv, char** env) {
                     {
                         VL_PRINTF("%c", buffer[i]);
                     }
+                    VL_PRINTF("\n");
                     for (size_t i = 0; i < 1000; i++)
                     {
                         buffer[i] = 0;

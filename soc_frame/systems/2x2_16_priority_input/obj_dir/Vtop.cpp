@@ -1139,9 +1139,7 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__2(Vtop__Syms* __restrict vlSymsp) {
                     }
                 } else {
                     if ((3U == vlTOPp->top__DOT__uart_inst__DOT__uart_tx_inst__DOT__state)) {
-                        if (VL_UNLIKELY(vlTOPp->top__DOT__uart_inst__DOT__clk_baud_rising_w)) {
-                            VL_WRITEF("The Uart: %c\n",
-                                      8,vlTOPp->top__DOT__uart_inst__DOT__uart_tx_inst__DOT__latched_data);
+                        if (vlTOPp->top__DOT__uart_inst__DOT__clk_baud_rising_w) {
                             vlTOPp->top__DOT__tx_out = 1U;
                             vlTOPp->top__DOT__uart_inst__DOT__uart_tx_inst__DOT__state = 0U;
                         }
@@ -1476,247 +1474,6 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__2(Vtop__Syms* __restrict vlSymsp) {
         vlTOPp->top__DOT__memory_controller_inst__DOT__w_merged_request_bridge_to_buffer[1U] = 0U;
         vlTOPp->top__DOT__memory_controller_inst__DOT__w_merged_request_bridge_to_buffer[2U] = 0U;
     }
-    vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.awready = 0U;
-    vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.wready = 0U;
-    vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.arready = 0U;
-    vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.bvalid = 0U;
-    vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.rvalid = 0U;
-    if (vlTOPp->top__DOT__w_res_n_syn) {
-        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counter_global 
-            = ((IData)(1U) + vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counter_global);
-        if ((1U & vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__active)) {
-            vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counters[0U] 
-                = ((IData)(1U) + vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counters
-                   [0U]);
-        }
-        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__i = 2U;
-        if ((2U & vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__active)) {
-            vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counters[1U] 
-                = ((IData)(1U) + vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counters
-                   [1U]);
-        }
-        if ((0U == vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__state)) {
-            __Vtask_write_req_wait__105__done = 0U;
-            vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.arready = 1U;
-            if ((1U & (~ (IData)(vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.w_addr_collected)))) {
-                vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.awready = 1U;
-            }
-            if ((1U & (~ (IData)(vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.w_data_collected)))) {
-                vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.wready = 1U;
-            }
-            if (vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.awvalid) {
-                __Vtask_write_req_wait__105__t_awaddr 
-                    = vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.awaddr;
-                __Vtask_write_req_wait__105__t_awprot 
-                    = vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.awprot;
-                vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.w_addr_collected = 1U;
-            }
-            if (vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.wvalid) {
-                __Vtask_write_req_wait__105__t_wdata 
-                    = vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.wdata;
-                __Vtask_write_req_wait__105__t_wstrb 
-                    = vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.wstrb;
-                vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.w_data_collected = 1U;
-            }
-            if (((IData)(vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.w_addr_collected) 
-                 & (IData)(vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.w_data_collected))) {
-                vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.w_addr_collected = 0U;
-                vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.w_data_collected = 0U;
-                __Vtask_write_req_wait__105__done = 1U;
-            }
-            vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_awaddr 
-                = __Vtask_write_req_wait__105__t_awaddr;
-            vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_awprot 
-                = __Vtask_write_req_wait__105__t_awprot;
-            vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_wdata 
-                = __Vtask_write_req_wait__105__t_wdata;
-            vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_wstrb 
-                = __Vtask_write_req_wait__105__t_wstrb;
-            vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__done 
-                = __Vtask_write_req_wait__105__done;
-            if (vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__done) {
-                vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__state = 1U;
-            }
-            __Vtask_read_req_wait__106__done = 0U;
-            if (vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.arvalid) {
-                __Vtask_read_req_wait__106__t_araddr 
-                    = vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.araddr;
-                __Vtask_read_req_wait__106__t_arprot 
-                    = vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.arprot;
-                __Vtask_read_req_wait__106__done = 1U;
-            }
-            vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_araddr 
-                = __Vtask_read_req_wait__106__t_araddr;
-            vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_arprot 
-                = __Vtask_read_req_wait__106__t_arprot;
-            vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__done 
-                = __Vtask_read_req_wait__106__done;
-            if (vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__done) {
-                vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__state = 2U;
-            }
-        } else {
-            if (VL_UNLIKELY((1U == vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__state))) {
-                vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__node_sel 
-                    = (1U & (vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_awaddr 
-                             >> 2U));
-                VL_WRITEF("awaddr: %b\n",32,vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_awaddr);
-                vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__state = 3U;
-                if (VL_UNLIKELY((0x80U & vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_awaddr))) {
-                    vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__axi_offsets[vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__node_sel] 
-                        = vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_wdata;
-                    if ((0U == vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_wdata)) {
-                        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__active 
-                            = ((~ ((IData)(1U) << (IData)(vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__node_sel))) 
-                               & vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__active);
-                        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__num_active 
-                            = (vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__num_active 
-                               - (IData)(1U));
-                    } else {
-                        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__num_active 
-                            = ((IData)(1U) + vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__num_active);
-                        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counters[vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__node_sel] = 0U;
-                        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__active 
-                            = (vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__active 
-                               | ((IData)(1U) << (IData)(vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__node_sel)));
-                    }
-                    if ((0U == vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_wdata)) {
-                        VL_WRITEF(";%10#,%1#,fin;\n",
-                                  32,vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counter_global,
-                                  1,(IData)(vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__node_sel));
-                    } else {
-                        VL_WRITEF("Contro set prg:;%10#,p%x,%1#;\n",
-                                  32,vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counter_global,
-                                  32,vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_wdata,
-                                  1,(IData)(vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__node_sel));
-                    }
-                    if (VL_UNLIKELY((vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counter_global_prev 
-                                     > vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counter_global))) {
-                        VL_WRITEF("uut: detected overflow\n");
-                        VL_WRITEF("uut: prev: %10#\n",
-                                  32,vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counter_global_prev);
-                        VL_WRITEF("uut: curr: %10#\n",
-                                  32,vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counter_global);
-                    }
-                    VL_WRITEF("uut: %10#,%11d,%1#,%x\n",
-                              32,vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counter_global,
-                              32,vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__num_active,
-                              1,(IData)(vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__node_sel),
-                              32,vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_wdata);
-                    vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counter_global_prev 
-                        = vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counter_global;
-                } else {
-                    if ((0x40000U & vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_awaddr)) {
-                        vlTOPp->leds_status = (0xffU 
-                                               & vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_wdata);
-                    } else {
-                        if ((0x80000U & vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_awaddr)) {
-                            vlTOPp->triggers = (0xffU 
-                                                & vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_wdata);
-                        }
-                    }
-                }
-            } else {
-                if ((2U == vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__state)) {
-                    vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__node_sel 
-                        = (1U & (vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_araddr 
-                                 >> 2U));
-                    vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__state = 4U;
-                    if ((0x80U & vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_araddr)) {
-                        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_rdata 
-                            = vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__axi_offsets
-                            [vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__node_sel];
-                    } else {
-                        if ((0x100U & vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_araddr)) {
-                            vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_rdata 
-                                = vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__active;
-                        } else {
-                            if ((0x200U & vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_araddr)) {
-                                vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_rdata 
-                                    = vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counters
-                                    [vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__node_sel];
-                            } else {
-                                if ((0x400U & vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_araddr)) {
-                                    vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_rdata 
-                                        = vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counter_global;
-                                } else {
-                                    if ((0x8000U & vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_araddr)) {
-                                        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_rdata 
-                                            = vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counter_global;
-                                        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counter_global = 0U;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    if (VL_UNLIKELY((0x80U & vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_araddr))) {
-                        VL_WRITEF("got read at control: %x\n",
-                                  1,vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__node_sel);
-                        VL_WRITEF("got read at control: %x\n",
-                                  32,vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__axi_offsets
-                                  [vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__node_sel]);
-                    }
-                    if (VL_UNLIKELY((0x400U & vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_araddr))) {
-                        VL_WRITEF("global time\n");
-                    }
-                } else {
-                    if ((3U == vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__state)) {
-                        __Vtask_write_resp__107__done = 0U;
-                        vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.bvalid = 1U;
-                        vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.bresp = 0U;
-                        if (vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.bready) {
-                            __Vtask_write_resp__107__done = 1U;
-                        }
-                        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__done 
-                            = __Vtask_write_resp__107__done;
-                        if (vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__done) {
-                            vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__state = 0U;
-                        }
-                    } else {
-                        if ((4U == vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__state)) {
-                            __Vtask_read_resp__108__t_rdata 
-                                = vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_rdata;
-                            __Vtask_read_resp__108__done = 0U;
-                            vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.rvalid = 1U;
-                            vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.rresp = 0U;
-                            vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.rdata 
-                                = __Vtask_read_resp__108__t_rdata;
-                            if (vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.rready) {
-                                __Vtask_read_resp__108__done = 1U;
-                            }
-                            vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__done 
-                                = __Vtask_read_resp__108__done;
-                            if (vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__done) {
-                                vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__state = 0U;
-                            }
-                        } else {
-                            vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__state = 0U;
-                        }
-                    }
-                }
-            }
-        }
-    } else {
-        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__axi_offsets[0U] = 0U;
-        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counters[0U] = 0U;
-        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__i = 2U;
-        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__done = 0U;
-        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__node_sel = 0U;
-        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__active = 0U;
-        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__num_active = 0U;
-        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counter_global = 1U;
-        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counter_global_prev = 0U;
-        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_awaddr = 0U;
-        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_awprot = 0U;
-        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_wdata = 0U;
-        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_wstrb = 0U;
-        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_araddr = 0U;
-        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_arprot = 0U;
-        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_bresp = 0U;
-        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_rresp = 0U;
-        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_rdata = 0U;
-        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__axi_offsets[1U] = 0U;
-        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counters[1U] = 0U;
-    }
     if (vlTOPp->top__DOT__w_res_n_syn) {
         vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_memory.awready = 0U;
         vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_memory.wready = 0U;
@@ -1895,6 +1652,240 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__2(Vtop__Syms* __restrict vlSymsp) {
         vlTOPp->top__DOT__memory_controller_inst__DOT__bram_controller_inst__DOT__wdata_temp = 0U;
         vlTOPp->top__DOT__memory_controller_inst__DOT__bram_controller_inst__DOT__rdata_temp = 0U;
         vlTOPp->top__DOT__memory_controller_inst__DOT__bram_controller_inst__DOT__done = 0U;
+    }
+    vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.awready = 0U;
+    vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.wready = 0U;
+    vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.arready = 0U;
+    vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.bvalid = 0U;
+    vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.rvalid = 0U;
+    if (vlTOPp->top__DOT__w_res_n_syn) {
+        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counter_global 
+            = ((IData)(1U) + vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counter_global);
+        if ((1U & vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__active)) {
+            vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counters[0U] 
+                = ((IData)(1U) + vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counters
+                   [0U]);
+        }
+        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__i = 2U;
+        if ((2U & vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__active)) {
+            vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counters[1U] 
+                = ((IData)(1U) + vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counters
+                   [1U]);
+        }
+        if ((0U == vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__state)) {
+            __Vtask_write_req_wait__105__done = 0U;
+            vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.arready = 1U;
+            if ((1U & (~ (IData)(vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.w_addr_collected)))) {
+                vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.awready = 1U;
+            }
+            if ((1U & (~ (IData)(vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.w_data_collected)))) {
+                vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.wready = 1U;
+            }
+            if (vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.awvalid) {
+                __Vtask_write_req_wait__105__t_awaddr 
+                    = vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.awaddr;
+                __Vtask_write_req_wait__105__t_awprot 
+                    = vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.awprot;
+                vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.w_addr_collected = 1U;
+            }
+            if (vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.wvalid) {
+                __Vtask_write_req_wait__105__t_wdata 
+                    = vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.wdata;
+                __Vtask_write_req_wait__105__t_wstrb 
+                    = vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.wstrb;
+                vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.w_data_collected = 1U;
+            }
+            if (((IData)(vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.w_addr_collected) 
+                 & (IData)(vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.w_data_collected))) {
+                vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.w_addr_collected = 0U;
+                vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.w_data_collected = 0U;
+                __Vtask_write_req_wait__105__done = 1U;
+            }
+            vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_awaddr 
+                = __Vtask_write_req_wait__105__t_awaddr;
+            vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_awprot 
+                = __Vtask_write_req_wait__105__t_awprot;
+            vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_wdata 
+                = __Vtask_write_req_wait__105__t_wdata;
+            vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_wstrb 
+                = __Vtask_write_req_wait__105__t_wstrb;
+            vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__done 
+                = __Vtask_write_req_wait__105__done;
+            if (vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__done) {
+                vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__state = 1U;
+            }
+            __Vtask_read_req_wait__106__done = 0U;
+            if (vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.arvalid) {
+                __Vtask_read_req_wait__106__t_araddr 
+                    = vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.araddr;
+                __Vtask_read_req_wait__106__t_arprot 
+                    = vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.arprot;
+                __Vtask_read_req_wait__106__done = 1U;
+            }
+            vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_araddr 
+                = __Vtask_read_req_wait__106__t_araddr;
+            vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_arprot 
+                = __Vtask_read_req_wait__106__t_arprot;
+            vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__done 
+                = __Vtask_read_req_wait__106__done;
+            if (vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__done) {
+                vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__state = 2U;
+            }
+        } else {
+            if (VL_UNLIKELY((1U == vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__state))) {
+                vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__node_sel 
+                    = (1U & (vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_awaddr 
+                             >> 2U));
+                VL_WRITEF("awaddr: %b\n",32,vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_awaddr);
+                vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__state = 3U;
+                if (VL_UNLIKELY((0x80U & vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_awaddr))) {
+                    vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__axi_offsets[vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__node_sel] 
+                        = vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_wdata;
+                    if ((0U == vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_wdata)) {
+                        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__active 
+                            = ((~ ((IData)(1U) << (IData)(vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__node_sel))) 
+                               & vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__active);
+                        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__num_active 
+                            = (vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__num_active 
+                               - (IData)(1U));
+                    } else {
+                        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__num_active 
+                            = ((IData)(1U) + vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__num_active);
+                        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counters[vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__node_sel] = 0U;
+                        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__active 
+                            = (vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__active 
+                               | ((IData)(1U) << (IData)(vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__node_sel)));
+                    }
+                    if ((0U == vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_wdata)) {
+                        VL_WRITEF(";%10#,%1#,fin;\n",
+                                  32,vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counter_global,
+                                  1,(IData)(vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__node_sel));
+                    } else {
+                        VL_WRITEF("Contro set prg:;%10#,p%x,%1#;\n",
+                                  32,vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counter_global,
+                                  32,vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_wdata,
+                                  1,(IData)(vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__node_sel));
+                    }
+                    if (VL_UNLIKELY((vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counter_global_prev 
+                                     > vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counter_global))) {
+                        VL_WRITEF("uut: detected overflow\n");
+                        VL_WRITEF("uut: prev: %10#\n",
+                                  32,vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counter_global_prev);
+                        VL_WRITEF("uut: curr: %10#\n",
+                                  32,vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counter_global);
+                    }
+                    VL_WRITEF("uut: %10#,%11d,%1#,%x\n",
+                              32,vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counter_global,
+                              32,vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__num_active,
+                              1,(IData)(vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__node_sel),
+                              32,vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_wdata);
+                    vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counter_global_prev 
+                        = vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counter_global;
+                } else {
+                    if ((0x40000U & vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_awaddr)) {
+                        vlTOPp->leds_status = (0xffU 
+                                               & vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_wdata);
+                    } else {
+                        if ((0x80000U & vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_awaddr)) {
+                            vlTOPp->triggers = (0xffU 
+                                                & vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_wdata);
+                        }
+                    }
+                }
+            } else {
+                if ((2U == vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__state)) {
+                    vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__node_sel 
+                        = (1U & (vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_araddr 
+                                 >> 2U));
+                    if ((0x80U & vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_araddr)) {
+                        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_rdata 
+                            = vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__axi_offsets
+                            [vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__node_sel];
+                    } else {
+                        if ((0x100U & vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_araddr)) {
+                            vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_rdata 
+                                = vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__active;
+                        } else {
+                            if ((0x200U & vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_araddr)) {
+                                vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_rdata 
+                                    = vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counters
+                                    [vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__node_sel];
+                            } else {
+                                if ((0x400U & vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_araddr)) {
+                                    vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_rdata 
+                                        = vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counter_global;
+                                } else {
+                                    if ((0x8000U & vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_araddr)) {
+                                        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_rdata 
+                                            = vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counter_global;
+                                        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counter_global = 0U;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__state = 4U;
+                    if (VL_UNLIKELY((0x400U & vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_araddr))) {
+                        VL_WRITEF("global time\n");
+                    }
+                } else {
+                    if ((3U == vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__state)) {
+                        __Vtask_write_resp__107__done = 0U;
+                        vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.bvalid = 1U;
+                        vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.bresp = 0U;
+                        if (vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.bready) {
+                            __Vtask_write_resp__107__done = 1U;
+                        }
+                        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__done 
+                            = __Vtask_write_resp__107__done;
+                        if (vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__done) {
+                            vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__state = 0U;
+                        }
+                    } else {
+                        if ((4U == vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__state)) {
+                            __Vtask_read_resp__108__t_rdata 
+                                = vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_rdata;
+                            __Vtask_read_resp__108__done = 0U;
+                            vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.rvalid = 1U;
+                            vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.rresp = 0U;
+                            vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.rdata 
+                                = __Vtask_read_resp__108__t_rdata;
+                            if (vlSymsp->TOP__top__DOT__memory_controller_inst__DOT__if_axi_light_control.rready) {
+                                __Vtask_read_resp__108__done = 1U;
+                            }
+                            vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__done 
+                                = __Vtask_read_resp__108__done;
+                            if (vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__done) {
+                                vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__state = 0U;
+                            }
+                        } else {
+                            vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__state = 0U;
+                        }
+                    }
+                }
+            }
+        }
+    } else {
+        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__axi_offsets[0U] = 0U;
+        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counters[0U] = 0U;
+        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__i = 2U;
+        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__done = 0U;
+        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__node_sel = 0U;
+        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__active = 0U;
+        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__num_active = 0U;
+        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counter_global = 1U;
+        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counter_global_prev = 0U;
+        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_awaddr = 0U;
+        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_awprot = 0U;
+        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_wdata = 0U;
+        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_wstrb = 0U;
+        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_araddr = 0U;
+        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_arprot = 0U;
+        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_bresp = 0U;
+        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_rresp = 0U;
+        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__latched_rdata = 0U;
+        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__axi_offsets[1U] = 0U;
+        vlTOPp->top__DOT__memory_controller_inst__DOT__control_inst__DOT__counters[1U] = 0U;
     }
     vlSymsp->TOP__top__DOT__node_0__DOT__if_axi_light_self_awareness_to_mux.awvalid = 0U;
     vlSymsp->TOP__top__DOT__node_0__DOT__if_axi_light_self_awareness_to_mux.wvalid = 0U;
@@ -20135,17 +20126,8 @@ void Vtop::_settle__TOP__7(Vtop__Syms* __restrict vlSymsp) {
                    >> 0x11U))]);
 }
 
-VL_INLINE_OPT void Vtop::_sequent__TOP__8(Vtop__Syms* __restrict vlSymsp) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop::_sequent__TOP__8\n"); );
-    Vtop* __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
-    // Body
-    VL_WRITEF("\n0x%08x ==>  0x%08x Write to Bram\n",
-              32,vlTOPp->top__DOT__memory_controller_inst__DOT__w_bram_wdata,
-              32,vlTOPp->top__DOT__memory_controller_inst__DOT__w_bram_addr);
-}
-
-VL_INLINE_OPT void Vtop::_combo__TOP__9(Vtop__Syms* __restrict vlSymsp) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop::_combo__TOP__9\n"); );
+VL_INLINE_OPT void Vtop::_combo__TOP__8(Vtop__Syms* __restrict vlSymsp) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop::_combo__TOP__8\n"); );
     Vtop* __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
     // Body
     vlTOPp->top__DOT__node_0__DOT__w_clk_gated = ((0U 
@@ -20156,8 +20138,8 @@ VL_INLINE_OPT void Vtop::_combo__TOP__9(Vtop__Syms* __restrict vlSymsp) {
                                                   & (IData)(vlTOPp->clk));
 }
 
-VL_INLINE_OPT void Vtop::_sequent__TOP__10(Vtop__Syms* __restrict vlSymsp) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop::_sequent__TOP__10\n"); );
+VL_INLINE_OPT void Vtop::_sequent__TOP__9(Vtop__Syms* __restrict vlSymsp) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop::_sequent__TOP__9\n"); );
     Vtop* __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
     // Variables
     CData/*2:0*/ __Vtask_write_req_wait__32__t_awprot;
@@ -25373,8 +25355,8 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__10(Vtop__Syms* __restrict vlSymsp) {
     }
 }
 
-VL_INLINE_OPT void Vtop::_sequent__TOP__11(Vtop__Syms* __restrict vlSymsp) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop::_sequent__TOP__11\n"); );
+VL_INLINE_OPT void Vtop::_sequent__TOP__10(Vtop__Syms* __restrict vlSymsp) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop::_sequent__TOP__10\n"); );
     Vtop* __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
     // Variables
     CData/*2:0*/ __Vtask_write_req_wait__59__t_awprot;
@@ -30590,8 +30572,8 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__11(Vtop__Syms* __restrict vlSymsp) {
     }
 }
 
-VL_INLINE_OPT void Vtop::_sequent__TOP__12(Vtop__Syms* __restrict vlSymsp) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop::_sequent__TOP__12\n"); );
+VL_INLINE_OPT void Vtop::_sequent__TOP__11(Vtop__Syms* __restrict vlSymsp) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop::_sequent__TOP__11\n"); );
     Vtop* __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
     // Body
     if (vlTOPp->top__DOT__node_0__DOT__w_activate) {
@@ -30628,8 +30610,8 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__12(Vtop__Syms* __restrict vlSymsp) {
     }
 }
 
-VL_INLINE_OPT void Vtop::_multiclk__TOP__13(Vtop__Syms* __restrict vlSymsp) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop::_multiclk__TOP__13\n"); );
+VL_INLINE_OPT void Vtop::_multiclk__TOP__12(Vtop__Syms* __restrict vlSymsp) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop::_multiclk__TOP__12\n"); );
     Vtop* __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
     // Body
     vlTOPp->top__DOT__node_0__DOT__picorv32_if_wrapper_inst__DOT__picorv32_axi_inst__DOT__mem_ready 
@@ -30707,8 +30689,8 @@ VL_INLINE_OPT void Vtop::_multiclk__TOP__13(Vtop__Syms* __restrict vlSymsp) {
                  & (IData)(vlTOPp->top__DOT__node_0__DOT__picorv32_if_wrapper_inst__DOT__picorv32_axi_inst__DOT__picorv32_core__DOT__mem_do_rinst))));
 }
 
-VL_INLINE_OPT void Vtop::_multiclk__TOP__14(Vtop__Syms* __restrict vlSymsp) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop::_multiclk__TOP__14\n"); );
+VL_INLINE_OPT void Vtop::_multiclk__TOP__13(Vtop__Syms* __restrict vlSymsp) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop::_multiclk__TOP__13\n"); );
     Vtop* __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
     // Body
     vlTOPp->top__DOT__node_1__DOT__picorv32_if_wrapper_inst__DOT__picorv32_axi_inst__DOT__mem_ready 
@@ -30786,8 +30768,8 @@ VL_INLINE_OPT void Vtop::_multiclk__TOP__14(Vtop__Syms* __restrict vlSymsp) {
                  & (IData)(vlTOPp->top__DOT__node_1__DOT__picorv32_if_wrapper_inst__DOT__picorv32_axi_inst__DOT__picorv32_core__DOT__mem_do_rinst))));
 }
 
-VL_INLINE_OPT void Vtop::_multiclk__TOP__15(Vtop__Syms* __restrict vlSymsp) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop::_multiclk__TOP__15\n"); );
+VL_INLINE_OPT void Vtop::_multiclk__TOP__14(Vtop__Syms* __restrict vlSymsp) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop::_multiclk__TOP__14\n"); );
     Vtop* __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
     // Body
     vlTOPp->trap_nodes = ((IData)(vlTOPp->top__DOT__trap_0) 
@@ -30822,48 +30804,42 @@ void Vtop::_eval(Vtop__Syms* __restrict vlSymsp) {
         vlSymsp->TOP__top__DOT__if_wrapper_noc_2x2_16_inst__DOT__mkNetworkSimple_inst__DOT__net_routers_router_core_2._sequent__TOP__top__DOT__if_wrapper_noc_2x2_16_inst__DOT__mkNetworkSimple_inst__DOT__net_routers_router_core_2__18(vlSymsp);
         vlSymsp->TOP__top__DOT__if_wrapper_noc_2x2_16_inst__DOT__mkNetworkSimple_inst__DOT__net_routers_router_core._sequent__TOP__top__DOT__if_wrapper_noc_2x2_16_inst__DOT__mkNetworkSimple_inst__DOT__net_routers_router_core__19(vlSymsp);
     }
-    if (((IData)(vlTOPp->top__DOT__memory_controller_inst__DOT__w_bram_write) 
-         & (~ (IData)(vlTOPp->__Vclklast__TOP__top__DOT__memory_controller_inst__DOT__w_bram_write)))) {
-        vlTOPp->_sequent__TOP__8(vlSymsp);
-    }
-    vlTOPp->_combo__TOP__9(vlSymsp);
+    vlTOPp->_combo__TOP__8(vlSymsp);
     vlTOPp->__Vm_traceActivity = (4U | vlTOPp->__Vm_traceActivity);
     if (((IData)(vlTOPp->top__DOT__node_0__DOT__w_clk_gated) 
          & (~ (IData)(vlTOPp->__Vclklast__TOP__top__DOT__node_0__DOT__w_clk_gated)))) {
-        vlTOPp->_sequent__TOP__10(vlSymsp);
+        vlTOPp->_sequent__TOP__9(vlSymsp);
         vlTOPp->__Vm_traceActivity = (8U | vlTOPp->__Vm_traceActivity);
     }
     if (((IData)(vlTOPp->top__DOT__node_1__DOT__w_clk_gated) 
          & (~ (IData)(vlTOPp->__Vclklast__TOP__top__DOT__node_1__DOT__w_clk_gated)))) {
-        vlTOPp->_sequent__TOP__11(vlSymsp);
+        vlTOPp->_sequent__TOP__10(vlSymsp);
         vlTOPp->__Vm_traceActivity = (0x10U | vlTOPp->__Vm_traceActivity);
     }
     if (((IData)(vlTOPp->clk) & (~ (IData)(vlTOPp->__Vclklast__TOP__clk)))) {
-        vlTOPp->_sequent__TOP__12(vlSymsp);
+        vlTOPp->_sequent__TOP__11(vlSymsp);
         vlTOPp->__Vm_traceActivity = (0x20U | vlTOPp->__Vm_traceActivity);
     }
     if ((((IData)(vlTOPp->clk) & (~ (IData)(vlTOPp->__Vclklast__TOP__clk))) 
          | ((IData)(vlTOPp->top__DOT__node_0__DOT__w_clk_gated) 
             & (~ (IData)(vlTOPp->__Vclklast__TOP__top__DOT__node_0__DOT__w_clk_gated))))) {
-        vlTOPp->_multiclk__TOP__13(vlSymsp);
+        vlTOPp->_multiclk__TOP__12(vlSymsp);
         vlTOPp->__Vm_traceActivity = (0x40U | vlTOPp->__Vm_traceActivity);
     }
     if ((((IData)(vlTOPp->clk) & (~ (IData)(vlTOPp->__Vclklast__TOP__clk))) 
          | ((IData)(vlTOPp->top__DOT__node_1__DOT__w_clk_gated) 
             & (~ (IData)(vlTOPp->__Vclklast__TOP__top__DOT__node_1__DOT__w_clk_gated))))) {
-        vlTOPp->_multiclk__TOP__14(vlSymsp);
+        vlTOPp->_multiclk__TOP__13(vlSymsp);
         vlTOPp->__Vm_traceActivity = (0x80U | vlTOPp->__Vm_traceActivity);
     }
     if ((((IData)(vlTOPp->top__DOT__node_0__DOT__w_clk_gated) 
           & (~ (IData)(vlTOPp->__Vclklast__TOP__top__DOT__node_0__DOT__w_clk_gated))) 
          | ((IData)(vlTOPp->top__DOT__node_1__DOT__w_clk_gated) 
             & (~ (IData)(vlTOPp->__Vclklast__TOP__top__DOT__node_1__DOT__w_clk_gated))))) {
-        vlTOPp->_multiclk__TOP__15(vlSymsp);
+        vlTOPp->_multiclk__TOP__14(vlSymsp);
     }
     // Final
     vlTOPp->__Vclklast__TOP__clk = vlTOPp->clk;
-    vlTOPp->__Vclklast__TOP__top__DOT__memory_controller_inst__DOT__w_bram_write 
-        = vlTOPp->top__DOT__memory_controller_inst__DOT__w_bram_write;
     vlTOPp->__Vclklast__TOP__top__DOT__node_0__DOT__w_clk_gated 
         = vlTOPp->top__DOT__node_0__DOT__w_clk_gated;
     vlTOPp->__Vclklast__TOP__top__DOT__node_1__DOT__w_clk_gated 
@@ -30896,8 +30872,6 @@ void Vtop::_eval_initial(Vtop__Syms* __restrict vlSymsp) {
     vlSymsp->TOP__top__DOT__node_0__DOT__if_axi_light_cpu_to_detector._initial__TOP__top__DOT__controller_inst__DOT__if_axi_light_cpu_to_debugger__1(vlSymsp);
     vlSymsp->TOP__top__DOT__node_1__DOT__if_axi_light_cpu_to_detector._initial__TOP__top__DOT__controller_inst__DOT__if_axi_light_cpu_to_debugger__1(vlSymsp);
     vlTOPp->__Vclklast__TOP__clk = vlTOPp->clk;
-    vlTOPp->__Vclklast__TOP__top__DOT__memory_controller_inst__DOT__w_bram_write 
-        = vlTOPp->top__DOT__memory_controller_inst__DOT__w_bram_write;
     vlTOPp->__Vclklast__TOP__top__DOT__node_0__DOT__w_clk_gated 
         = vlTOPp->top__DOT__node_0__DOT__w_clk_gated;
     vlTOPp->__Vclklast__TOP__top__DOT__node_1__DOT__w_clk_gated 

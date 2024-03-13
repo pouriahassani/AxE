@@ -30,6 +30,7 @@
 #include "prgs_func.h"
 #include "arch_func.h"
 #include "queue_func.h"
+#include <math.h>
 // #include <std.h>
 
 
@@ -207,7 +208,8 @@ void my_main()
     // print_str("exact\n");
     // print_dec(pro);
     // nl();
-    
+    a = sqrt(a);
+    print_str_dec_n("sqrt: ",a);
     // print_str("approx\n");
     // print_dec(pro_appr);
     // nl();
