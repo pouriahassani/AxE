@@ -1,9 +1,0 @@
-util.h:17:13:signal_fin	16	static
-util.h:32:13:print_char	32	static
-util.h:40:6:print_str	32	static
-util.h:51:6:print_dec	48	static
-util.h:71:6:print_hex	48	static
-util.h:82:6:nl	16	static
-util.h:89:6:emb_assert	32	static
-main.c:25:5:amul	32	static
-main.c:35:6:my_main	32	static

@@ -1,3 +1,0 @@
-main.c:50:1:fft	80	static
-main.c:89:1:ifft	64	static
-main.c:116:1:my_main	224	static
