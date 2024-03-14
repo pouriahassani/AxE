@@ -1,0 +1,4 @@
+main.c:6:5:Normal	96	static
+main.c:52:5:callValue	112	static
+main.c:68:5:putValue	112	static
+main.c:84:6:my_main	64	static

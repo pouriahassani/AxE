@@ -1,0 +1,41 @@
+
+./rv32i_main.elf:     file format elf32-littleriscv
+
+SYMBOL TABLE:
+00000000 l    d  .text	00000000 .text
+0000042c l    d  .rodata	00000000 .rodata
+00001444 l    d  .sdata	00000000 .sdata
+00000000 l    d  .comment	00000000 .comment
+00000000 l    d  .debug_aranges	00000000 .debug_aranges
+00000000 l    d  .debug_info	00000000 .debug_info
+00000000 l    d  .debug_abbrev	00000000 .debug_abbrev
+00000000 l    d  .debug_line	00000000 .debug_line
+00000000 l    d  .debug_str	00000000 .debug_str
+00000000 l    df *ABS*	00000000 /tmp/ccYeh6nN.o
+00000094 l       .text	00000000 loop
+00000000 l    df *ABS*	00000000 main.c
+00001c42 g       *ABS*	00000000 __global_pointer$
+000002e4 g     F .text	00000070 my_main
+000000c8 g     F .text	00000030 print_char
+00000098 g     F .text	00000030 signal_fin
+00001444 g       .sdata	00000000 __SDATA_BEGIN__
+000000f8 g     F .text	00000048 print_str
+00000298 g     F .text	0000004c emb_assert
+00000380 g     F .text	00000048 .hidden __udivsi3
+00000140 g     F .text	000000bc print_dec
+0000026c g     F .text	0000002c nl
+000003c8 g     F .text	00000010 .hidden __umodsi3
+00000354 g     F .text	00000024 .hidden __mulsi3
+00001448 g       .sdata	00000000 __BSS_END__
+00001448 g       .sdata	00000000 __bss_start
+0000000c g       .text	00000000 main
+00000000 g       .text	00000000 my_start
+00000378 g     F .text	00000084 .hidden __divsi3
+000001fc g     F .text	00000070 print_hex
+00001442 g       .sdata	00000000 __DATA_BEGIN__
+00001448 g       .sdata	00000000 _edata
+00001448 g       .sdata	00000000 _end
+000003fc g     F .text	00000030 .hidden __modsi3
+00001444 g     O .sdata	00000004 cnt_to
+
+
