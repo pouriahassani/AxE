@@ -19,9 +19,9 @@
 // read the result from the register. this is done by adding 0 to x10.
 
 __attribute__((noinline))
-int fpadd(int rd, int rs1, int rs2)
+int fpsub(int rd, int rs1, int rs2)
 {
-    asm __volatile__ (".word 0x00C5850B\n");
+    asm __volatile__ (".word 0x04C5850B\n");
     asm __volatile__ ("addi %0, x10, 0" : "=r" (rd)); //TODO: what is addi? Assembly? May have to be edited to also designate the custom instruction used (PCPI_FPADD)
     
     return rd;
@@ -46,14 +46,14 @@ void my_main()
 
 
     /*************************************************************************************************************************
-    Sanity test for custom pcpi_fpadd instruction running on PCPI coprocessor called picorv32_pcpi_fpadd
+    Sanity test for custom pcpi_fpsub instruction running on PCPI coprocessor called picorv32_pcpi_fpsub
     **************************************************************************************************************************/
-   //TODO: THIS DIRECTORY IS A STRAIGHT COPY OF THE MUL_APROX BENCHMARK PROGRAM. FILES IN THIS DIRECTORY HERE HAVE NOT BEEN VERIFIED AND WE DO NOT KNOW WHAT THEY DO OR IF THEY MATTER.
-    int fpa = 0x3F9E0652; // 1.2345679
-    int fpb = 0x3DCCCCCD; // 0.1
+   //TODO: THIS DIRECTORY IS A STRAIGHT COPY OF THE FPADD BENCHMARK PROGRAM. FILES IN THIS DIRECTORY HERE HAVE NOT BEEN VERIFIED AND WE DO NOT KNOW WHAT THEY DO OR IF THEY MATTER.
+    int fpa = 0x42C80000; // 100.0000
+    int fpb = 0x38D1B717; // 0.0001
     
-    int fpsum = 0;
-    fpsum = fpadd( fpsum, fpa, fpb);
+    int fpdiff = 0;
+    fpdiff = fpsub( fpdiff, fpa, fpb);
 
 
 
@@ -62,7 +62,7 @@ void my_main()
     nl();
     
     print_str("approx\n");
-    print_dec(fpsum);
+    print_dec(fpdiff);
     nl();
     
     print_str( "mul d\n" );

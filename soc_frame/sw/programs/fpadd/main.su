@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 util.h:68:13:signal_fin	16	static
 util.h:73:6:signal_kill_sim	16	static
 util.h:91:13:print_char	32	static
@@ -35,3 +36,20 @@ util.h:778:11:float_acos	32	static
 util.h:784:6:intToString	48	static
 util.h:812:5:floatToInt	48	static
 main.c:24:6:my_main	32	static
+=======
+util.h:21:13:signal_fin	16	static
+util.h:26:6:signal_kill_sim	16	static
+util.h:44:13:print_char	32	static
+util.h:51:6:print_str_str_n	32	static
+util.h:66:6:print_str_dec_n	48	static
+util.h:93:6:print_str	32	static
+util.h:102:6:print_str_n	32	static
+util.h:114:6:print_dec_n	48	static
+util.h:139:6:print_dec	32	static
+util.h:167:6:print_hex	32	static
+util.h:178:6:print_bin	48	static
+util.h:190:6:nl	16	static
+util.h:197:6:emb_assert	32	static
+main.c:22:5:fpadd	32	static
+main.c:32:6:my_main	32	static
+>>>>>>> a02f35a11e39e5b51185e662cbe7d1c389ca9f98
