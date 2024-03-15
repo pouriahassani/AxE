@@ -922,15 +922,20 @@ float32_t power(float32_t base, float32_t exponent_t) {
 // Function to compute the pow(x,y) using polynomial approximation 
 //  Here we assume that exponent is normalized and not in the denormalized range
 int fp_Pow(int base, int exponent) {
-    int result = base;
+
+    // if exponent is zero return 1.0
+    int result = 0x3f800000;// result  = 1.0
     if(exponent == 0)
-        return 0x3f800000;
+        return 0x3f800000;// return 1.0
+
+
     int eSign = fp_ExtractSign(exponent);
     int eExponet = fp_ExtractExponent(exponent);
     int eFraction = fp_ExtractFraction(exponent);
     int intPower = 0;
     if(eExponet >=150){
-        for(int i=0;i<((eFraction|0x800000) << (eExponet - 150));i++)
+        intPower = ((eFraction|0x800000) << (eExponet - 150));
+        for(int i=0 ; i < intPower ; i++)
             result = fpmul(result,base);
         return result;
     }
@@ -938,11 +943,30 @@ int fp_Pow(int base, int exponent) {
         intPower = (eFraction | 0x800000) >> (150 - eExponet);
         for(int i = 0 ; i < intPower ; i++)
             result = fpmul(result,base);
-            return result;
         // fp_Pow_taylor()
+        return result;
     }
     return 1;
 }
+
+// Function to compute the pow(x,y) using polynomial approximation 
+//  Here we assume that exponent is normalized and not in the denormalized range
+// int pow_fp_itr(int base, int exponent) {
+//         // if exponent is zero return 1.0
+//     int result = 0x3f800000;// result  = 1.0
+//     if(exponent == 0)
+//         return 0x3f800000;// return 1.0
+
+//     if(base == 0x3f800000)// if base == 1.0
+//         return 0x3f800000;// return 1.0
+
+//     if(base == 0)
+//      return 0;
+
+//     for(int i=0 ; i < exponent ; i++)
+//         result = fpmul(result,base);
+//     return result;
+// }
 
 // calculate absolute value of floating point number x
 int fp_Fabs(int x) {
@@ -996,15 +1020,15 @@ void intToString(int num, char* str) {
     }
 }
 
-int floatToInt(float32_t x){
-    if(extractExponent(x)<127)  
-        return 0;
+// int floatToInt(float32_t x){
+//     if(extractExponent(x)<127)  
+//         return 0;
 
-    int y = extractFraction(x) | 0x800000;
-    if(extractExponent(x) > 159)
-        return -1;
-    if(extractExponent(x) > 150 && extractExponent(x) < 159)
-        return y << (extractExponent(x) - 150);
+//     int y = extractFraction(x) | 0x800000;
+//     if(extractExponent(x) > 159)
+//         return -1;
+//     if(extractExponent(x) > 150 && extractExponent(x) < 159)
+//         return y << (extractExponent(x) - 150);
    
-    return y>>(150 - extractExponent(x) );
-}
+//     return y>>(150 - extractExponent(x) );
+// }

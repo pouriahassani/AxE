@@ -27,7 +27,7 @@
 // `define DEBUGNETS
 // `define DEBUGREGS
 // `define DEBUGASM
-`define DEBUG
+// `define DEBUG
 
 `ifdef DEBUG
   `define debug(debug_command) debug_command
