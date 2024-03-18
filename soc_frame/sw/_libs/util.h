@@ -214,4 +214,67 @@ void memset_Char_t(unsigned char* ptr,char value,int size);
 
 void memset_Int_t(int* ptr,int value,int size);
 
+<<<<<<< HEAD
 #endif
+=======
+    str[i + len] = '\0'; // Null-terminate the string
+
+    for (int j = i + len - 1; j >= i; j--) {
+        str[j] = num % 10 + '0'; // Convert digit to character
+        num /= 10;
+    }
+}
+
+int fp_Exp(int x){
+    return x;
+}
+// Casting float to integer. if x is greater than the range of integer the result is valid
+// This is equivalent of (int)x where x is a float
+int cast_Fp_To_Int(int x){
+    uint32_t S = fp_ExtractSign(x);
+    uint32_t F = fp_ExtractFraction(x);
+    uint32_t E = fp_ExtractExponent(x);
+    int result = F | 0x800000;
+    if(E >= 150)
+        return S ? (0 - (result << (E-150))) : result << (E-150);
+    if(E<150)
+        return S ? (0 - (result >> (150-E))) : result >> (150-E);
+}
+
+
+// int_to_float convert int value between certain range to float format 
+int int_to_float(int x) {
+    int sign = x < 0 ? 1 : 0;  // Sign bit: 0 for positive, 1 for negative
+    int abs_x = x < 0 ? -x : x;  // Absolute value of x
+
+    int exponent = 0;
+    int fraction = 0;
+    int y;
+    if (abs_x != 0) {
+        // Determine exponent
+        int temp = abs_x;
+        while (temp >>= 1) {
+            exponent++;
+        }
+
+        // Normalize abs_x
+        y = abs_x;
+        abs_x <<= (23 - exponent);
+    }
+    // Combine sign, exponent, and fraction to form the floating-point representation
+    int result = (sign << 31) | (exponent << 23) | (abs_x & (0x7FFFFF));
+    
+    return result;
+}
+
+memset_Char_t(unsigned char* ptr,char value,int size){
+    for(int i=0;i<size;i++)
+        ptr++[i] = value;
+}
+
+memset_Int_t(int* ptr,int value,int size){
+    for(int i=0;i<size;i++)
+        ptr++[i] = value;
+}
+
+>>>>>>> origin/dev
