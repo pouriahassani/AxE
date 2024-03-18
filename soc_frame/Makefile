@@ -135,6 +135,8 @@ clean_programs:
 	$(MAKE) -C sw/programs/sha256/ clean
 	$(MAKE) -C sw/programs/square_mmult/ clean
 	$(MAKE) -C sw/programs/mul/ clean
+	$(MAKE) -C sw/programs/basicmath/ clean
+	$(MAKE) -C sw/programs/CRC32/ clean
 
 controller:
 	$(MAKE) -C sw/controller/ big

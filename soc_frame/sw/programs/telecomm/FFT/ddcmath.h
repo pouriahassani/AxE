@@ -9,7 +9,7 @@
 #ifndef __ddcmath_h
 #define __ddcmath_h
 
-#define  DDC_PI  (3.14159265358979323846)
+#define  DDC_PI  (0x40490fdb)//3.14
 
 #endif /* __ddcmath_h */
 

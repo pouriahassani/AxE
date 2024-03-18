@@ -74,7 +74,6 @@ void my_main() {
 
 	// Calling merge sort to sort the array. 
 	MergeSort(A,numberOfElements);
-
 	//printing all elements in the array once its sorted.
 	//~ for(i = 0;i < numberOfElements;i++) printf("%d ",A[i]);
     

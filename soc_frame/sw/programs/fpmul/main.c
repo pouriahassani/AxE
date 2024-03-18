@@ -18,14 +18,14 @@
 // to keep everything working with O0 an additional instruction is needed to
 // read the result from the register. this is done by adding 0 to x10.
 
-__attribute__((noinline))
-int fpmul(int rd, int rs1, int rs2)
-{
-    asm __volatile__ (".word 0x02C5850B\n");
-    asm __volatile__ ("addi %0, x10, 0" : "=r" (rd)); //TODO: what is addi? Assembly? May have to be edited to also designate the custom instruction used (PCPI_FPADD)
+// __attribute__((noinline))
+// int fpmul(int rd, int rs1, int rs2)
+// {
+//     asm __volatile__ (".word 0x02C5850B\n");
+//     asm __volatile__ ("addi %0, x10, 0" : "=r" (rd)); //TODO: what is addi? Assembly? May have to be edited to also designate the custom instruction used (PCPI_FPADD)
     
-    return rd;
-}
+//     return rd;
+// }
 
 // The main function has to be called my_main.
 
@@ -53,7 +53,7 @@ void my_main()
     int fpb = 0x3DCCCCCD; // 0.1
     
     int fppro = 0;
-    fppro = fpmul( fppro, fpa, fpb);
+    fppro = fpmul(fpa, fpb);
 
 
 

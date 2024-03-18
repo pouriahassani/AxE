@@ -47,6 +47,7 @@ $(ARCH)_main.bin: $(ARCH)_main.elf
 
 $(ARCH)_main.elf:
 #~ 	$(CC) -march=$(ARCH) $(CFLAGS) -nostartfiles -o ./$(ARCH)_main.elf $(LINK) ../sp_nostart.S -DSTACK_POINTER=$(STACK_POINTER) ../start.S $(SRC) ./main.c
+	echo "$(CC) -march=$(ARCH) $(CFLAGS) -nostartfiles -o ./$(ARCH)_main.elf $(LINK) ../sp.S -DSTACK_POINTER=$(STACK_POINTER) ../crt0.o ../start.S $(SRC) ./main.c"
 	$(CC) -march=$(ARCH) $(CFLAGS) -nostartfiles -o ./$(ARCH)_main.elf $(LINK) ../sp.S -DSTACK_POINTER=$(STACK_POINTER) ../crt0.o ../start.S $(SRC) ./main.c
 
 clean:

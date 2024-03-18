@@ -46,7 +46,7 @@ $(ARCH)_main.bin: $(ARCH)_main.elf
 	/opt/riscv32i/bin/riscv32-unknown-elf-objcopy ./$(ARCH)_main.elf -O binary ./$(ARCH)_main.bin
 
 $(ARCH)_main.elf:
-	$(CC) -march=$(ARCH) $(CFLAGS) -o ./$(ARCH)_main.elf $(LINK) ../../_libs/start.S $(SRC) ./main.c -lm
+	$(CC) -march=$(ARCH) $(CFLAGS) -o ./$(ARCH)_main.elf $(LINK) ../../_libs/start.S $(SRC) ./main.c ./../../_libs/util.c -lm
 
 clean:
 	rm -f main.elf main.bin main.hex main.map *.objdump *.su *.o rv32*
