@@ -5,7 +5,7 @@
 //~ #include <stdio.h>
 #include <stdlib.h>
 
-#include "util.h"
+#include "./../../_libs/util.h"
 #include "memmgr.h"
 
 // Function to Merge Arrays L and R into A. 

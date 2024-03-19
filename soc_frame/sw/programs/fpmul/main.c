@@ -1,7 +1,7 @@
 
 // This is free and unencumbered software released into the public domain.
 
-#include "util.h"
+#include "./../../_libs/util.h"
 
 // idea from:
 // http://quasilyte.dev/blog/post/riscv32-custom-instruction-and-its-simulation/
@@ -67,5 +67,5 @@ void my_main()
     
     print_str( "mul d\n" );
     
-    while (1==1){}
+    // while (1==1){}
 }

@@ -14,6 +14,7 @@ int fpmul(int rs1, int rs2)
     asm __volatile__ ("addi %0, x10, 0" : "=r" (rd)); //TODO: what is addi? Assembly? May have to be edited to also designate the custom instruction used (PCPI_FPADD)
     
     return rd;
+    // return 1;
 }
 
 __attribute__((noinline))
@@ -24,6 +25,7 @@ int fpadd(int rs1, int rs2)
     asm __volatile__ ("addi %0, x10, 0" : "=r" (rd)); //TODO: what is addi? Assembly? May have to be edited to also designate the custom instruction used (PCPI_FPADD)
     
     return rd;
+    // return 1;
 }
 
 
@@ -35,15 +37,16 @@ int fpsub(int rs1, int rs2)
     asm __volatile__ ("addi %0, x10, 0" : "=r" (rd)); //TODO: what is addi? Assembly? May have to be edited to also designate the custom instruction used (PCPI_FPADD)
     
     return rd;
+        // return 1;
 }
 
 
 __attribute__((noinline))
 int fpdiv(int rs1, int rs2)
 {
-    int rd =1;
-    // asm __volatile__ (".word 0x00C5850B\n");
-    // asm __volatile__ ("addi %0, x10, 0" : "=r" (rd)); //TODO: what is addi? Assembly? May have to be edited to also designate the custom instruction used (PCPI_FPADD)
+    int rd;
+    asm __volatile__ (".word 0x00C5850B\n");
+    asm __volatile__ ("addi %0, x10, 0" : "=r" (rd)); //TODO: what is addi? Assembly? May have to be edited to also designate the custom instruction used (PCPI_FPADD)
     
     return rd;
 }
@@ -1024,7 +1027,7 @@ void intToString(int num, char* str) {
 int fp_Exp(int x){
     return x;
 }
-// Casting float to integer. if x is greater than the range of integer the result is valid
+// Casting float to integer. if x is greater than the range of integer the result is invalid
 // This is equivalent of (int)x where x is a float
 int cast_Fp_To_Int(int x){
     uint32_t S = fp_ExtractSign(x);
@@ -1035,10 +1038,11 @@ int cast_Fp_To_Int(int x){
         return S ? (0 - (result << (E-150))) : result << (E-150);
     if(E<150)
         return S ? (0 - (result >> (150-E))) : result >> (150-E);
+    return 1;
 }
 
 
-// int_to_float convert int value between certain range to float format 
+// int_to_float converts int value between certain range to float format 
 uint32_t int_to_float(int x) {
     uint32_t sign = x < 0 ? 1 : 0;  // Sign bit: 0 for positive, 1 for negative
     uint32_t abs_x = x < 0 ? -x : x;  // Absolute value of x

@@ -1408,11 +1408,7 @@ CORNER_LIST corner_list;
 
 
           susan_corners(in,r,bp,max_no_corners,corner_list,x_size,y_size);
-<<<<<<< HEAD
-        corner_draw(in,corner_list,x_size,drawing_mode);
-=======
         // corner_draw(in,corner_list,x_size,drawing_mode);
->>>>>>> origin/dev
 
 
 
