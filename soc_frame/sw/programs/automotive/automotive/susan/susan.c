@@ -767,7 +767,7 @@ TOTAL_TYPE total;
 /* }}} */
   }
   else
-  {     /* 3x3 constant mask */
+  {    /* 3x3 constant mask */
     /* {{{ main section */
 
   for (i=1;i<y_size-1;i++)

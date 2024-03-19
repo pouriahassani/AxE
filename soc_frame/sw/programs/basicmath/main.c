@@ -1,5 +1,5 @@
 
-// #include "../../_libs/util.h"
+#include "../../_libs/util.h"
 #include "basicMath.h"
 void usqrt(unsigned long x, struct int_sqrt *q)
 {
@@ -57,24 +57,24 @@ void my_main(void)
   /* should get 3 solutions: 2, 6 & 2.5   */
   SolveCubic(a1, b1, c1, d1, &solutions, x);  
 
-  // /* should get 1 solution: 2.5           */
+  /* should get 1 solution: 2.5           */
   SolveCubic(a2, b2, c2, d2, &solutions, x);  
 
   SolveCubic(a3, b3, c3, d3, &solutions, x);
 
   SolveCubic(a4, b4, c4, d4, &solutions, x);
 
-    /* Now solve some random equations */
-  loop(&solutions,x);
+  //   /* Now solve some random equations */
+  // loop(&solutions,x);
   
   struct int_sqrt q;
   // /* perform some integer square roots */
-  for (i = 0; i < 1001; ++i)
-    {
-      usqrt(i, &q);
-			// remainder differs on some machines
-    }
-  usqrt(l, &q); 
+  // for (i = 0; i < 1001; ++i)
+  //   {
+  //     usqrt(i, &q);
+	// 		// remainder differs on some machines
+  //   }
+  // usqrt(l, &q); 
 }
 
 

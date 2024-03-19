@@ -17,56 +17,30 @@
 
 ============================================================================*/
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <math.h>
-
-#include "fourier.h"
 #include "ddcmath.h"
-
-#define CHECKPOINTER(p)  CheckPointer(p,#p)
-
-static void CheckPointer ( void *p, char *name )
-{
-    if ( p == NULL )
-    {
-        fprintf ( stderr, "Error in fft_float():  %s == NULL\n", name );
-        exit(1);
-    }
-}
+#include "fourier.h"
+typedef unsigned int uint32_t;
 
 
 void fft_float (
     unsigned  NumSamples,
     int       InverseTransform,
-    float    *RealIn,
-    float    *ImagIn,
-    float    *RealOut,
-    float    *ImagOut )
+    uint32_t    *RealIn,     //float
+    uint32_t    *ImagIn,//float
+    uint32_t    *RealOut,//float
+    uint32_t    *ImagOut )  //float
 {
     unsigned NumBits;    /* Number of bits needed to store indices */
     unsigned i, j, k, n;
     unsigned BlockSize, BlockEnd;
 
-    double angle_numerator = 2.0 * DDC_PI;
-    double tr, ti;     /* temp real, temp imaginary */
+    uint32_t angle_numerator = fpmul(0x40000000,DDC_PI);//double angle_numerator = 2.0 * DDC_PI;
+    uint32_t tr, ti;     /* double: temp real, temp imaginary  */
 
-    if ( !IsPowerOfTwo(NumSamples) )
-    {
-        fprintf (
-            stderr,
-            "Error in fft():  NumSamples=%u is not power of two\n",
-            NumSamples );
 
-        exit(1);
-    }
 
     if ( InverseTransform )
-        angle_numerator = -angle_numerator;
-
-    CHECKPOINTER ( RealIn );
-    CHECKPOINTER ( RealOut );
-    CHECKPOINTER ( ImagOut );
+        angle_numerator = fpsub(0,angle_numerator);
 
     NumBits = NumberOfBitsNeeded ( NumSamples );
 
@@ -78,7 +52,7 @@ void fft_float (
     {
         j = ReverseBits ( i, NumBits );
         RealOut[j] = RealIn[i];
-        ImagOut[j] = (ImagIn == NULL) ? 0.0 : ImagIn[i];
+        ImagOut[j] =  ImagIn[i];
     }
 
     /*
@@ -88,14 +62,14 @@ void fft_float (
     BlockEnd = 1;
     for ( BlockSize = 2; BlockSize <= NumSamples; BlockSize <<= 1 )
     {
-        double delta_angle = angle_numerator / (double)BlockSize;
-        double sm2 = sin ( -2 * delta_angle );
-        double sm1 = sin ( -delta_angle );
-        double cm2 = cos ( -2 * delta_angle );
-        double cm1 = cos ( -delta_angle );
-        double w = 2 * cm1;
-        double ar[3], ai[3];
-        double temp;
+        /*double*/ uint32_t delta_angle = fpdiv(angle_numerator,int_to_float(BlockSize));       
+        /*double*/ uint32_t sm2 = fp_Sin ( fpmul(0xc0000000 , delta_angle) );//sin ( -2 * delta_angle );
+        /*double*/ uint32_t sm1 = fp_Sin ( fpsub(0,delta_angle) );//sin ( -delta_angle );
+        /*double*/ uint32_t cm2 = fp_Cos ( fpmul(0xc0000000 , delta_angle) );//cos ( -2 * delta_angle );
+        /*double*/ uint32_t cm1 = fp_Cos ( fpsub(0,delta_angle) );//cos ( -delta_angle );
+        /*double*/ uint32_t w = fpmul(0x40000000 , cm1);//double w = 2 * cm1;
+        /*double*/ uint32_t ar[3], ai[3];// double ar[3], ai[3];
+        /*double*/ uint32_t temp;//double temp;
 
         for ( i=0; i < NumSamples; i += BlockSize )
         {
@@ -107,23 +81,23 @@ void fft_float (
 
             for ( j=i, n=0; n < BlockEnd; j++, n++ )
             {
-                ar[0] = w*ar[1] - ar[2];
+                ar[0] =fpsub(fpmul(w,ar[1]) , ar[2]);//ar[0] = w*ar[1] - ar[2];
                 ar[2] = ar[1];
                 ar[1] = ar[0];
 
-                ai[0] = w*ai[1] - ai[2];
+               ai[0] =fpsub(fpmul(w,ai[1]) , ai[2]);//ai[0] = w*ai[1] - ai[2];
                 ai[2] = ai[1];
                 ai[1] = ai[0];
 
                 k = j + BlockEnd;
-                tr = ar[0]*RealOut[k] - ai[0]*ImagOut[k];
-                ti = ar[0]*ImagOut[k] + ai[0]*RealOut[k];
+                tr = fpsub(fpmul(ar[0],RealOut[k]) , fpmul(ai[0],ImagOut[k]));// ar[0]*RealOut[k] - ai[0]*ImagOut[k];
+                ti = fpadd(fpmul(ar[0],ImagOut[k]) , fpmul(ai[0],RealOut[k]));//ar[0]*ImagOut[k] + ai[0]*RealOut[k];
 
-                RealOut[k] = RealOut[j] - tr;
-                ImagOut[k] = ImagOut[j] - ti;
+                RealOut[k] = fpsub(RealOut[j] , tr);
+                ImagOut[k] = fpsub(ImagOut[j] , ti);
 
-                RealOut[j] += tr;
-                ImagOut[j] += ti;
+                RealOut[j] = fpadd(RealOut[j], tr);//RealOut[j] += tr;
+                ImagOut[j] = fpadd(ImagOut[j] , ti); //ImagOut[j] += ti;
             }
         }
 
@@ -136,12 +110,12 @@ void fft_float (
 
     if ( InverseTransform )
     {
-        double denom = (double)NumSamples;
+        uint32_t denom = int_to_float(NumSamples);//  double denom = (double)NumSamples;
 
         for ( i=0; i < NumSamples; i++ )
         {
-            RealOut[i] /= denom;
-            ImagOut[i] /= denom;
+            RealOut[i] = fpdiv(RealOut[i],denom);//RealOut[i] /= denom;
+            ImagOut[i] = fpdiv( ImagOut[i],denom);//ImagOut[i] /= denom;
         }
     }
 }
