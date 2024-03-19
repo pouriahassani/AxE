@@ -1,7 +1,7 @@
 
 // This is free and unencumbered software released into the public domain.
 
-#include "./../../_libs/util.h"
+#include "util.h"
 
 // idea from:
 // http://quasilyte.dev/blog/post/riscv32-custom-instruction-and-its-simulation/
@@ -18,7 +18,14 @@
 // to keep everything working with O0 an additional instruction is needed to
 // read the result from the register. this is done by adding 0 to x10.
 
-
+__attribute__((noinline))
+int fpmul_approx(int rd, int rs1, int rs2)
+{
+    asm __volatile__ (".word 0x82C5850B\n");
+    asm __volatile__ ("addi %0, x10, 0" : "=r" (rd)); //TODO: what is addi? Assembly? May have to be edited to also designate the custom instruction used (PCPI_FPMUL_APPROX)
+    
+    return rd;
+}
 
 // The main function has to be called my_main.
 
@@ -39,14 +46,15 @@ void my_main()
 
 
     /*************************************************************************************************************************
-    Sanity test for custom pcpi_fpmul instruction running on PCPI coprocessor called picorv32_pcpi_fpmul
+    Sanity test for custom pcpi_fpmul_approx instruction running on PCPI coprocessor called picorv32_pcpi_fpmul_approx
     **************************************************************************************************************************/
-   //TODO: THIS DIRECTORY IS A STRAIGHT COPY OF THE MUL_APROX BENCHMARK PROGRAM. FILES IN THIS DIRECTORY HERE HAVE NOT BEEN VERIFIED AND WE DO NOT KNOW WHAT THEY DO OR IF THEY MATTER.
+   //TODO: THIS DIRECTORY IS A STRAIGHT COPY OF THE FPMUL BENCHMARK PROGRAM. FILES IN THIS DIRECTORY HERE HAVE NOT BEEN VERIFIED AND WE DO NOT KNOW WHAT THEY DO OR IF THEY MATTER.
     int fpa = 0x40133333; // 2.3
     int fpb = 0x3DCCCCCD; // 0.1
     
     int fppro = 0;
-    fppro = fpmul(fpa, fpb);
+    fppro = fpmul_approx( fppro, fpa, fpb);
+
 
 
     // print_str("exact\n");
@@ -55,10 +63,9 @@ void my_main()
     
     // print_str("approx\n");
     print_dec(fppro);
-    // print_dec(fppro2);
     nl();
     
     print_str( "mul d\n" );
     
-    // while (1==1){}
+    while (1==1){}
 }

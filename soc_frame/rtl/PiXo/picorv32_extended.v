@@ -54,7 +54,7 @@
 // design are read in the correct order.
 `define PICORV32_V
 
-
+`include "../../rtl/PiXo/DTCL_AFPM.sv" //TODO: Inlcude this into this file when possible (may need SysV to Verilog conversion)
 /***************************************************************
  * picorv32
  ***************************************************************/
@@ -269,6 +269,11 @@ module picorv32 #(
 	wire        pcpi_fpmul_wait;
 	wire        pcpi_fpmul_ready;
 
+	wire        pcpi_fpmul_approx_wr;
+	wire [31:0] pcpi_fpmul_approx_rd;
+	wire        pcpi_fpmul_approx_wait;
+	wire        pcpi_fpmul_approx_ready;
+
 	wire        pcpi_fpdiv_wr;
 	wire [31:0] pcpi_fpdiv_rd;
 	wire        pcpi_fpdiv_wait;
@@ -344,7 +349,20 @@ module picorv32 #(
 	    .pcpi_rd(pcpi_fpmul_rd),
 	    .pcpi_wait(pcpi_fpmul_wait),
 	    .pcpi_ready(pcpi_fpmul_ready)
-	);	
+	);
+
+	picorv32_pcpi_fpmul_approx pcpi_fpmul_approx (
+	    .clk(clk),
+	    .resetn(resetn),
+	    .pcpi_valid(pcpi_valid),
+	    .pcpi_insn(pcpi_insn),
+	    .pcpi_rs1(pcpi_rs1),
+	    .pcpi_rs2(pcpi_rs2),
+	    .pcpi_wr(pcpi_fpmul_approx_wr),
+	    .pcpi_rd(pcpi_fpmul_approx_rd),
+	    .pcpi_wait(pcpi_fpmul_approx_wait),
+	    .pcpi_ready(pcpi_fpmul_approx_ready)
+	);
 
 	picorv32_pcpi_fpdiv pcpi_fpdiv (
 	    .clk(clk),
@@ -419,8 +437,8 @@ module picorv32 #(
 		pcpi_int_wr = 0;
 		pcpi_int_rd = 32'bx;
 		//TODO: pcpi_int_wait and pcpi_int_ready may need to be renamed as they do not suggest a more general use of PCPI (!) beyond integer operations. I abuse them as flags to show whether any module on PCPI has wait or ready asserted   
-		pcpi_int_wait  = |{ENABLE_PCPI && pcpi_wait,  (ENABLE_MUL || ENABLE_FAST_MUL) && pcpi_mul_wait,  ENABLE_DIV && pcpi_div_wait  , pcpi_mul_approx_wait, pcpi_fpmul_wait, pcpi_fpdiv_wait, pcpi_fpadd_wait, pcpi_fpsub_wait};
-		pcpi_int_ready = |{ENABLE_PCPI && pcpi_ready, (ENABLE_MUL || ENABLE_FAST_MUL) && pcpi_mul_ready, ENABLE_DIV && pcpi_div_ready , pcpi_mul_approx_ready, pcpi_fpmul_ready, pcpi_fpdiv_ready, pcpi_fpadd_ready, pcpi_fpsub_ready};
+		pcpi_int_wait  = |{ENABLE_PCPI && pcpi_wait,  (ENABLE_MUL || ENABLE_FAST_MUL) && pcpi_mul_wait,  ENABLE_DIV && pcpi_div_wait  , pcpi_mul_approx_wait, pcpi_fpmul_wait, pcpi_fpmul_approx_wait, pcpi_fpdiv_wait, pcpi_fpadd_wait, pcpi_fpsub_wait};
+		pcpi_int_ready = |{ENABLE_PCPI && pcpi_ready, (ENABLE_MUL || ENABLE_FAST_MUL) && pcpi_mul_ready, ENABLE_DIV && pcpi_div_ready , pcpi_mul_approx_ready, pcpi_fpmul_ready, pcpi_fpmul_approx_ready, pcpi_fpdiv_ready, pcpi_fpadd_ready, pcpi_fpsub_ready};
 
 		(* parallel_case *)
 		case (1'b1)
@@ -443,6 +461,10 @@ module picorv32 #(
 			pcpi_fpmul_ready: begin
 				pcpi_int_wr = pcpi_fpmul_wr;
 				pcpi_int_rd = pcpi_fpmul_rd;
+			end
+			pcpi_fpmul_approx_ready: begin
+				pcpi_int_wr = pcpi_fpmul_approx_wr;
+				pcpi_int_rd = pcpi_fpmul_approx_rd;
 			end
 			pcpi_fpdiv_ready: begin
 				pcpi_int_wr = pcpi_fpdiv_wr;
@@ -3117,6 +3139,52 @@ module picorv32_pcpi_fpmul(
   assign pcpi_wr = s_output_z_stb;
   assign pcpi_rd = s_output_z;
 endmodule
+
+
+/***************************************************************
+ * picorv32_pcpi_fpmul_approx
+ ***************************************************************/
+// Wrapper for the DTCL Approximations as given by Daniel Blattner 2023 (with hardcoded 32bit IEEE-754 floats)
+module picorv32_pcpi_fpmul_approx (
+        input             clk,
+        input             resetn,
+        input             pcpi_valid,
+        input      [31:0] pcpi_insn,
+        input      [31:0] pcpi_rs1,
+        input      [31:0] pcpi_rs2,
+        output reg        pcpi_wr,
+        output reg [31:0] pcpi_rd,
+        output reg        pcpi_wait,
+        output reg        pcpi_ready
+);
+          //Internal variables
+  		// custom instruction (R-Type) for invoking an Approximate Floating Point Multiplication (using DTCL) on a PCPI Co-Processor
+  		wire active = pcpi_valid && pcpi_insn[6:0] == 7'b0001011 && pcpi_insn[31:25] == 7'b1000001;
+        
+        DTCL_AFPM dtclafpm
+        (
+             .fp_multiplier(pcpi_rs1)
+            ,.fp_multiplicand(pcpi_rs2)    
+            ,.fp_product(pcpi_rd)
+        );
+
+        always @(posedge clk) begin
+                pcpi_ready <= 0;
+                pcpi_wr <= 0;
+                pcpi_wait <= 0;
+
+				if (active) begin
+						// $display("ACTIVE: picorv32_pcpi_fpmul_approx");
+                        pcpi_ready <= 1;
+                        pcpi_wr <= 1;
+						$display("FPMUL_APPROX Completed.");
+						$display("FPMUL_APPROX input a: %h, input b: %h, external output z: %h", pcpi_rs1, pcpi_rs2, pcpi_rd);
+                end
+        end
+endmodule
+
+
+
 
 
 /***************************************************************
