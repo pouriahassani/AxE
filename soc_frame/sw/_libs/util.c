@@ -6,16 +6,26 @@
 
 //~ { print_dec(__LINE__);print_str(#expr);nl(); }
 //~ { print_dec(__LINE__);print_str(#expr); }
-__attribute__((noinline))
 int fpmul(int rs1, int rs2)
 {
     int rd;
-    asm __volatile__ (".word 0x00C5850B\n");
+    asm __volatile__ (".word 0x02C5850B\n");
     asm __volatile__ ("addi %0, x10, 0" : "=r" (rd)); //TODO: what is addi? Assembly? May have to be edited to also designate the custom instruction used (PCPI_FPADD)
     
     return rd;
-    // return 1;
 }
+
+
+__attribute__((noinline))
+int fpmul_approx(int rs1, int rs2)
+{
+    int rd;
+    asm __volatile__ (".word 0x82C5850B\n");
+    asm __volatile__ ("addi %0, x10, 0" : "=r" (rd)); //TODO: what is addi? Assembly? May have to be edited to also designate the custom instruction used (PCPI_FPMUL_APPROX)
+    
+    return rd;
+}
+
 
 __attribute__((noinline))
 int fpadd(int rs1, int rs2)
@@ -25,7 +35,6 @@ int fpadd(int rs1, int rs2)
     asm __volatile__ ("addi %0, x10, 0" : "=r" (rd)); //TODO: what is addi? Assembly? May have to be edited to also designate the custom instruction used (PCPI_FPADD)
     
     return rd;
-    // return 1;
 }
 
 
@@ -33,11 +42,10 @@ __attribute__((noinline))
 int fpsub(int rs1, int rs2)
 {
     int rd;
-    asm __volatile__ (".word 0x00C5850B\n");
+    asm __volatile__ (".word 0x04C5850B\n");
     asm __volatile__ ("addi %0, x10, 0" : "=r" (rd)); //TODO: what is addi? Assembly? May have to be edited to also designate the custom instruction used (PCPI_FPADD)
     
     return rd;
-        // return 1;
 }
 
 
@@ -45,7 +53,7 @@ __attribute__((noinline))
 int fpdiv(int rs1, int rs2)
 {
     int rd;
-    asm __volatile__ (".word 0x00C5850B\n");
+    asm __volatile__ (".word 0x06C5850B\n");
     asm __volatile__ ("addi %0, x10, 0" : "=r" (rd)); //TODO: what is addi? Assembly? May have to be edited to also designate the custom instruction used (PCPI_FPADD)
     
     return rd;

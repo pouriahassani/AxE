@@ -1,7 +1,7 @@
 
 // This is free and unencumbered software released into the public domain.
 
-#include "util.h"
+#include "./../../_libs/util.h"
 
 // idea from:
 // http://quasilyte.dev/blog/post/riscv32-custom-instruction-and-its-simulation/
@@ -18,14 +18,6 @@
 // to keep everything working with O0 an additional instruction is needed to
 // read the result from the register. this is done by adding 0 to x10.
 
-__attribute__((noinline))
-int fpmul_approx(int rd, int rs1, int rs2)
-{
-    asm __volatile__ (".word 0x82C5850B\n");
-    asm __volatile__ ("addi %0, x10, 0" : "=r" (rd)); //TODO: what is addi? Assembly? May have to be edited to also designate the custom instruction used (PCPI_FPMUL_APPROX)
-    
-    return rd;
-}
 
 // The main function has to be called my_main.
 
@@ -53,7 +45,7 @@ void my_main()
     int fpb = 0x3DCCCCCD; // 0.1
     
     int fppro = 0;
-    fppro = fpmul_approx( fppro, fpa, fpb);
+    fppro = fpmul_approx(fpa, fpb);
 
 
 
@@ -67,5 +59,4 @@ void my_main()
     
     print_str( "mul d\n" );
     
-    while (1==1){}
 }
