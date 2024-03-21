@@ -65,16 +65,16 @@ void my_main(void)
   SolveCubic(a4, b4, c4, d4, &solutions, x);
 
   //   /* Now solve some random equations */
-  // loop(&solutions,x);
+  loop(&solutions,x);
   
   struct int_sqrt q;
   // /* perform some integer square roots */
-  // for (i = 0; i < 1001; ++i)
-  //   {
-  //     usqrt(i, &q);
-	// 		// remainder differs on some machines
-  //   }
-  // usqrt(l, &q); 
+  for (i = 0; i < 1001; ++i)
+    {
+      usqrt(i, &q);
+			// remainder differs on some machines
+    }
+  usqrt(l, &q); 
 }
 
 
