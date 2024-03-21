@@ -1,0 +1,11 @@
+main.c:305:1:int_to_uchar	48	static
+main.c:332:6:setup_brightness_lut	48	static
+main.c:363:7:median	80	static
+main.c:393:1:enlarge	48	static
+main.c:426:6:susan_smoothing	112	static
+main.c:526:1:edge_draw	64	static
+main.c:562:1:susan_thin	160	static
+main.c:775:1:susan_edges	128	static
+main.c:1033:1:corner_draw	48	static
+main.c:1063:1:susan_corners	57856	static
+main.c:1353:6:my_main	360080	static

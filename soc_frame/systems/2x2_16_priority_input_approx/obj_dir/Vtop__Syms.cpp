@@ -3,6 +3,7 @@
 
 #include "Vtop__Syms.h"
 #include "Vtop.h"
+#include "Vtop___024unit.h"
 #include "Vtop_mkIQRouterCoreSimple.h"
 #include "Vtop_if_axi_light.h"
 #include "Vtop_if_axi_light__AC4.h"

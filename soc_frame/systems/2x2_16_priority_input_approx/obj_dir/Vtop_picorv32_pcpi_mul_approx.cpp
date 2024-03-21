@@ -1133,7 +1133,7 @@ VL_INLINE_OPT void Vtop_picorv32_pcpi_mul_approx::_sequent__TOP__top__DOT__contr
                                                 | ((IData)(this->__PVT__mul16s_HDG_inst__DOT__S_2_9) 
                                                    & (IData)(this->mul16s_HDG_inst__DOT____Vcellinp__U5497__C)));
     this->__PVT__active = (((IData)(vlTOPp->top__DOT__controller_inst__DOT__picorv32_if_wrapper_inst__DOT__picorv32_axi_inst__DOT__pcpi_valid) 
-                            & (0x7fU == (0x7fU & vlTOPp->top__DOT__controller_inst__DOT__picorv32_if_wrapper_inst__DOT__picorv32_axi_inst__DOT__pcpi_insn))) 
+                            & (0x1fU == (0x7fU & vlTOPp->top__DOT__controller_inst__DOT__picorv32_if_wrapper_inst__DOT__picorv32_axi_inst__DOT__pcpi_insn))) 
                            & (0x7fU == (0x7fU & (vlTOPp->top__DOT__controller_inst__DOT__picorv32_if_wrapper_inst__DOT__picorv32_axi_inst__DOT__pcpi_insn 
                                                  >> 0x19U))));
     this->__PVT__mul16s_HDG_inst__DOT__C_4_1 = ((((IData)(this->__PVT__mul16s_HDG_inst__DOT__S_3_2) 
@@ -2778,7 +2778,7 @@ void Vtop_picorv32_pcpi_mul_approx::_settle__TOP__top__DOT__controller_inst__DOT
     Vtop* __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
     // Body
     this->__PVT__active = (((IData)(vlTOPp->top__DOT__controller_inst__DOT__picorv32_if_wrapper_inst__DOT__picorv32_axi_inst__DOT__pcpi_valid) 
-                            & (0x7fU == (0x7fU & vlTOPp->top__DOT__controller_inst__DOT__picorv32_if_wrapper_inst__DOT__picorv32_axi_inst__DOT__pcpi_insn))) 
+                            & (0x1fU == (0x7fU & vlTOPp->top__DOT__controller_inst__DOT__picorv32_if_wrapper_inst__DOT__picorv32_axi_inst__DOT__pcpi_insn))) 
                            & (0x7fU == (0x7fU & (vlTOPp->top__DOT__controller_inst__DOT__picorv32_if_wrapper_inst__DOT__picorv32_axi_inst__DOT__pcpi_insn 
                                                  >> 0x19U))));
     this->mul16s_HDG_inst__DOT____Vcellinp__U5696__B 
@@ -5521,7 +5521,7 @@ void Vtop_picorv32_pcpi_mul_approx::_settle__TOP__top__DOT__node_0__DOT__picorv3
     Vtop* __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
     // Body
     this->__PVT__active = (((IData)(vlTOPp->top__DOT__node_0__DOT__picorv32_if_wrapper_inst__DOT__picorv32_axi_inst__DOT__pcpi_valid) 
-                            & (0x7fU == (0x7fU & vlTOPp->top__DOT__node_0__DOT__picorv32_if_wrapper_inst__DOT__picorv32_axi_inst__DOT__pcpi_insn))) 
+                            & (0x1fU == (0x7fU & vlTOPp->top__DOT__node_0__DOT__picorv32_if_wrapper_inst__DOT__picorv32_axi_inst__DOT__pcpi_insn))) 
                            & (0x7fU == (0x7fU & (vlTOPp->top__DOT__node_0__DOT__picorv32_if_wrapper_inst__DOT__picorv32_axi_inst__DOT__pcpi_insn 
                                                  >> 0x19U))));
     this->mul16s_HDG_inst__DOT____Vcellinp__U5696__B 
@@ -9371,7 +9371,7 @@ VL_INLINE_OPT void Vtop_picorv32_pcpi_mul_approx::_sequent__TOP__top__DOT__node_
                                                 | ((IData)(this->__PVT__mul16s_HDG_inst__DOT__S_2_9) 
                                                    & (IData)(this->mul16s_HDG_inst__DOT____Vcellinp__U5497__C)));
     this->__PVT__active = (((IData)(vlTOPp->top__DOT__node_0__DOT__picorv32_if_wrapper_inst__DOT__picorv32_axi_inst__DOT__pcpi_valid) 
-                            & (0x7fU == (0x7fU & vlTOPp->top__DOT__node_0__DOT__picorv32_if_wrapper_inst__DOT__picorv32_axi_inst__DOT__pcpi_insn))) 
+                            & (0x1fU == (0x7fU & vlTOPp->top__DOT__node_0__DOT__picorv32_if_wrapper_inst__DOT__picorv32_axi_inst__DOT__pcpi_insn))) 
                            & (0x7fU == (0x7fU & (vlTOPp->top__DOT__node_0__DOT__picorv32_if_wrapper_inst__DOT__picorv32_axi_inst__DOT__pcpi_insn 
                                                  >> 0x19U))));
     this->__PVT__mul16s_HDG_inst__DOT__C_4_1 = ((((IData)(this->__PVT__mul16s_HDG_inst__DOT__S_3_2) 
@@ -11016,7 +11016,7 @@ void Vtop_picorv32_pcpi_mul_approx::_settle__TOP__top__DOT__node_1__DOT__picorv3
     Vtop* __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
     // Body
     this->__PVT__active = (((IData)(vlTOPp->top__DOT__node_1__DOT__picorv32_if_wrapper_inst__DOT__picorv32_axi_inst__DOT__pcpi_valid) 
-                            & (0x7fU == (0x7fU & vlTOPp->top__DOT__node_1__DOT__picorv32_if_wrapper_inst__DOT__picorv32_axi_inst__DOT__pcpi_insn))) 
+                            & (0x1fU == (0x7fU & vlTOPp->top__DOT__node_1__DOT__picorv32_if_wrapper_inst__DOT__picorv32_axi_inst__DOT__pcpi_insn))) 
                            & (0x7fU == (0x7fU & (vlTOPp->top__DOT__node_1__DOT__picorv32_if_wrapper_inst__DOT__picorv32_axi_inst__DOT__pcpi_insn 
                                                  >> 0x19U))));
     this->mul16s_HDG_inst__DOT____Vcellinp__U5696__B 
@@ -14866,7 +14866,7 @@ VL_INLINE_OPT void Vtop_picorv32_pcpi_mul_approx::_sequent__TOP__top__DOT__node_
                                                 | ((IData)(this->__PVT__mul16s_HDG_inst__DOT__S_2_9) 
                                                    & (IData)(this->mul16s_HDG_inst__DOT____Vcellinp__U5497__C)));
     this->__PVT__active = (((IData)(vlTOPp->top__DOT__node_1__DOT__picorv32_if_wrapper_inst__DOT__picorv32_axi_inst__DOT__pcpi_valid) 
-                            & (0x7fU == (0x7fU & vlTOPp->top__DOT__node_1__DOT__picorv32_if_wrapper_inst__DOT__picorv32_axi_inst__DOT__pcpi_insn))) 
+                            & (0x1fU == (0x7fU & vlTOPp->top__DOT__node_1__DOT__picorv32_if_wrapper_inst__DOT__picorv32_axi_inst__DOT__pcpi_insn))) 
                            & (0x7fU == (0x7fU & (vlTOPp->top__DOT__node_1__DOT__picorv32_if_wrapper_inst__DOT__picorv32_axi_inst__DOT__pcpi_insn 
                                                  >> 0x19U))));
     this->__PVT__mul16s_HDG_inst__DOT__C_4_1 = ((((IData)(this->__PVT__mul16s_HDG_inst__DOT__S_3_2) 

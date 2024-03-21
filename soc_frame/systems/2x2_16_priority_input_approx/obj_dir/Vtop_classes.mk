@@ -18,6 +18,7 @@ VM_TRACE_THREADED = 0
 # Generated module classes, fast-path, compile with highest optimization
 VM_CLASSES_FAST += \
 	Vtop \
+	Vtop___024unit \
 	Vtop_mkIQRouterCoreSimple \
 	Vtop_if_axi_light \
 	Vtop_if_axi_light__AC4 \
