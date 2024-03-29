@@ -8,11 +8,11 @@ Clone to AxE repository and move to the cloned repo:
 git clone https://github.com/pouriahassani/AxE.git
 cd AxE
 ```
-Run the following in your Ubuntu system to pull the docker image from the docker hub:
+The environment for running AXE has been prepared in a docker image. 
 ```bash
-docker pull poria19964214/axe:original
+poria19964214/axe:original
 ```
-Now you can run an interactive docker container:
+You can run an interactive docker container:
 ```bash
 docker run -it -v $(pwd):/home/user/ poria19964214/axe:original
 ```
