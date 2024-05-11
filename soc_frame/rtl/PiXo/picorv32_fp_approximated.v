@@ -54,7 +54,7 @@
 // design are read in the correct order.
 `define PICORV32_V
 
-`include "../../rtl/PiXo/DTCL_AFPM.sv" //TODO: Inlcude this into this file when possible (may need SysV to Verilog conversion)
+`include "../../rtl/PiXo/DTCL_AFPM.v"
 /***************************************************************
  * picorv32
  ***************************************************************/
