@@ -1,0 +1,8 @@
+nodes_func.c:13:14:get_busy_node_mask	16	static
+nodes_func.c:23:14:get_idle_node_mask	32	static
+nodes_func.c:48:14:get_finished_nodes_mask	48	static
+nodes_func.c:81:6:node_set_busy	32	static
+nodes_func.c:95:6:nodes_set_idle	32	static
+nodes_func.c:133:5:node_is_busy	32	static
+nodes_func.c:153:6:node_assign_prg	32	static
+nodes_func.c:180:6:nodes_report_charges	32	static

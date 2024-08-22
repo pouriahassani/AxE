@@ -1,0 +1,4 @@
+The floating point multiplications that can be done using approximation are as follow:
+Just search for fmul
+Lines 671, 676, 434,435,437,438 
+for integer there are alot. needs to check

@@ -1,0 +1,14 @@
+scheduler.c:4:5:get_prg_apply_edh_rules	48	static
+scheduler.c:146:5:L_r_empty	48	static
+scheduler.c:177:5:get_prg_i_via_edf	64	static
+scheduler.c:234:14:E	32	static
+scheduler.c:241:5:E_is_empty	32	static
+scheduler.c:258:5:is_empty	32	static
+scheduler.c:270:5:E_is_full	32	static
+scheduler.c:297:14:SE	64	static
+scheduler.c:393:14:ST	64	static
+scheduler.c:496:14:SE_tau	48	static
+scheduler.c:558:14:ST_tau	48	static
+scheduler.c:601:14:Es	48	static
+scheduler.c:657:14:g	64	static
+scheduler.c:735:14:h	64	static

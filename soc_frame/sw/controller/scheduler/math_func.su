@@ -1,0 +1,2 @@
+math_func.c:2:14:clamp_add	48	static
+math_func.c:25:14:clamp_sub	48	static

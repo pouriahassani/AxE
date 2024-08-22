@@ -1,0 +1,2 @@
+clk_func.c:2:14:clk_cnt_to_ms	48	static
+clk_func.c:21:14:ms_to_clk_cnt	48	static

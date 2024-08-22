@@ -1,0 +1,4 @@
+basicMath.h:16:6:SolveCubic	96	static
+basicMath.h:81:6:loop	48	static
+main.c:4:6:usqrt	48	static
+main.c:26:6:my_main	128	static

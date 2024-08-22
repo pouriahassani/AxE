@@ -1,0 +1,2 @@
+fixed_point.c:3:14:fixed_mul_8q8	48	static
+fixed_point.c:10:14:fixed_div_8q8	48	static

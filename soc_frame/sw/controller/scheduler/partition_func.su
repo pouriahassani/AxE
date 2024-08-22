@@ -1,0 +1,4 @@
+partition_func.c:11:5:partition_eh_ra	48	static
+partition_func.c:179:10:rep_partition	32	static
+partition_func.c:207:6:create_task_array	32	static
+partition_func.c:359:10:rep_prgs_list	32	static

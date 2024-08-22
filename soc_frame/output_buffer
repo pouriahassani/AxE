@@ -1,0 +1,19 @@
+****************start
+GET_COUNTER_GLOBAL: 
+114298node[0] addres: 2147483776
+node[1] addres: 21474837800: spmvm
+===@@0
+c: 0 0estimations
+
+arch: 0;
+
+exec time of: spmvm
+node id: 1048576
+exec time of: 
+set cnt_diff to: 9691711
+result: 387
+execution time estimations:
+
+arch 0;
+;
+spmvm1048576

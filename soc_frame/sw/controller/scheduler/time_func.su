@@ -1,0 +1,5 @@
+time_func.c:4:6:time_update_global	32	static
+time_func.c:16:6:time_advance	48	static
+time_func.c:30:5:time_reached_cnt_t	32	static
+time_func.c:34:5:time_reached	32	static
+time_func.c:56:14:time_get_cnt_until	32	static

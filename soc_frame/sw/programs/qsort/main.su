@@ -1,0 +1,5 @@
+main.c:61:1:swapfunc	96	static
+main.c:87:1:med3	32	static
+stdlib.h:139:6:qsort	144	static
+main.c:181:5:compare	48	static
+main.c:188:6:my_main	240	static
