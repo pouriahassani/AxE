@@ -1,4 +1,0 @@
-set terminal png
-set output 'final.png'
-
-plot 'final.csv' with linespoints
