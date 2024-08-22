@@ -8,10 +8,9 @@
        and inverse Fourier transforms.
 
 ============================================================================*/
+#ifndef FOURIER_H
+#define FOURIER_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 /*
 **   fft() computes the Fourier transform or inverse transform
@@ -27,23 +26,16 @@ extern "C" {
 **           transforming digital samples of real number data without
 **           wasting memory.
 */
-
-void fft_double (
-    unsigned  NumSamples,          /* must be a power of 2 */
-    int       InverseTransform,    /* 0=forward FFT, 1=inverse FFT */
-    double   *RealIn,              /* array of input's real samples */
-    double   *ImaginaryIn,         /* array of input's imag samples */
-    double   *RealOut,             /* array of output's reals */
-    double   *ImaginaryOut );      /* array of output's imaginaries */
+#include "util.h"
 
 
 void fft_float (
     unsigned  NumSamples,          /* must be a power of 2 */
     int       InverseTransform,    /* 0=forward FFT, 1=inverse FFT */
-    float    *RealIn,              /* array of input's real samples */
-    float    *ImaginaryIn,         /* array of input's imag samples */
-    float    *RealOut,             /* array of output's reals */
-    float    *ImaginaryOut );      /* array of output's imaginaries */
+    uint32_t    *RealIn,              /* array of input's real samples */
+    uint32_t    *ImaginaryIn,         /* array of input's imag samples */
+    uint32_t    *RealOut,             /* array of output's reals */
+    uint32_t    *ImaginaryOut );      /* array of output's imaginaries */
 
 
 int IsPowerOfTwo ( unsigned x );
@@ -57,9 +49,7 @@ unsigned ReverseBits ( unsigned index, unsigned NumBits );
 */
 double Index_to_frequency ( unsigned NumSamples, unsigned Index );
 
-#ifdef __cplusplus
-}
-#endif
 
+#endif
 
 /*--- end of file fourier.h ---*/

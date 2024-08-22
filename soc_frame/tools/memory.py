@@ -166,7 +166,7 @@ class Memory:
                 # that should be high enough
                 # what is the sufficient value for a 128 x 128 image?
                     prg.clean()
-                    prg.compl( "0x01000000" )
+                    prg.compl( "0x00010000" )
                 
                 # a simulation is run with an arg that outputs the memory usage
                 
@@ -199,7 +199,7 @@ class Memory:
                 # that should be high enough
                 # what is the sufficient value for a 128 x 128 image?
                     prg.clean()
-                    prg.compl( "0x01000000" )
+                    prg.compl( "0x00010000" )
                 
                 # a simulation is run with an arg that outputs the memory usage
                 

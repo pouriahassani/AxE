@@ -1,0 +1,3 @@
+bmhisrch.c:42:6:bmhi_init	48	static
+bmhisrch.c:76:7:bmhi_search	48	static
+bmhisrch.c:103:6:bhmi_cleanup	16	static

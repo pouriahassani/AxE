@@ -1,47 +1,36 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-
-int main(int argc, char *argv[]) {
+#include "fourier.h"
+void main() {
 	unsigned MAXSIZE;
 	unsigned MAXWAVES;
 	unsigned i,j;
-	float *RealIn;
-	float *ImagIn;
-	float *RealOut;
-	float *ImagOut;
-	float *coeff;
-	float *amp;
+	uint32_t RealIn[4096];  /*float *RealIn;*/
+	uint32_t ImagIn[4096]; /*float *ImagIn;*/
+	uint32_t RealOut[4096];    /*float *RealOut;*/
+	uint32_t ImagOut[4096];   /*float *ImagOut;*/
+	uint32_t coeff[4096];  /*float *coeff;*/
+	uint32_t amp[4096];/*float *amp;*/
+
+	uint32_t RealIn_i[8192];   /*float *RealIn;*/
+	uint32_t ImagIn_i[8192];   /*float *ImagIn;*/
+	uint32_t RealOut_i[8192];    /*float *RealOut;*/
+	uint32_t ImagOut_i[8192];    /*float *ImagOut;*/
+	uint32_t coeff_i[8192];  /*float *coeff;*/
+	uint32_t amp_i[8192];/*float *amp;*/
 	int invfft=0;
-
-	if (argc<3)
-	{
-		printf("Usage: fft <waves> <length> -i\n");
-		printf("-i performs an inverse fft\n");
-		printf("make <waves> random sinusoids");
-		printf("<length> is the number of samples\n");
-		exit(-1);
-	}
-	else if (argc==4)
-		invfft = !strncmp(argv[3],"-i",2);
-	MAXSIZE=atoi(argv[2]);
-	MAXWAVES=atoi(argv[1]);
-		
- srand(1);
-
- RealIn=(float*)malloc(sizeof(float)*MAXSIZE);
- ImagIn=(float*)malloc(sizeof(float)*MAXSIZE);
- RealOut=(float*)malloc(sizeof(float)*MAXSIZE);
- ImagOut=(float*)malloc(sizeof(float)*MAXSIZE);
- coeff=(float*)malloc(sizeof(float)*MAXWAVES);
- amp=(float*)malloc(sizeof(float)*MAXWAVES);
-
+	MAXSIZE=4096;
+	MAXWAVES=4;
  /* Makes MAXWAVES waves of random amplitude and period */
-	for(i=0;i<MAXWAVES;i++) 
-	{
-		coeff[i] = rand()%1000;
-		amp[i] = rand()%1000;
-	}
+//  printf("\ni is : %d",MAXWAVES);
+  coeff[0] = 0x43bf8000;//int_to_float(383);
+  coeff[1] = 0x44424000;//int_to_float(777);
+  coeff[2] = 0x44464000;//int_to_float(793);
+  coeff[3] = 0x43c10000;//int_to_float(386);
+  amp[0] =   0x445d8000;//int_to_float(886);
+  amp[1] =   0x4464c000;//int_to_float(915);
+  amp[2] =   0x43a78000;//int_to_float(335);
+  amp[3] =   0x43f60000;//int_to_float(492);
+
  for(i=0;i<MAXSIZE;i++) 
  {
    /*   RealIn[i]=rand();*/
@@ -49,38 +38,32 @@ int main(int argc, char *argv[]) {
 	 for(j=0;j<MAXWAVES;j++) 
 	 {
 		 /* randomly select sin or cos */
-		 if (rand()%2)
+		 if (i%2)
 		 {
-		 		RealIn[i]+=coeff[j]*cos(amp[j]*i);
+		 		RealIn[i]+=fpmul(coeff[j],fp_Cos(fpmul(amp[j],int_to_float(i))));
 			}
 		 else
 		 {
-		 	RealIn[i]+=coeff[j]*sin(amp[j]*i);
+		 	RealIn[i]+= fpmul(coeff[j],fp_Sin(fpmul(amp[j],int_to_float(i))));
 		 }
   	 ImagIn[i]=0;
 	 }
  }
 
  /* regular*/
- fft_float (MAXSIZE,invfft,RealIn,ImagIn,RealOut,ImagOut);
+ fft_float (MAXSIZE,0,RealIn,ImagIn,RealOut,ImagOut);
+
+ fft_float (MAXSIZE,1,RealIn,ImagIn,RealOut,ImagOut);
  
  printf("RealOut:\n");
  for (i=0;i<MAXSIZE;i++)
-   printf("%f \t", RealOut[i]);
+   printf("%d \t", RealOut[i]);
  printf("\n");
 
 printf("ImagOut:\n");
  for (i=0;i<MAXSIZE;i++)
-   printf("%f \t", ImagOut[i]);
+   printf("%d \t", ImagOut[i]);
    printf("\n");
-
- free(RealIn);
- free(ImagIn);
- free(RealOut);
- free(ImagOut);
- free(coeff);
- free(amp);
- exit(0);
 
 
 }

@@ -28,7 +28,7 @@ int amul(int rd, int rs1, int rs2)
 }
 
 // The main function has to be called my_main.
-
+//TODO: Could be buggy, as it has been changed a few times and not re-verified in a simulation.
 void my_main()
 {
     // There are a few print functions located in util.h (found in dir _libs).
@@ -43,16 +43,15 @@ void my_main()
     // by the simulation environment (sim_main.cpp under configurations)
     
     print_str( "mul s\n" );
-    
     int a = 333;
     int b = 444;
-    
+
     int pro = 0;
     int pro_appr = 0;
     
-    pro = a * b;
-    pro_appr = amul( pro_appr, a, b );
-    
+    pro = a + b;
+    pro_appr = amul( pro_appr, a, b);
+
     print_str("exact\n");
     print_dec(pro);
     nl();

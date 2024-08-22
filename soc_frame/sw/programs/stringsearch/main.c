@@ -29,6 +29,7 @@ void init_search(const char *string)
       size_t i;
 
       len = strlen(string);
+	//   printf("\nstr llent: %d",len);
       for (i = 0; i <= UCHAR_MAX; i++)                      /* rdg 10/93 */
             table[i] = len;
       for (i = 0; i < len; i++)

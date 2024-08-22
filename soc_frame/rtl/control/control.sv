@@ -10,7 +10,7 @@
 ***************************************************************************** */
 
 // this module can activate the nodes and set the AXI address offsets.
-`define DEBUG_CONTROL
+// `define DEBUG_CONTROL
 module control #()
 (
      input clk
@@ -304,8 +304,8 @@ begin : control_proc
             if ( latched_araddr[ INDEX_PROG         ] == 1'b1 )
             begin
                 
-                // $display( "got read at control: %h", node_sel );
-                // $display( "got read at control: %h", axi_offsets[ node_sel ] );
+                $display( "got read at control: %h", node_sel );
+                $display( "got read at control: %h", axi_offsets[ node_sel ] );
                 
             end
             

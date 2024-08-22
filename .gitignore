@@ -1,0 +1,26 @@
+*.su *.o * *rv32im_main.objdump_table rv32im_main.objdump rv32im_main.hex rv32im_main.elf rv32im_main.bin
+soc_frame/sw/controller/scheduler/util.su
+soc_frame/sw/programs/fpmul/util.su
+soc_frame/sw/programs/msort/util.su
+soc_frame/sw/programs/susan/main.su
+soc_frame/sw/programs/susan/memmgr.su
+soc_frame/sw/programs/telecomm/FFT/fft
+soc_frame/sw/programs/telecomm/FFT/fftmisc.o
+soc_frame/sw/programs/telecomm/FFT/fftmisc.su
+soc_frame/sw/programs/telecomm/FFT/fourierf.o
+soc_frame/sw/programs/telecomm/FFT/fourierf.su
+soc_frame/sw/programs/telecomm/FFT/main.o
+soc_frame/sw/programs/telecomm/FFT/main.su
+soc_frame/sw/programs/telecomm/FFT/memmgr.su
+soc_frame/sw/programs/telecomm/FFT/util.o
+
+_prgs.json
+_prgs_with_controller.json
+no1
+shchexbin.json
+soc_frame/sw/programs/fpmul/main.su
+soc_frame/sw/programs/fpmul/memmgr.su
+soc_frame/sw/programs/msort/main.su
+soc_frame/sw/programs/msort/memmgr.su
+test.hex
+

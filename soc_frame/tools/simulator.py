@@ -76,11 +76,6 @@ class Simulator:
             print(proc.returncode, proc.stderr)
             stdout_l = stdout.split("\n")
             del stdout_l[-1]
-            with open("stout.txt", "w") as file:
-            # Iterate over each element in the list
-                for item in stdout_l:
-                # Write each element to the file
-                    file.write(item + "\n")  # Add a newline after each element
             return stdout_l
             
         

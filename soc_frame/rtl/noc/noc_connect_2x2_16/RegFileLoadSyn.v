@@ -56,7 +56,6 @@ module RegFileLoadSyn
    
    initial
      begin : init_block
-          $display("\n here we also read to memory");
            $readmemh(file, arr, lo, hi);
      end
 

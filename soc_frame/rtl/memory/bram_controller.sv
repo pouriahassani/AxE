@@ -63,7 +63,7 @@ reg done = 1'b0;
 
     `ifdef SIMULATION
         always @(posedge bram_write) begin       
-            // $display("\n0x%08x ==>  0x%08x Write to Bram", bram_wdata, bram_addr); 
+            $display("\n0x%08x ==>  0x%08x Write to Bram", bram_wdata, bram_addr); 
         end
     `endif
 

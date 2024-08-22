@@ -831,18 +831,18 @@ module picorv32 #(
 	end
 `endif
 
-`ifdef DEBUG
-	always @(posedge clk) begin
-		if (dbg_next) begin
-			if (&dbg_insn_opcode[1:0])
-				$display("DECODE Node[%d]: 0x%08x 0x%08x %0s",NODE_ID, dbg_insn_addr, dbg_insn_opcode, dbg_ascii_instr ? dbg_ascii_instr : "UNKNOWN");
-				//~ $display("DECODE: 0x%08x 0x%08x %-0s", dbg_insn_addr, dbg_insn_opcode, dbg_ascii_instr ? dbg_ascii_instr : "UNKNOWN");
-			else
-				$display("DECODE Node[%d]: 0x%08x     0x%04x %0s",NODE_ID, dbg_insn_addr, dbg_insn_opcode[15:0], dbg_ascii_instr ? dbg_ascii_instr : "UNKNOWN");
-				//~ $display("DECODE: 0x%08x     0x%04x %-0s", dbg_insn_addr, dbg_insn_opcode[15:0], dbg_ascii_instr ? dbg_ascii_instr : "UNKNOWN");
-		end
-	end
-`endif
+// `ifdef DEBUG
+// 	always @(posedge clk) begin
+// 		if (dbg_next) begin
+// 			if (&dbg_insn_opcode[1:0])
+// 				$display("DECODE Node[%d]: 0x%08x 0x%08x %0s",NODE_ID, dbg_insn_addr, dbg_insn_opcode, dbg_ascii_instr ? dbg_ascii_instr : "UNKNOWN");
+// 				//~ $display("DECODE: 0x%08x 0x%08x %-0s", dbg_insn_addr, dbg_insn_opcode, dbg_ascii_instr ? dbg_ascii_instr : "UNKNOWN");
+// 			else
+// 				$display("DECODE Node[%d]: 0x%08x     0x%04x %0s",NODE_ID, dbg_insn_addr, dbg_insn_opcode[15:0], dbg_ascii_instr ? dbg_ascii_instr : "UNKNOWN");
+// 				//~ $display("DECODE: 0x%08x     0x%04x %-0s", dbg_insn_addr, dbg_insn_opcode[15:0], dbg_ascii_instr ? dbg_ascii_instr : "UNKNOWN");
+// 		end
+// 	end
+// `endif
 
 	always @(posedge clk) begin
 		is_lui_auipc_jal <= |{instr_lui, instr_auipc, instr_jal};
@@ -1493,9 +1493,7 @@ module picorv32 #(
 				case (1'b1)
 					latched_branch: begin
 						current_pc = latched_store ? (latched_stalu ? alu_out_q : reg_out) & ~1 : reg_next_pc;
-						`ifdef DEBUG
-							`debug($display("ST_RD Node[%d]:  %2d 0x%08x, BRANCH 0x%08x", NODE_ID, latched_rd, reg_pc + (latched_compr ? 2 : 4), current_pc);)
-						`endif
+						`debug($display("ST_RD Node[%d]:  %2d 0x%08x, BRANCH 0x%08x", NODE_ID, latched_rd, reg_pc + (latched_compr ? 2 : 4), current_pc);)
 					end
 					latched_store && !latched_branch: begin
 						`debug($display("ST_RD Node[%d]:  %2d 0x%08x", NODE_ID, latched_rd, latched_stalu ? alu_out_q : reg_out);)

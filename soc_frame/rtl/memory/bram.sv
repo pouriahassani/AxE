@@ -29,7 +29,7 @@ module bram
 // in the log vivado will comment, that it saw the ram_style stuff, but not if
 // this has been achieved or not.
 
-(* ram_style = "block" *) reg[ `AXI_DATA_WIDTH-1:0 ] mem[ `MEM_SIZE ];
+(* ram_style = "block" *) reg[ `AXI_DATA_WIDTH-1:0 ] mem[ `MEM_SIZE-1:0 ];
 
 reg [ 31:0 ] index;
 
@@ -38,8 +38,7 @@ assign index = addr >> 2;
 initial begin
     
     // read the program to a memory array.
-        $display("\nhere we read the program to memory array.");
-
+    
     $readmemh( "/home/user/soc_frame/mem.hex", mem,  0 );
     //~ $readmemh( "../../mem.hex", mem,  0 );
     
