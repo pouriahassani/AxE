@@ -1,6 +1,6 @@
-util.c:3:5:fpmul	48	static
-util.c:14:5:fpmul_approx	48	static
-util.c:25:5:fpadd	48	static
+util.c:4:5:fpmul	48	static
+util.c:15:5:fpmul_approx	48	static
+util.c:26:5:fpadd	48	static
 util.c:35:5:amul	48	static
 util.c:45:5:emul	48	static
 util.c:56:5:fpsub	48	static

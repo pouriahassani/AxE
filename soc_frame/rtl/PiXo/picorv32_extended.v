@@ -440,7 +440,7 @@ module picorv32 #(
 		pcpi_int_wait  = |{ENABLE_PCPI && pcpi_wait,  (ENABLE_MUL || ENABLE_FAST_MUL) && pcpi_mul_wait,  ENABLE_DIV && pcpi_div_wait  , pcpi_mul_approx_wait, pcpi_fpmul_wait, pcpi_fpmul_approx_wait, pcpi_fpdiv_wait, pcpi_fpadd_wait, pcpi_fpsub_wait};
 		pcpi_int_ready = |{ENABLE_PCPI && pcpi_ready, (ENABLE_MUL || ENABLE_FAST_MUL) && pcpi_mul_ready, ENABLE_DIV && pcpi_div_ready , pcpi_mul_approx_ready, pcpi_fpmul_ready, pcpi_fpmul_approx_ready, pcpi_fpdiv_ready, pcpi_fpadd_ready, pcpi_fpsub_ready};
 		if({pcpi_fpadd_ready})
-		$display("in pcpi %d %d %d",ENABLE_PCPI,pcpi_mul_ready,pcpi_fpadd_ready);
+		$display("in pcpi %d %d %d pcpi_int_rd %d pcpi_int_wr %d",ENABLE_PCPI,pcpi_mul_ready,pcpi_fpadd_ready,pcpi_int_rd,pcpi_int_wr);
 		(* parallel_case *)
 		case (1'b1)
 			ENABLE_PCPI && pcpi_ready: begin
@@ -2302,6 +2302,29 @@ module picorv32 #(
 		end
 	end
 `endif
+reg [5:0] pcpi_counter; // Assuming you need a 32-bit counter
+always @(posedge clk) begin
+	$display("current_pc is %d",next_pc);
+	if (!pcpi_valid)
+		pcpi_counter <= 0; // Reset the counter when pcpi_valid is low
+	else begin
+		pcpi_counter <= pcpi_counter + 1; // Increment the counter when pcpi_valid is high
+		if(pcpi_fpadd_ready)
+			$display("pcpi_counter for fpadd is : %d",pcpi_counter);
+		if(pcpi_fpsub_ready)
+			$display("pcpi_counter for fpsub is : %d",pcpi_counter);
+		if(pcpi_fpmul_ready)
+			$display("pcpi_counter for fpmul is : %d",pcpi_counter);
+		if(pcpi_fpdiv_ready)
+			$display("pcpi_counter for fpdiv is : %d",pcpi_counter);
+		// 	// $display("pcpi_counter is : %d AND pcpi_mul_ready %d and pcpi_int_ready %d %d %d %d %d %d %d %d %d %d", pcpi_counter,pcpi_mul_ready,pcpi_int_ready,
+		// 	// ENABLE_PCPI && pcpi_ready, (ENABLE_MUL || ENABLE_FAST_MUL) && pcpi_mul_ready, ENABLE_DIV && pcpi_div_ready 
+		// 	// , pcpi_mul_approx_ready, pcpi_fpmul_ready, pcpi_fpmul_approx_ready, pcpi_fpdiv_ready, pcpi_fpadd_ready, pcpi_fpsub_ready); // Display the counter value
+		// 	$display("pcpi_counter is : %d AND pcpi_mul_ready %d and pcpi_int_ready %d %d %d %d %d %d %d %d %d %d", pcpi_counter,pcpi_mul_ready,pcpi_int_ready,
+		// 	 ENABLE_DIV && pcpi_div_ready); // Display the counter value
+	end
+end
+
 endmodule
 
 // This is a simple example implementation of PICORV32_REGS.
@@ -2360,8 +2383,7 @@ module picorv32_pcpi_mul #(
     end
 
 	always @(posedge clk) begin
-		//$display("\nresetn: %d\tpcpi_wait: %d\tpcpi_wr: %d\tpcpi_rd: %h\tpcpi_ready: %d",
-         //resetn, pcpi_wait, pcpi_wr, pcpi_rd, pcpi_ready);
+
 
 
 			counter <= counter+1;
@@ -2373,6 +2395,8 @@ module picorv32_pcpi_mul #(
 		instr_mulhu <= 0;
 
 		if (resetn && pcpi_valid && pcpi_insn[6:0] == 7'b0110011 && pcpi_insn[31:25] == 7'b0000001) begin
+					//$display("\nresetn: %d\tpcpi_wait: %d\tpcpi_wr: %d\tpcpi_rd: %h\tpcpi_ready: %d",
+         //resetn, pcpi_wait, pcpi_wr, pcpi_rd, pcpi_ready);
 			case (pcpi_insn[14:12])
 				3'b000: instr_mul <= 1;
 				3'b001: instr_mulh <= 1;
@@ -2942,6 +2966,7 @@ module picorv32_pcpi_fpmul(
       begin
         s_input_a_ack <= 1;
 		s_input_b_ack <= 1;
+		pcpi_wait <= 0;
         if (s_input_a_ack && s_input_b_ack && active) begin
 		//   $display("ACTIVE: picorv32_pcpi_fpmul");
 		  s_input_a_ack <= 0;
@@ -3128,10 +3153,14 @@ module picorv32_pcpi_fpmul(
         s_output_z <= z;
 		pcpi_ready <= 1; //TODO: check if this is correct placement
 		pcpi_wait <= 0;
+		pcpi_wr <= 1;
+		pcpi_rd <= z;
         if (s_output_z_stb) begin
 		//   $display("FPMUL Completed.");
 		//   $display("FPMUL internal input a: %h, internal input b: %h, external output z (s_output_z <= z;): %h, internal output z: %h", a, b, s_output_z, z);
           s_output_z_stb <= 0;
+		  pcpi_wr <= 0;
+		  pcpi_ready <= 0;
           state <= get_operands;
         end
       end
@@ -3151,8 +3180,8 @@ module picorv32_pcpi_fpmul(
   end
   // assign input_a_ack = s_input_a_ack;
   // assign input_b_ack = s_input_b_ack;
-  assign pcpi_wr = s_output_z_stb;
-  assign pcpi_rd = s_output_z;
+//   assign pcpi_wr = s_output_z_stb;
+//   assign pcpi_rd = s_output_z;
 endmodule
 
 
@@ -3484,9 +3513,13 @@ module picorv32_pcpi_fpdiv(
         s_output_z <= z;
 		pcpi_ready <= 1; //TODO: check if this is correct placement
 		pcpi_wait <= 0;
+		pcpi_wr <= 1;
+		pcpi_rd <= z;
         if (s_output_z_stb) begin
 	    //   $display("FPDIV Completed.");
 		//   $display("FPDIV input a: %h, input b: %h, output z: %h", pcpi_rs1, pcpi_rs2, s_output_z);
+		pcpi_wr <= 0;
+		pcpi_ready <= 0;
           s_output_z_stb <= 0;
           state <= get_operands;
         end
@@ -3506,8 +3539,8 @@ module picorv32_pcpi_fpdiv(
   end
   // assign input_a_ack = s_input_a_ack;
   // assign input_b_ack = s_input_b_ack;
-  assign pcpi_wr = s_output_z_stb;
-  assign pcpi_rd = s_output_z;
+//   assign pcpi_wr = s_output_z_stb;
+//   assign pcpi_rd = s_output_z;
 endmodule
 
 
@@ -3559,7 +3592,26 @@ module picorv32_pcpi_fpadd(
   reg       a_s, b_s, z_s;
   reg       guard, round_bit, sticky;
   reg       [27:0] sum;
+  reg [8:0]fpadd_counter;
+  always @(posedge clk)
+  	begin
+		if(active)begin
+			// $display("fpadd_couneter is : %d",fpadd_counter);
+			case(state)
+				get_operands:
+					fpadd_counter <= 0;
+				done:
+				begin
+					$display("fpadd_counter is : %d",fpadd_counter);
+					fpadd_counter <= 0;
+				end
 
+				default:
+					fpadd_counter <= fpadd_counter + 1;
+			endcase
+		end
+  		
+    end
   always @(posedge clk)
   begin
 	 //$display("pcpi_insn: %b, pcpi_valid: %b, isactive: %b, pcpi_insn[6:0]: %b, pcpi_insn[31:25]: %b", pcpi_insn, pcpi_valid, active, pcpi_insn[6:0], pcpi_insn[31:25]);
@@ -3769,31 +3821,34 @@ module picorv32_pcpi_fpadd(
 
       put_z:
       begin
-	  $display("FPADD Completed.");
+	  $display("FPADD Completed. result is %d",z);
         s_output_z_stb <= 1;
 		s_output_z <= z;
 		pcpi_ready <= 1; //TODO: check if this is correct placement
 		pcpi_wait <= 0;
 		pcpi_wr <= 1;
-		pcpi_rd <= s_output_z;
+		pcpi_rd <= z;
         if (s_output_z_stb) begin
           s_output_z_stb <= 0;
-          state <= done;
+		  pcpi_ready <= 0; //TODO: check if this is correct placement
+	  	//   pcpi_wait <= 0;
+		  pcpi_wr <= 0;
+		  state <= get_operands;
         end
       end
 	  
-	  done:
-	  begin
-		//$display("FPADD Completed.");
-		//$display("FPADD input a: %h, input b: %h, output z: %h, pcpi_rd: %h, pcpi_wr: %d, pcpi_ready: %d, pcpi_wait: %d, pcpi_valid: %d", 
-         //pcpi_rs1, pcpi_rs2, s_output_z, pcpi_rd, pcpi_wr, pcpi_ready, pcpi_wait, pcpi_valid);
-		 pcpi_ready <= 0;
-		 pcpi_wr <= 1;
-	  	if(active)begin
-		$display("FPADD restrated.");
-			state <= get_operands;
-		end
-	  end
+	//   done:
+	//   begin
+	// 	//$display("FPADD Completed.");
+	// 	//$display("FPADD input a: %h, input b: %h, output z: %h, pcpi_rd: %h, pcpi_wr: %d, pcpi_ready: %d, pcpi_wait: %d, pcpi_valid: %d", 
+    //      //pcpi_rs1, pcpi_rs2, s_output_z, pcpi_rd, pcpi_wr, pcpi_ready, pcpi_wait, pcpi_valid);
+	// 	 pcpi_ready <= 0;
+	// 	 pcpi_wr <= 1;
+	//   	if(active)begin
+	// 	$display("FPADD restrated.");
+	// 		state <= get_operands;
+	// 	end
+	//   end
     endcase
 
     if (resetn == 0) begin
@@ -4077,9 +4132,13 @@ module picorv32_pcpi_fpsub(
 		s_output_z <= z;
 		pcpi_ready <= 1; //TODO: check if this is correct placement
 		pcpi_wait <= 0;
+		pcpi_wr <= 1;
+		pcpi_rd <= z;
         if (s_output_z_stb) begin
 		   $display("FPSUB Completed.");
 		   $display("FPSUB input a: %h, input b: %h, output z: %h", pcpi_rs1, pcpi_rs2, s_output_z);
+		   pcpi_wr <= 0;
+		   pcpi_ready <= 0;
           s_output_z_stb <= 0;
           state <= get_operands;
         end
@@ -4100,8 +4159,8 @@ module picorv32_pcpi_fpsub(
   end
   // assign input_a_ack = s_input_a_ack;
   // assign input_b_ack = s_input_b_ack;
-  assign pcpi_wr = s_output_z_stb;
-  assign pcpi_rd = s_output_z;
+//   assign pcpi_wr = s_output_z_stb;
+//   assign pcpi_rd = s_output_z;
 endmodule
 
 

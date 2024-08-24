@@ -28,6 +28,7 @@ void my_main()
     {
         /* code */
         pro = a*b;
+        pro = fpadd(a,b);
     }
     
     // pro = a * b;

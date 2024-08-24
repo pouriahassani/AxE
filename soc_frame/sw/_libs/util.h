@@ -2,7 +2,6 @@
 #define UTIL_H
 // Define a structure to represent single-precision floating-point numbers
 typedef unsigned int uint32_t;
-
 typedef struct {
     uint32_t value;
 } float32_t;

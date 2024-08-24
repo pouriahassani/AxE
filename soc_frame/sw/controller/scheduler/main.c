@@ -254,14 +254,30 @@ void my_main()
 {
 //     //img_test();
     
-	int i = 5;
-	int j = 6;
-	int k = i*j;
-	int c = fpadd(i,j);
+	int i = 0x40b00000;
+	int j = 0x4318534d;
+	// int i = 5;
+	// int j = 10;
+	print_str( "emul cycle count\n" );
+	int k = emul(i,j);
+	print_str( "fpdiv cycle count\n" );
+	 int c = fpdiv(i,j);
+	print_str( "fpsub cycle count\n" );
+	 c = fpsub(i,j);
+	print_str( "fpadd cycle count\n" );
+	 c = fpadd(i,j);
+	print_str( "fpmul cycle count\n" );
+	 c = fpmul(i,j);
+
 	unsigned int tmp = 0;
 	
 	print_str( "start\n" );
-	
+	print_dec(c);
+	print_str( "\n");
+	print_dec(k);
+	print_str( "\n");
+	k = amul(i,j);
+	print_dec(k);
 	cnt = GET_COUNTER_GLOBAL;
 	print_str( "GET_COUNTER_GLOBAL: \n" );
 	print_dec(GET_COUNTER_GLOBAL);
