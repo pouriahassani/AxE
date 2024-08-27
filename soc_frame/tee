@@ -1,0 +1,83 @@
+make: Entering directory '/home/user/soc_frame/systems/2x2_16_priority_input_approx'
+rm -rf logs obj_dir *.log *.dmp *.vpd core
+make: Leaving directory '/home/user/soc_frame/systems/2x2_16_priority_input_approx'
+make: Entering directory '/home/user/soc_frame/systems/2x2_16_priority_input_approx'
+verilator  -cc --exe --trace  --trace-max-array 20480000 -Wno-fatal -y ../../rtl/noc/noc_connect_16 top.sv sim_main.cpp
+make -j 4 -C obj_dir -f Vtop.mk
+make[1]: Entering directory '/home/user/soc_frame/systems/2x2_16_priority_input_approx/obj_dir'
+g++  -I.  -MMD -I/usr/local/share/verilator/include -I/usr/local/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TRACE=1 -faligned-new -Wno-bool-operation -Wno-sign-compare -Wno-uninitialized -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable -Wno-shadow       -c -o sim_main.o ../sim_main.cpp
+g++  -I.  -MMD -I/usr/local/share/verilator/include -I/usr/local/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TRACE=1 -faligned-new -Wno-bool-operation -Wno-sign-compare -Wno-uninitialized -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable -Wno-shadow       -c -o verilated.o /usr/local/share/verilator/include/verilated.cpp
+g++  -I.  -MMD -I/usr/local/share/verilator/include -I/usr/local/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TRACE=1 -faligned-new -Wno-bool-operation -Wno-sign-compare -Wno-uninitialized -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable -Wno-shadow       -c -o verilated_vcd_c.o /usr/local/share/verilator/include/verilated_vcd_c.cpp
+/usr/bin/perl /usr/local/share/verilator/bin/verilator_includer -DVL_INCLUDE_OPT=include Vtop.cpp Vtop___024unit.cpp Vtop_mkIQRouterCoreSimple.cpp Vtop_if_axi_light.cpp Vtop_if_axi_light__AC4.cpp Vtop_if_connect.cpp Vtop_picorv32_pcpi_mul_approx.cpp > Vtop__ALLcls.cpp
+/usr/bin/perl /usr/local/share/verilator/bin/verilator_includer -DVL_INCLUDE_OPT=include Vtop__Trace.cpp Vtop__Syms.cpp Vtop__Trace__Slow.cpp > Vtop__ALLsup.cpp
+g++  -I.  -MMD -I/usr/local/share/verilator/include -I/usr/local/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TRACE=1 -faligned-new -Wno-bool-operation -Wno-sign-compare -Wno-uninitialized -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable -Wno-shadow       -c -o Vtop__ALLcls.o Vtop__ALLcls.cpp
+g++  -I.  -MMD -I/usr/local/share/verilator/include -I/usr/local/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TRACE=1 -faligned-new -Wno-bool-operation -Wno-sign-compare -Wno-uninitialized -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable -Wno-shadow       -c -o Vtop__ALLsup.o Vtop__ALLsup.cpp
+ar -cr Vtop__ALL.a Vtop__ALLcls.o Vtop__ALLsup.o
+ranlib Vtop__ALL.a
+g++    sim_main.o verilated.o verilated_vcd_c.o Vtop__ALL.a    -o Vtop -lm -lstdc++ 
+make[1]: Leaving directory '/home/user/soc_frame/systems/2x2_16_priority_input_approx/obj_dir'
+make: Leaving directory '/home/user/soc_frame/systems/2x2_16_priority_input_approx'
+make: Entering directory '/home/user/soc_frame/systems/_mem_packer_rv32i'
+rm -rf logs obj_dir *.log *.dmp *.vpd core
+make: Leaving directory '/home/user/soc_frame/systems/_mem_packer_rv32i'
+make: Entering directory '/home/user/soc_frame/systems/_mem_packer_rv32im'
+rm -rf logs obj_dir *.log *.dmp *.vpd core
+make: Leaving directory '/home/user/soc_frame/systems/_mem_packer_rv32im'
+make: Entering directory '/home/user/soc_frame/systems/_mem_packer_rv32i'
+verilator  -cc --exe --trace  --trace-max-array 20480000 -Wno-fatal top.sv sim_main.cpp
+make -j 4 -C obj_dir -f Vtop.mk
+make[1]: Entering directory '/home/user/soc_frame/systems/_mem_packer_rv32i/obj_dir'
+g++  -I.  -MMD -I/usr/local/share/verilator/include -I/usr/local/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TRACE=1 -faligned-new -Wno-bool-operation -Wno-sign-compare -Wno-uninitialized -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable -Wno-shadow       -c -o sim_main.o ../sim_main.cpp
+g++  -I.  -MMD -I/usr/local/share/verilator/include -I/usr/local/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TRACE=1 -faligned-new -Wno-bool-operation -Wno-sign-compare -Wno-uninitialized -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable -Wno-shadow       -c -o verilated.o /usr/local/share/verilator/include/verilated.cpp
+g++  -I.  -MMD -I/usr/local/share/verilator/include -I/usr/local/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TRACE=1 -faligned-new -Wno-bool-operation -Wno-sign-compare -Wno-uninitialized -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable -Wno-shadow       -c -o verilated_vcd_c.o /usr/local/share/verilator/include/verilated_vcd_c.cpp
+/usr/bin/perl /usr/local/share/verilator/bin/verilator_includer -DVL_INCLUDE_OPT=include Vtop.cpp Vtop_if_axi_light.cpp > Vtop__ALLcls.cpp
+/usr/bin/perl /usr/local/share/verilator/bin/verilator_includer -DVL_INCLUDE_OPT=include Vtop__Trace.cpp Vtop__Syms.cpp Vtop__Trace__Slow.cpp > Vtop__ALLsup.cpp
+g++  -I.  -MMD -I/usr/local/share/verilator/include -I/usr/local/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TRACE=1 -faligned-new -Wno-bool-operation -Wno-sign-compare -Wno-uninitialized -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable -Wno-shadow       -c -o Vtop__ALLcls.o Vtop__ALLcls.cpp
+g++  -I.  -MMD -I/usr/local/share/verilator/include -I/usr/local/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TRACE=1 -faligned-new -Wno-bool-operation -Wno-sign-compare -Wno-uninitialized -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable -Wno-shadow       -c -o Vtop__ALLsup.o Vtop__ALLsup.cpp
+ar -cr Vtop__ALL.a Vtop__ALLcls.o Vtop__ALLsup.o
+ranlib Vtop__ALL.a
+g++    sim_main.o verilated.o verilated_vcd_c.o Vtop__ALL.a    -o Vtop -lm -lstdc++ 
+make[1]: Leaving directory '/home/user/soc_frame/systems/_mem_packer_rv32i/obj_dir'
+make: Leaving directory '/home/user/soc_frame/systems/_mem_packer_rv32i'
+make: Entering directory '/home/user/soc_frame/systems/_mem_packer_rv32im'
+verilator  -cc --exe --trace  --trace-max-array 20480000 -Wno-fatal top.sv sim_main.cpp
+make -j 4 -C obj_dir -f Vtop.mk
+make[1]: Entering directory '/home/user/soc_frame/systems/_mem_packer_rv32im/obj_dir'
+g++  -I.  -MMD -I/usr/local/share/verilator/include -I/usr/local/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TRACE=1 -faligned-new -Wno-bool-operation -Wno-sign-compare -Wno-uninitialized -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable -Wno-shadow       -c -o sim_main.o ../sim_main.cpp
+g++  -I.  -MMD -I/usr/local/share/verilator/include -I/usr/local/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TRACE=1 -faligned-new -Wno-bool-operation -Wno-sign-compare -Wno-uninitialized -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable -Wno-shadow       -c -o verilated.o /usr/local/share/verilator/include/verilated.cpp
+g++  -I.  -MMD -I/usr/local/share/verilator/include -I/usr/local/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TRACE=1 -faligned-new -Wno-bool-operation -Wno-sign-compare -Wno-uninitialized -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable -Wno-shadow       -c -o verilated_vcd_c.o /usr/local/share/verilator/include/verilated_vcd_c.cpp
+/usr/bin/perl /usr/local/share/verilator/bin/verilator_includer -DVL_INCLUDE_OPT=include Vtop.cpp Vtop_if_axi_light.cpp > Vtop__ALLcls.cpp
+/usr/bin/perl /usr/local/share/verilator/bin/verilator_includer -DVL_INCLUDE_OPT=include Vtop__Trace.cpp Vtop__Syms.cpp Vtop__Trace__Slow.cpp > Vtop__ALLsup.cpp
+g++  -I.  -MMD -I/usr/local/share/verilator/include -I/usr/local/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TRACE=1 -faligned-new -Wno-bool-operation -Wno-sign-compare -Wno-uninitialized -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable -Wno-shadow       -c -o Vtop__ALLcls.o Vtop__ALLcls.cpp
+g++  -I.  -MMD -I/usr/local/share/verilator/include -I/usr/local/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TRACE=1 -faligned-new -Wno-bool-operation -Wno-sign-compare -Wno-uninitialized -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable -Wno-shadow       -c -o Vtop__ALLsup.o Vtop__ALLsup.cpp
+ar -cr Vtop__ALL.a Vtop__ALLcls.o Vtop__ALLsup.o
+ranlib Vtop__ALL.a
+g++    sim_main.o verilated.o verilated_vcd_c.o Vtop__ALL.a    -o Vtop -lm -lstdc++ 
+make[1]: Leaving directory '/home/user/soc_frame/systems/_mem_packer_rv32im/obj_dir'
+make: Leaving directory '/home/user/soc_frame/systems/_mem_packer_rv32im'
+make: Entering directory '/home/user/soc_frame/sw/programs/susan'
+rm -f main.elf main.bin main.hex main.map *.objdump *.objdump_table *.su *.o rv32*
+make: Leaving directory '/home/user/soc_frame/sw/programs/susan'
+				>>>>>>>>running prgs
+				 programs list: 
+['susan']
+				>>>>>>>>loading config for sim
+				>>>>>>>>pick controller estimations
+				>>>>>>>>create objects
+/home/user/soc_frame/systems/2x2_16_priority_input_approx/
+				>>>>>>>>compiled system
+				>>>>>>>>will run memory compression
+/home/user/soc_frame/systems/_mem_packer_rv32i/
+				>>>>>>>>compiled system i
+/home/user/soc_frame/systems/_mem_packer_rv32im/
+				>>>>>>>>compiled system im
+				>>>>>>>>calling mem.pack_prgs
+pack_prgs
+['rv32im', 'rv32im']
+
+['/home/user/soc_frame/systems/_mem_packer_rv32im/obj_dir/Vtop', '0']
+
+set_hex here
+ /home/user/soc_frame/sw/programs/susan/rv32im_main.hex
+['/home/user/soc_frame/systems/_mem_packer_rv32im/obj_dir/Vtop', '0']
+-6 b''

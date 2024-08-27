@@ -14,7 +14,7 @@ typedef float      TOTAL_TYPE; /* for my PowerPC accelerator only */
 /* ********** Leave the rest - but you may need to remove one or both of sys/file.h and malloc.h lines */
 
 
-#include "./../../_libs/util.h"
+#include "util.h"
 // #define  exit_error(IFB,IFC) { fprintf(stderr,IFB,IFC); exit(0); }
 #define  FTOI(a) ( (a) < 0 ? ((int)(a-0.5)) : ((int)(a+0.5)) )
 typedef  unsigned char uchar;

@@ -60,7 +60,7 @@ reg done = 1'b0;
 initial begin
     
     // read the program to memory array.
-    // $display("\nhere we read the program to memory array.: %d",`MEM_SIZE);
+    // $display("\nhere we read the program to memory array.: %d %d",`MEM_SIZE,`AXI_DATA_WIDTH);
     $readmemh( `MEM_PATH, mem,  0 );
     
     state = IDLE;

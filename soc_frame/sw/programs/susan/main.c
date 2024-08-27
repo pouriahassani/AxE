@@ -285,7 +285,7 @@
 
 /* ********** Optional settings */
 #include "susan.h"
-
+#include "util.h"
 /* }}} */
 /* {{{ usage() */
 
@@ -426,7 +426,7 @@ int   i, j;
 void susan_smoothing(int three_by_three,unsigned int dt,int x_size,int y_size)
 {
 /* {{{ vars */
-
+display_print(0,0,"\n Started susan smoothing");
 unsigned int temp;
 int   n_max, increment, mask_size,
       i,j,x,y,area,brightness,tmp,centre;
@@ -437,7 +437,7 @@ TOTAL_TYPE total;
 // Copy the original data to out array as uchar
 for(i=0;i<7220;i++)
   out[i] = dataIn[i];
-
+display_print(0,0,"\n read dataIn");
 /* }}} */
 
   /* {{{ setup larger image and border sizes */
@@ -452,9 +452,9 @@ for(i=0;i<7220;i++)
     // printf("Mask size (1.5*distance_thresh+1=%d) too big for image (%dx%d).\n",mask_size,x_size,y_size);
     exit(0);
   }
-
+  display_print(0,0,"\n Started enlarge");
   enlarge(&x_size,&y_size,mask_size);
-
+  display_print(0,0,"\n finished emlarge");
 /* }}} */
 
        /* large Gaussian masks */
@@ -467,19 +467,24 @@ for(i=0;i<7220;i++)
   dpt    = dp;
   temp   = fpsub(0,fpmul(dt,dt));
     int l=0;
-  for(i=-mask_size; i<=mask_size; i++)
+  for(i=-mask_size; i<=mask_size; i++){
+    display_print(0,0,"\n first loop ");
+    display_print(1,i,"\n first loop ");
     for(j=-mask_size; j<=mask_size; j++)
     {
       x = fpmul( 0x42c80000 , fp_Exp( fpdiv(((i*i)+(j*j)) , temp )));
       x = cast_Fp_To_Int(x);
       *dpt++ = (unsigned char)x;
     }
+  }
 
 // /* }}} */
 //     /* {{{ main section */
   in  = tmp_image;
   for (i=mask_size;i<y_size-mask_size;i++)
   {
+    display_print(0,0,"\n second loop ");
+    display_print(1,i,"\n first loop ");
     for (j=mask_size;j<x_size-mask_size;j++)
     {
       area = 0;
@@ -1385,31 +1390,38 @@ CORNER_LIST corner_list;
   /* {{{ main processing */
 
   setup_brightness_lut(bt,2);
-  susan_smoothing(three_by_three,dt,76,95);
 
+  susan_smoothing(three_by_three,dt,76,95);
+  display_print(0,0,"\nsusan_smoothing finished");
 //       /* {{{ edges */
 
-      setup_brightness_lut(bt,6);
-
+  setup_brightness_lut(bt,6);
+  display_print(0,0,"\nsetup_brightness_lut finished");
       
-      memset_Char_t (mid,100,x_size * y_size); /* note not set to zero */
+  memset_Char_t (mid,100,x_size * y_size); /* note not set to zero */
+  display_print(0,0,"\nmemset_Char_t finished");
 
-
-        susan_edges(in,r,mid,bp,max_no_edges,x_size,y_size);
+  susan_edges(in,r,mid,bp,max_no_edges,x_size,y_size);
+  display_print(0,0,"\nsusan_edges finished");
     //   if(thin_post_proc)
-        susan_thin(r,mid,x_size,y_size);
-      edge_draw(in,mid,x_size,y_size,drawing_mode);
+
+  susan_thin(r,mid,x_size,y_size);
+  display_print(0,0,"\nsusan_thin finished");
+
+  edge_draw(in,mid,x_size,y_size,drawing_mode);
+ display_print(0,0,"\nedge_draw finished");
 
 
 // /* }}} */
 //       /* {{{ corners */
 
-      setup_brightness_lut(bt,6);
+  setup_brightness_lut(bt,6);
+  display_print(0,0,"\nsetup_brightness_lut finished");
 
 
-          susan_corners(in,r,bp,max_no_corners,corner_list,x_size,y_size);
         // corner_draw(in,corner_list,x_size,drawing_mode);
-
+  susan_corners(in,r,bp,max_no_corners,corner_list,x_size,y_size);
+  display_print(0,0,"\nsusan_corners finished");
 
 
 /* }}} */

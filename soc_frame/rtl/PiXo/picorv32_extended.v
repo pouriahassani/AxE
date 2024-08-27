@@ -264,6 +264,9 @@ module picorv32 #(
 	wire		pcpi_fpsub_wait;
 	wire		pcpi_fpsub_ready;
 
+	// pcpi_Fag ready signal
+	wire		pcpi_flag_ready;
+
 	wire        pcpi_fpmul_wr;
 	wire [31:0] pcpi_fpmul_rd;
 	wire        pcpi_fpmul_wait;
@@ -336,6 +339,15 @@ module picorv32 #(
 	    .pcpi_rd(pcpi_fpsub_rd),
 	    .pcpi_wait(pcpi_fpsub_wait),
 	    .pcpi_ready(pcpi_fpsub_ready)
+	);
+		picorv32_pcpi_flag pcpi_flag (
+	    .clk(clk),
+	    .resetn(resetn),
+	    .pcpi_valid(pcpi_valid),
+	    .pcpi_insn(pcpi_insn),
+		.pcpi_rs1(pcpi_rs1),
+	    .pcpi_rs2(pcpi_rs2),
+	    .pcpi_ready(pcpi_flag_ready)
 	);
 
 	picorv32_pcpi_fpmul pcpi_fpmul (
@@ -438,7 +450,7 @@ module picorv32 #(
 		pcpi_int_rd = 32'bx;
 		//TODO: pcpi_int_wait and pcpi_int_ready may need to be renamed as they do not suggest a more general use of PCPI (!) beyond integer operations. I abuse them as flags to show whether any module on PCPI has wait or ready asserted   
 		pcpi_int_wait  = |{ENABLE_PCPI && pcpi_wait,  (ENABLE_MUL || ENABLE_FAST_MUL) && pcpi_mul_wait,  ENABLE_DIV && pcpi_div_wait  , pcpi_mul_approx_wait, pcpi_fpmul_wait, pcpi_fpmul_approx_wait, pcpi_fpdiv_wait, pcpi_fpadd_wait, pcpi_fpsub_wait};
-		pcpi_int_ready = |{ENABLE_PCPI && pcpi_ready, (ENABLE_MUL || ENABLE_FAST_MUL) && pcpi_mul_ready, ENABLE_DIV && pcpi_div_ready , pcpi_mul_approx_ready, pcpi_fpmul_ready, pcpi_fpmul_approx_ready, pcpi_fpdiv_ready, pcpi_fpadd_ready, pcpi_fpsub_ready};
+		pcpi_int_ready = |{ENABLE_PCPI && pcpi_ready, (ENABLE_MUL || ENABLE_FAST_MUL) && pcpi_mul_ready, ENABLE_DIV && pcpi_div_ready , pcpi_mul_approx_ready, pcpi_fpmul_ready, pcpi_fpmul_approx_ready, pcpi_fpdiv_ready, pcpi_fpadd_ready, pcpi_flag_ready, pcpi_fpsub_ready};
 		if({pcpi_fpadd_ready})
 		$display("in pcpi %d %d %d pcpi_int_rd %d pcpi_int_wr %d",ENABLE_PCPI,pcpi_mul_ready,pcpi_fpadd_ready,pcpi_int_rd,pcpi_int_wr);
 		(* parallel_case *)
@@ -2304,19 +2316,19 @@ module picorv32 #(
 `endif
 reg [5:0] pcpi_counter; // Assuming you need a 32-bit counter
 always @(posedge clk) begin
-	$display("current_pc is %d",next_pc);
+	// $display("current_pc is %d",next_pc);
 	if (!pcpi_valid)
 		pcpi_counter <= 0; // Reset the counter when pcpi_valid is low
 	else begin
 		pcpi_counter <= pcpi_counter + 1; // Increment the counter when pcpi_valid is high
-		if(pcpi_fpadd_ready)
-			$display("pcpi_counter for fpadd is : %d",pcpi_counter);
-		if(pcpi_fpsub_ready)
-			$display("pcpi_counter for fpsub is : %d",pcpi_counter);
-		if(pcpi_fpmul_ready)
-			$display("pcpi_counter for fpmul is : %d",pcpi_counter);
-		if(pcpi_fpdiv_ready)
-			$display("pcpi_counter for fpdiv is : %d",pcpi_counter);
+		// if(pcpi_fpadd_ready)
+		// 	$display("pcpi_counter for fpadd is : %d",pcpi_counter);
+		// if(pcpi_fpsub_ready)
+		// 	$display("pcpi_counter for fpsub is : %d",pcpi_counter);
+		// if(pcpi_fpmul_ready)
+		// 	$display("pcpi_counter for fpmul is : %d",pcpi_counter);
+		// if(pcpi_fpdiv_ready)
+		// 	$display("pcpi_counter for fpdiv is : %d",pcpi_counter);
 		// 	// $display("pcpi_counter is : %d AND pcpi_mul_ready %d and pcpi_int_ready %d %d %d %d %d %d %d %d %d %d", pcpi_counter,pcpi_mul_ready,pcpi_int_ready,
 		// 	// ENABLE_PCPI && pcpi_ready, (ENABLE_MUL || ENABLE_FAST_MUL) && pcpi_mul_ready, ENABLE_DIV && pcpi_div_ready 
 		// 	// , pcpi_mul_approx_ready, pcpi_fpmul_ready, pcpi_fpmul_approx_ready, pcpi_fpdiv_ready, pcpi_fpadd_ready, pcpi_fpsub_ready); // Display the counter value
@@ -2482,6 +2494,7 @@ module picorv32_pcpi_mul #(
 		if (mul_finish && resetn) begin
 			//$display("ACTIVE: couter is : %d picorv32_pcpi_mul rs1 %d rs2 %d pcpi_valid %d pcpi_ready %d pcpi_wr %d pcpi_rd %d",
 			//counter,pcpi_rs1,pcpi_rs2,pcpi_valid,pcpi_ready,pcpi_wr,pcpi_rd);
+			$display("\nMUL called");
 			pcpi_wr <= 1;
 			pcpi_ready <= 1;
 			pcpi_rd <= instr_any_mulh ? rd >> 32 : rd;
@@ -3158,6 +3171,7 @@ module picorv32_pcpi_fpmul(
         if (s_output_z_stb) begin
 		//   $display("FPMUL Completed.");
 		//   $display("FPMUL internal input a: %h, internal input b: %h, external output z (s_output_z <= z;): %h, internal output z: %h", a, b, s_output_z, z);
+		  $display("\nFPMUL called");
           s_output_z_stb <= 0;
 		  pcpi_wr <= 0;
 		  pcpi_ready <= 0;
@@ -3221,8 +3235,8 @@ module picorv32_pcpi_fpmul_approx (
 						// $display("ACTIVE: picorv32_pcpi_fpmul_approx");
                         pcpi_ready <= 1;
                         pcpi_wr <= 1;
-						$display("FPMUL_APPROX Completed.");
-						$display("FPMUL_APPROX input a: %h, input b: %h, external output z: %h", pcpi_rs1, pcpi_rs2, pcpi_rd);
+						// $display("FPMUL_APPROX Completed.");
+						// $display("FPMUL_APPROX input a: %h, input b: %h, external output z: %h", pcpi_rs1, pcpi_rs2, pcpi_rd);
                 end
         end
 endmodule
@@ -3516,8 +3530,9 @@ module picorv32_pcpi_fpdiv(
 		pcpi_wr <= 1;
 		pcpi_rd <= z;
         if (s_output_z_stb) begin
-	    //   $display("FPDIV Completed.");
+	      $display("\nFPDIV called");
 		//   $display("FPDIV input a: %h, input b: %h, output z: %h", pcpi_rs1, pcpi_rs2, s_output_z);
+		
 		pcpi_wr <= 0;
 		pcpi_ready <= 0;
           s_output_z_stb <= 0;
@@ -3832,6 +3847,7 @@ module picorv32_pcpi_fpadd(
           s_output_z_stb <= 0;
 		  pcpi_ready <= 0; //TODO: check if this is correct placement
 	  	//   pcpi_wait <= 0;
+		  $display("\nFPADD called");
 		  pcpi_wr <= 0;
 		  state <= get_operands;
         end
@@ -3878,6 +3894,68 @@ endmodule
 //INFO: This module is identical to the picorv32_pcpi_fpadd module, except for the designated PCPI_FPSUB instruction and the "unpack_and_negate" state, 
 //		which entails an implicit negation in order to perform a subtraction instead of an addition.
 //		This functionality receives a dedicated module to follow the design method of "1 dedicated module per dedicated FP-instruction". 
+
+
+
+module picorv32_pcpi_flag (
+	    input 	clk,
+        input 	resetn,
+		input	[31:0] pcpi_insn,
+		input	[31:0] pcpi_rs1,
+        input	[31:0] pcpi_rs2,
+		input 	pcpi_valid,
+		output 	reg pcpi_ready);
+		  //Internal variables
+  // custom instruction (R-Type) for checkpoint in c code on a PCPI Co-Processor
+  reg [1:0]state;
+  parameter listening = 2'b00;
+  parameter setting = 2'b01;
+
+  wire active = pcpi_valid && pcpi_insn[6:0] == 7'b0001011 && pcpi_insn[31:25] == 7'b0000111;
+
+  wire is_digit = pcpi_insn[12];
+
+  wire [7:0] rs1_char_1 = pcpi_rs2[31:24];
+  wire [7:0] rs1_char_2 = pcpi_rs2[23:16];
+  wire [7:0] rs1_char_3 = pcpi_rs2[15:8];
+  wire [7:0] rs1_char_4 = pcpi_rs2[7:0];
+
+  wire [7:0] rs2_char_1 = pcpi_rs1[31:24];
+  wire [7:0] rs2_char_2 = pcpi_rs1[23:16];
+  wire [7:0] rs2_char_3 = pcpi_rs1[15:8];
+  wire [7:0] rs2_char_4 = pcpi_rs1[7:0];
+
+  always@(posedge clk)begin
+	case(state)
+		listening:begin
+			if(active)begin
+				pcpi_ready <= 1;
+				state <= setting;
+				if(is_digit)begin 
+					$write("%d",pcpi_rs2);
+				end
+				else begin 
+					$write("%c%c%c%c%c%c%c%c",rs1_char_1,rs1_char_2,rs1_char_3,rs1_char_4,rs2_char_1,rs2_char_2,rs2_char_3,rs2_char_4);
+				end
+				
+			end
+			else 
+				pcpi_ready <= 0;
+		end
+
+		setting:begin 
+			state <= listening;
+			pcpi_ready <= 0;
+		end
+  	endcase
+	if(!resetn)begin
+		state <= listening;
+		pcpi_ready <= 0;
+	 end
+  
+  end
+	
+endmodule
 module picorv32_pcpi_fpsub(
 	    input 	clk,
         input 	resetn,
@@ -4135,8 +4213,7 @@ module picorv32_pcpi_fpsub(
 		pcpi_wr <= 1;
 		pcpi_rd <= z;
         if (s_output_z_stb) begin
-		   $display("FPSUB Completed.");
-		   $display("FPSUB input a: %h, input b: %h, output z: %h", pcpi_rs1, pcpi_rs2, s_output_z);
+		   $display("\nFPSUB called");
 		   pcpi_wr <= 0;
 		   pcpi_ready <= 0;
           s_output_z_stb <= 0;

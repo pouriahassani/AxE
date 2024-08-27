@@ -38,7 +38,7 @@ assign index = addr >> 2;
 initial begin
     
     // read the program to a memory array.
-    
+    $display("\n in bram modulke the mem_size is %d",`MEM_SIZE);
     $readmemh( "/home/user/soc_frame/mem.hex", mem,  0 );
     //~ $readmemh( "../../mem.hex", mem,  0 );
     

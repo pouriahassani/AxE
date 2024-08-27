@@ -7,7 +7,7 @@
 #include <time.h>
 #include <signal.h>
 #include <cstdio>
-
+#include <algorithm>
 
 // Include common routines
 #include <verilated.h>
@@ -176,6 +176,15 @@ int main(int argc, char** argv, char** env) {
                     fclose(fd);
                     //  VL_PRINTF( "buffer: ");
                     // VL_PRINTF("%s", buffer);
+                    int flag = 0;
+                    char* sim_end_signal = "Simulation Ended!";
+                    for(int i = 0; i< std::min(17,buffer_index);i++){
+                        if(buffer[i] != sim_end_signal[i])
+                            break;
+                        flag+=1;
+                    }
+                    if(flag == 17)
+                        break;
                     for (size_t i = 0; i < buffer_index -1; i++)
                     {
                         VL_PRINTF("%c", buffer[i]);

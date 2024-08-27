@@ -41,6 +41,11 @@ int amul(int rs1, int rs2);
 __attribute__((noinline))
 int emul(int rs1, int rs2);
 
+__attribute__((noinline))
+void checkprint_str(int rs1, int rs2);
+
+__attribute__((noinline))
+void checkprint_int(int rs1);
 
 __attribute__((noinline))
 int fpdiv(int rs1, int rs2);
@@ -50,6 +55,8 @@ int fpdiv(int rs1, int rs2);
 void signal_fin();
 
 void signal_kill_sim();
+
+void display_print(int is_digit,int value,char* string);
 // -----------------------------------------------------------------------------
 // 
 // P R I N T

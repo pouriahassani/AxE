@@ -1,1 +1,18 @@
-****************emul cycle count
+****************start
+GET_COUNTER_GLOBAL: 
+118452node[0] addres: 2147483776
+node[1] addres: 2147483780
+prg 0: susan
+===arch0
+c: ms
+d: ms
+t: ms
+e: mj
+c_clk_cnt: 0
+t_clk_cnt: 0estimations
+
+arch: 0;
+
+exec time of: susan
+node id: 1048576
+exec time of: 

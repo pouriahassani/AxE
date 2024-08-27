@@ -24,11 +24,16 @@ void my_main()
     int b = 444;
     
     int pro;
+    display_print(0,0,"\nI am here mofossss");
+
     for (n = 0; n < 1; n++)
     {
         /* code */
         pro = a*b;
         pro = fpadd(a,b);
+        display_print(0,0,"\nthe value of pro is ");
+        display_print(1,pro," ");
+
     }
     
     // pro = a * b;

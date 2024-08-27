@@ -1,6 +1,6 @@
 #include "util.h"
 // #include "print.h"
-int fpadd_counter = 0;
+// int fpadd_counter = 0;
 int fpmul(int rs1, int rs2)
 {
     int rd;
@@ -72,6 +72,66 @@ int fpdiv(int rs1, int rs2)
     asm __volatile__ ("addi %0, x10, 0" : "=r" (rd)); //TODO: what is addi? Assembly? May have to be edited to also designate the custom instruction used (PCPI_FPADD)
     
     return rd;
+}
+
+__attribute__((noinline))
+void checkprint_str(int rs1, int rs2)
+{
+    asm __volatile__ (".word 0x0EA5850B\n");
+}
+__attribute__((noinline))
+void checkprint_int(int rs1)
+{
+    asm __volatile__ (".word 0x0EA5950B\n");
+}
+
+void display_print(int is_digit,int value,char* str){
+    int rs1;
+    int rs2;
+    if(is_digit){
+        checkprint_int(value);
+    }
+    else{
+        int i = 0;
+        int j = 0;
+        int k = 0;
+        while(str[i] != '\0'){
+            
+            if(j == 0){
+                rs1 = str[i];
+            }
+            else{
+                if(j == 8){
+                    checkprint_str(rs1,rs2);
+                    rs1 = 0;
+                    rs2 = 0;
+                    j = -1;
+                    i-=1;
+                }
+                else{
+                    if(j < 4){
+                        rs1 <<= 8;
+                        rs1 += str[i];
+                        // printf("\n%c",rs1);
+                    }
+                    else{
+                        if(j==4)
+                            rs2 = str[i];
+                        else{
+                            rs2 <<= 8;
+                            rs2 += str[i];
+                        }
+                        // printf("\n%d %d %c",i,j,rs2);
+                    }
+                }
+
+            }
+            j+=1;
+            i+=1;
+        }
+        if(j!=0)
+            checkprint_str(rs1,rs2);
+    }
 }
 // is now done in the asm file.
 
