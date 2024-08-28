@@ -3311,8 +3311,8 @@ module picorv32_pcpi_fpdiv(
           //   $display("ACTIVE: picorv32_pcpi_fpdiv");
 		  s_input_a_ack <= 0;
           s_input_b_ack <= 0;
-		  a <= pcpi_rs1;
-		  b <= pcpi_rs2;
+		  a <= pcpi_rs2;
+		  b <= pcpi_rs1;
 		  pcpi_wait <= 1; //start of mutli-cycle operation
 		  pcpi_ready <= 0;
           state <= unpack;
@@ -3530,7 +3530,7 @@ module picorv32_pcpi_fpdiv(
 		pcpi_wr <= 1;
 		pcpi_rd <= z;
         if (s_output_z_stb) begin
-	      $display("\nFPDIV called");
+	      $display("\nFPDIV called: %d",pcpi_rd);
 		//   $display("FPDIV input a: %h, input b: %h, output z: %h", pcpi_rs1, pcpi_rs2, s_output_z);
 		
 		pcpi_wr <= 0;
