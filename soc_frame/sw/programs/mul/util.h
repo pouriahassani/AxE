@@ -48,6 +48,9 @@ __attribute__((noinline))
 void checkprint_int(int rs1);
 
 __attribute__((noinline))
+void checkprint_float(int rs1);
+
+__attribute__((noinline))
 int fpdiv(int rs1, int rs2);
 
 // is now done in the asm file.

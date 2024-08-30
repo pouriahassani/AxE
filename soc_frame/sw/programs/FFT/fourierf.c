@@ -19,6 +19,7 @@
 
 #include "ddcmath.h"
 #include "fourier.h"
+#include <stddef.h>
 typedef unsigned int uint32_t;
 
 
@@ -52,7 +53,7 @@ void fft_float (
     {
         j = ReverseBits ( i, NumBits );
         RealOut[j] = RealIn[i];
-        ImagOut[j] =  ImagIn[i];
+        ImagOut[j] = (ImagIn == NULL) ? 0.0 : ImagIn[i];
     }
 
     /*
@@ -70,6 +71,12 @@ void fft_float (
         /*double*/ uint32_t w = fpmul(0x40000000 , cm1);//double w = 2 * cm1;
         /*double*/ uint32_t ar[3], ai[3];// double ar[3], ai[3];
         /*double*/ uint32_t temp;//double temp;
+        // display_print(0,0,"delta_angle: ");display_print(1,delta_angle,"");
+        // display_print(0,0,"sm2: ");display_print(1,sm2,"");
+        // display_print(0,0,"sm1: ");display_print(1,sm1,"");
+        // display_print(0,0,"cm2: ");display_print(1,cm2,"");
+        // display_print(0,0,"cm1: ");display_print(1,cm1,"");
+        // display_print(0,0,"w: ");display_print(1,w,"");
 
         for ( i=0; i < NumSamples; i += BlockSize )
         {
@@ -85,7 +92,7 @@ void fft_float (
                 ar[2] = ar[1];
                 ar[1] = ar[0];
 
-               ai[0] =fpsub(fpmul(w,ai[1]) , ai[2]);//ai[0] = w*ai[1] - ai[2];
+                ai[0] = fpsub(fpmul(w,ai[1]) , ai[2]);//ai[0] = w*ai[1] - ai[2];
                 ai[2] = ai[1];
                 ai[1] = ai[0];
 

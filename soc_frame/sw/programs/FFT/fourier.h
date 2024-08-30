@@ -26,9 +26,8 @@
 **           transforming digital samples of real number data without
 **           wasting memory.
 */
-#include "../../_libs/util.h"
 
-
+#include "util.h"
 void fft_float (
     unsigned  NumSamples,          /* must be a power of 2 */
     int       InverseTransform,    /* 0=forward FFT, 1=inverse FFT */

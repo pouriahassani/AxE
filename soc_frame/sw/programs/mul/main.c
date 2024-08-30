@@ -19,30 +19,33 @@ void my_main()
     // by the simulation environment (sim_main.cpp under configurations)
     
     //~ print_str( "mul s\n" );
-    int n = 0;
-    int a = 333;
-    int b = 444;
-    
-    int pro;
-    display_print(0,0,"\nI am here mofossss");
+    uint32_t PI = 0x40490fdb;
 
-    for (n = 0; n < 1; n++)
-    {
-        /* code */
-        pro = a*b;
-        pro = fpadd(a,b);
-        display_print(0,0,"\nthe value of pro is ");
-        display_print(1,pro," ");
+    fp_Sin(fpsub(0,fpmul(0x40000000,PI)));//-2*pi
+    fp_Sin(fpmul(0xbfc00000,PI));//-3/2*pi
+    fp_Sin(fpmul(0xbf800000,PI));//-*pi
+    fp_Sin(fpmul(0xbf000000,PI));//-1/2*pi
+    fp_Sin(0x00000000);//0
+    fp_Sin(fpmul(0x3f000000,PI));//1/2*pi
+    fp_Sin(PI);//pi
+    fp_Sin(fpmul(0x3fc00000,PI));//3/2*pi
+    fp_Sin(fpmul(0x40000000,PI));//2*pi
 
-    }
-    
-    // pro = a * b;
-    
-    // Printing a decimal number. Note the function nl() to print just a newline
-    // right after it.
-    
-    //~ print_dec(pro);
-    //~ nl();
-    
-    //~ print_str( "mul d\n" );
+    fp_Sin(fpsub(0,fpadd(fpmul(0x3fc00000,PI),fpmul(0x40000000,PI))));//-2*pi-3/2pi
+    fp_Sin(fpadd(fpmul(0x3fc00000,PI),fpmul(0x40000000,PI)));//-2*pi-3/2pi
+
+    fp_Cos(fpsub(0,fpmul(0x40000000,PI)));//-2*pi
+    fp_Cos(fpmul(0xbfc00000,PI));//-3/2*pi
+    fp_Cos(fpmul(0xbf800000,PI));//-*pi
+    fp_Cos(fpmul(0xbf000000,PI));//-1/2*pi
+    fp_Cos(0x00000000);//0
+    fp_Cos(fpmul(0x3f000000,PI));//1/2*pi
+    fp_Cos(PI);//pi
+    fp_Cos(fpmul(0x3fc00000,PI));//3/2*pi
+    fp_Cos(fpmul(0x40000000,PI));//2*pi
+
+    fp_Cos(fpsub(0,fpadd(fpmul(0x40000000,PI),fpmul(0x40000000,PI))));//-2*pi-3/2pi
+    fp_Cos(fpadd(fpmul(0x40000000,PI),fpmul(0x40000000,PI)));//-2*pi-3/2pi
+
+
 }

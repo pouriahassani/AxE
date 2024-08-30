@@ -3913,7 +3913,7 @@ module picorv32_pcpi_flag (
 
   wire active = pcpi_valid && pcpi_insn[6:0] == 7'b0001011 && pcpi_insn[31:25] == 7'b0000111;
 
-  wire is_digit = pcpi_insn[12];
+  wire [1:0]is_digit = pcpi_insn[13:12];
 
   wire [7:0] rs1_char_1 = pcpi_rs2[31:24];
   wire [7:0] rs1_char_2 = pcpi_rs2[23:16];
@@ -3924,18 +3924,28 @@ module picorv32_pcpi_flag (
   wire [7:0] rs2_char_2 = pcpi_rs1[23:16];
   wire [7:0] rs2_char_3 = pcpi_rs1[15:8];
   wire [7:0] rs2_char_4 = pcpi_rs1[7:0];
-
+  wire [63:0] double; // double precision float
+  assign double = {pcpi_rs2[31], pcpi_rs2[30], {3{~pcpi_rs2[30]}}, pcpi_rs2[29:23], pcpi_rs2[22:0], {29{1'b0}}};
   always@(posedge clk)begin
 	case(state)
 		listening:begin
 			if(active)begin
 				pcpi_ready <= 1;
 				state <= setting;
-				if(is_digit)begin 
-					$write("%d",pcpi_rs2);
+				if(is_digit == 1)begin 
+					$write("%f\n",$bitstoreal(double));
 				end
+				if(is_digit == 2)
+					$write("%d",pcpi_rs2);
 				else begin 
-					$write("%c%c%c%c%c%c%c%c",rs1_char_1,rs1_char_2,rs1_char_3,rs1_char_4,rs2_char_1,rs2_char_2,rs2_char_3,rs2_char_4);
+					$write("%c",rs1_char_1);
+					$write("%c",rs1_char_2);
+					$write("%c",rs1_char_3);
+					$write("%c",rs1_char_4);
+					$write("%c",rs2_char_1);
+					$write("%c",rs2_char_2);
+					$write("%c",rs2_char_3);
+					$write("%c",rs2_char_4);
 				end
 				
 			end
@@ -4015,8 +4025,8 @@ module picorv32_pcpi_fpsub(
 		//   $display("ACTIVE: picorv32_pcpi_fpsub");
           s_input_a_ack <= 0;
           s_input_b_ack <= 0;
-		  a <= pcpi_rs1;
-		  b <= pcpi_rs2;
+		  a <= pcpi_rs2;
+		  b <= pcpi_rs1;
 		  pcpi_wait <= 1; //start of mutli-cycle operation
 		  pcpi_ready <= 0;
           state <= unpack_and_negate;

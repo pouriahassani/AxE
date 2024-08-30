@@ -808,42 +808,73 @@ int fp_Cos(int x) {
 // Constants for the polynomial approximation
 
 // Bring x to the range of -pi and pi
-    if(fp_ExtractSign(x) == 0){
-        int y = fpdiv(x,0x40490fdb);
-        y = cast_Fp_To_Int(y);
-        x = fpsub(x,fpmul(y,0X40490fdb));
-    }
-    else{
-        int y = fpdiv(x,0x40490fdb);
-        y = cast_Fp_To_Int(y);
-        x = fpadd(x,fpmul(y,0X40490fdb));  
-    }
-    int A2 = 0xbf000000;//0.333333
-    int A4 = 0x3d2aaaab;
-    int A6 = 0xbab60b61;
 
+    int y = fpdiv(x,0x40490fdb);
+    y = cast_Fp_To_Int(y);
+    y = int_to_float(y);
+    x = fpsub(x,fpmul(y,0x40490fdb));
+
+    int A2 = 0xbf000000;//-0.5
+    int A4 = 0x3d2aaaab;//0.041666668 = 1/24
+    int A6 = 0xbab60b61;//-0.0013888888 = -1/720
+    int A8 = 0x37d00998;//0.0000248 = 1/40320
 
 
     // Compute cos using the polynomial approximation
     int x_2 = fpmul(x, x);
     int x_4 = fpmul(x_2, x_2);
     int x_6 = fpmul(x_4, x_2);
+    int x_8 = fpmul(x_6, x_2);
 
     int term2 = fpmul(x_2, A2);
     int term4 = fpmul(x_4, A4);
     int term6 = fpmul(x_6, A6);
+    int term8 = fpmul(x_8, A8);
 
     int result = x;
     int constant = 0x3f800000; 
     result = fpadd(constant,term2);
     result = fpadd(result,term4);
     result = fpadd(result,term6);
+    result = fpadd(result,term8);
     return result;
 }
 
 uint32_t fp_Sin(uint32_t x){
-    int y = fp_Cos(x);
-    return fp_Sqrt(fpsub(0x3f800000,fpmul(y,y)));// sin(x) = sqrt(1 - cos(x)*cos(x))
+// Constants for the polynomial approximation
+
+// Bring x to the range of -pi and pi
+
+    int y = fpdiv(x,0x40490fdb);
+    y = cast_Fp_To_Int(y);
+    y = int_to_float(y);
+    x = fpsub(x,fpmul(y,0x40490fdb));
+
+    int A1 = 0x3f800000;//1
+    int A3 = 0xbe2aaaab;//-0.1666666667 = -1/6
+    int A5 = 0x3c088889;//0.008333333333 = 1/120
+    int A7 = 0xb9500d01;//-0.000198412698 = -1/5040
+
+
+    // Compute cos using the polynomial approximation
+    int x_1 = x;
+    int x_2 = fpmul(x_1,x_1);
+    int x_3 = fpmul(x_1, x_2);
+    int x_5 = fpmul(x_3, x_2);
+    int x_7 = fpmul(x_5, x_2);
+
+    int term1 = fpmul(x_1, A1);
+    int term3 = fpmul(x_3, A3);
+    int term5 = fpmul(x_5, A5);
+    int term7 = fpmul(x_7, A7);
+
+    int result = x;
+    // int constant = 0x3f800000; 
+    result = fpadd(term1,term3);
+    result = fpadd(result,term5);
+    result = fpadd(result,term7);
+    
+    return result;
 }
 
 // Function to compute the pow(x,y) assuming that y doesnt have integer     
@@ -986,32 +1017,43 @@ int cast_Fp_To_Int(int x){
 }
 
 
-// int_to_float converts int value between certain range to float format 
 uint32_t int_to_float(int x) {
-    uint32_t sign = x < 0 ? 1 : 0;  // Sign bit: 0 for positive, 1 for negative
-    uint32_t abs_x = x < 0 ? -x : x;  // Absolute value of x
-
-    uint32_t exponent = 0;
-    uint32_t fraction = 0;
-    uint32_t y;
-    if (abs_x != 0) {
-        // Determine exponent
-        uint32_t temp = abs_x;
-        temp = temp>>1;
-        // while (temp !=0) {
-        //     exponent++;
-        //     temp = temp>>1;
-        // }
-
-        // Normalize abs_x
-        y = abs_x;
-        abs_x <<= (23 - exponent);
-        exponent += 127;
+    // Handle special case for zero
+    if (x == 0) {
+        return 0;  // IEEE 754 representation of 0 is all bits zero
     }
     
-    // Combine sign, exponent, and fraction to form the floating-point representation
-    uint32_t result = (sign << 31) | (exponent << 23) | (abs_x & (0x7FFFFF));
-    
+    // Step 1: Determine the sign bit
+    uint32_t sign = x < 0 ? 1 : 0;
+
+    // Step 2: Compute the absolute value
+    uint32_t abs_x = x < 0 ? -x : x;
+
+    // Step 3: Find the position of the highest set bit (MSB)
+    uint32_t exponent = 0;
+    uint32_t temp = abs_x;
+    while (temp != 0) {
+        exponent++;
+        temp >>= 1;
+    }
+
+    // Step 4: Normalize the absolute value (shift left to have MSB at the 24th position)
+    uint32_t normalized = abs_x;
+    if (exponent > 0 && exponent <= 24) {
+        normalized = abs_x << (23 - (exponent - 1));
+    }
+
+    if(exponent > 24)
+        normalized = abs_x >> (exponent - 24);
+    // Step 5: Mask the 23 bits of the fraction
+    uint32_t fraction = normalized & 0x7FFFFF; // Mask out the lower 23 bits for fraction
+    // printf("\n%d %u %u %u",x,fraction,exponent,sign);
+    // Step 6: Adjust the exponent with the bias (127)
+    exponent = (exponent - 1) + 127;
+
+    // Step 7: Combine sign, exponent, and fraction to form the floating-point representation
+    uint32_t result = (sign << 31) | (exponent << 23) | fraction;
+
     return result;
 }
 void memset_Char_t(unsigned char* ptr,char value,int size){}
