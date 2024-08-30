@@ -170,11 +170,11 @@ class Memory:
                 
                 # a simulation is run with an arg that outputs the memory usage
                 
-                    memory_usage = sim.run( list(arch_dict.values())[0], prg, [MEM_PACKER_OUTPUT_MEMORY] )
+                    # memory_usage = sim.run( list(arch_dict.values())[0], prg, [MEM_PACKER_OUTPUT_MEMORY] )
                     print("this i memory_usage")
                     print(memory_usage)
-                    sp = prg.get_stack_pointer( memory_usage )
-                
+                    # sp = prg.get_stack_pointer( memory_usage )
+                    sp = '0x4000000'
                 # the program has to be compiled again using the new stack
                 # pointer. this is the program that is then read and stored in
                 # the dict of the memory.
@@ -203,13 +203,13 @@ class Memory:
                 
                 # a simulation is run with an arg that outputs the memory usage
                 
-                    memory_usage = sim.run( list(arch_dict.values())[1], prg, [MEM_PACKER_OUTPUT_MEMORY] )
-                    with open("/home/user/soc_frame/memory_usage.txt", "w") as file:
-                        for item in memory_usage:
-                            file.write(item + "\n")
+                    # memory_usage = sim.run( list(arch_dict.values())[1], prg, [MEM_PACKER_OUTPUT_MEMORY] )
+                    # with open("/home/user/soc_frame/memory_usage.txt", "w") as file:
+                        # for item in memory_usage:
+                            # file.write(item + "\n")
                 
-                    sp = prg.get_stack_pointer( memory_usage )
-                
+                    # sp = prg.get_stack_pointer( memory_usage )
+                    sp = '0x8000000'
                 # the program has to be compiled again using the new stack
                 # pointer. this is the program that is then read and stored in
                 # the dict of the memory.
