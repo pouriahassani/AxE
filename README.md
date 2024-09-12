@@ -18,6 +18,12 @@ docker run -it -v $(pwd):/home/user/ poria19964214/axe:original
 ```
 Using the `-v` option you use a docker volume where the current directory of your local machine is mapped to the `/home/user/` directory of the container. Any changes to this directory are reflected on both sides. 
 
+For use with Docker Desktop and Windows Powershell analogously use 
+```bash
+docker run -it -v ${pwd}:/home/user/ poria19964214/axe:original
+```
+with curly brackets instead.
+
 ## Installation without docker image
 ### Prerequisites
 - Ubuntu 18.04
