@@ -199,7 +199,7 @@ uint32_t extractSign(float32_t a) {
 }
 
 // Helper function to extract the sign bit from a float32_t number
-uint32_t fp_ExtractSign(int a) {
+uint32_t fp_ExtractSign(uint32_t a) {
     return a >> 31;
 }
 
@@ -209,7 +209,7 @@ uint32_t extractExponent(float32_t a) {
 }
 
 // Helper function to extract the exponent bits from a float32_t 	$(CC) -march=$(ARCH) $(CFLAGS) -nostartfiles -o ./$(ARCH)_main.elf $(LINK) ../sp.S -DSTACK_POINTER=$(STACK_POINTER) ../crt0.o ../start.S $(SRC) ./main.cnumber
-uint32_t fp_ExtractExponent(int a) {
+uint32_t fp_ExtractExponent(uint32_t a) {
     return (a >> 23) & 0xFF;
 }
 
@@ -219,7 +219,7 @@ uint32_t extractFraction(float32_t a) {
 }
 
 // Helper function to extract the fraction bits from a float32_t number
-uint32_t fp_ExtractFraction(int a) {
+uint32_t fp_ExtractFraction(uint32_t a) {
     return a & 0x7FFFFF;
 }
 
@@ -576,7 +576,7 @@ float32_t float_asin(float32_t x) {
 }
 
 // Function to compute the inverse sine (asin) using polynomial approximation
-int fp_Asin_simple(int x) {
+uint32_t fp_Asin_simple(uint32_t x) {
     // Constants for the polynomial approximation
 
     int A1 = 0x3fc90da4; // 1.5707288
@@ -608,28 +608,28 @@ int fp_Asin_simple(int x) {
 
 
 // Function to compute the inverse sine (asin) using polynomial approximation
-int fp_Asin(int x) {
+uint32_t fp_Asin(uint32_t x) {
     // Constants for the polynomial approximation
-    int A3 = 0x3e2aaaab;//0.333333
-    int A5 = 0x3d99999a;
-    int A7 = 0x3d36db6e;
-    int A9 = 0x3cf8e38e;
+    uint32_t A3 = 0x3e2aaaab;//0.166666667
+    uint32_t A5 = 0x3d99999a;//0.075
+    uint32_t A7 = 0x3d36db6e;//0.04464285714
+    uint32_t A9 = 0x3cf8e38e;//0.030381944
 
 
 
     // Compute asin using the polynomial approximation
-    int  x_2 = fpmul(x, x);
-    int x_3 = fpmul(x_2, x);
-    int x_5 = fpmul(x_3, x_2);
-    int x_7 = fpmul(x_5, x_2);
-    int x_9 = fpmul(x_7, x_2);
+    uint32_t x_2 = fpmul(x, x);
+    uint32_t x_3 = fpmul(x_2, x);
+    uint32_t x_5 = fpmul(x_3, x_2);
+    uint32_t x_7 = fpmul(x_5, x_2);
+    uint32_t x_9 = fpmul(x_7, x_2);
 
-    int term1 = fpmul(x_3, A3);
-    int term2 = fpmul(x_5, A5);
-    int term3 = fpmul(x_7, A7);
-    int term4 = fpmul(x_9, A9);
+    uint32_t term1 = fpmul(x_3, A3);
+    uint32_t term2 = fpmul(x_5, A5);
+    uint32_t term3 = fpmul(x_7, A7);
+    uint32_t term4 = fpmul(x_9, A9);
 
-    int result = x;
+    uint32_t result = x;
     result = fpadd(x,term1);
     result = fpadd(result,term2);
     result = fpadd(result,term3);
@@ -735,38 +735,80 @@ using follwoing formula:
 your function ==> f(x) for  n < x < m
 f(x) = sqrt(m-n) * g(x/(m-n) - 1) for -1 < x < 1
 */
+uint32_t fp_Sqrt(uint32_t n) {
+  // Max and min are used to take into account numbers less than 1
+  uint32_t lo,hi,mid;
+  uint32_t Const001 = 0x3c23d70a;//0.01
+  uint32_t Const01 = 0x3dcccccd;//0.1
+  uint32_t Const1 = 0x3f800000;//1.0
+  uint32_t Const10 = 0x41200000;//10.0
+  uint32_t Const100 = 0x42c80000;//100.0
+  uint32_t Const2 = 0x40000000;//2.0
 
-int fp_Sqrt(int y) {
+  //Calculate lo 
+  uint32_t tmp_min = fpsub(n,1);
+  if(!fp_ExtractSign(tmp_min))
+    lo = 0x3f800000;//1.0
+  else 
+    lo = n;
+
+  //Calculate hi
+  if(fp_ExtractSign(tmp_min))
+    hi = 0x3f800000;//1.0
+  else 
+    hi = n;
+
+
+  // Update the bounds to be off the target by a factor of 10
+  while(fp_ExtractSign( fpsub(fpmul(fpmul(Const100,lo),lo) , n))) lo = fpmul(lo,Const10);
+  while(!fp_ExtractSign( fpsub(fpmul(fpmul(Const001,hi),hi) , n))) hi = fpmul(hi,Const01);
+
+
+  for(int i = 0 ; i < 100 ; i++){
+      mid = fpdiv(fpadd(lo,hi),Const2);
+      if(fpmul(mid,mid) == n) return mid;
+      if(!fp_ExtractSign(fpsub(fpmul(mid,mid), n))) hi = mid;
+      else lo = mid;
+  }
+  return mid;
+}
+uint32_t fp_Sqrt_x_lt_30(uint32_t y) {
         // Constants for the polynomial approximation
-    int x;
-    int const_15 = 0x41700000;
-    int const_N_one = 0xbf800000;
+        static int counterF = 0;
+    float* yF = &y;
+    if(*yF >30.0){
+        counterF+=1;
+        printf("\n%d %f",counterF,*yF);
+    }
+    uint32_t x;
+    uint32_t const_15 = 0x41700000;
+    uint32_t const_N_one = 0xbf800000;
     x = fpdiv(y,const_15);
     x = fpdiv(x,const_N_one);
-    int Devider = 0x4077dee8;
-    int A1 = 0x3f000000;
-    int A2 = 0xbe000000;//0.333333
-    int A3 = 0x3d800000;
-    int A4 = 0xbd200000;
-    int A5 = 0x3ce00000;
+    uint32_t Devider = 0x4077dee8;
+    uint32_t A1 = 0x3f000000;
+    uint32_t A2 = 0xbe000000;//0.333333
+    uint32_t A3 = 0x3d800000;
+    uint32_t A4 = 0xbd200000;
+    uint32_t A5 = 0x3ce00000;
 
 
 
     // Compute sqrt(x) using the polynomial approximation
-    int x_2 = fpmul(x, x);
-    int x_3 = fpmul(x_2, x);
-    int x_4 = fpmul(x_3, x);
-    int x_5 = fpmul(x_4, x);
+    uint32_t x_2 = fpmul(x, x);
+    uint32_t x_3 = fpmul(x_2, x);
+    uint32_t x_4 = fpmul(x_3, x);
+    uint32_t x_5 = fpmul(x_4, x);
 
 
 
-    int term1 = fpmul(x, A1);
-    int term2 = fpmul(x_2, A2);
-    int term3 = fpmul(x_3, A3);
-    int term4 = fpmul(x_4, A4);
-    int term5 = fpmul(x_5, A5);
-    int result = x;
-    int constant = 0x3f800000; 
+    uint32_t term1 = fpmul(x, A1);
+    uint32_t term2 = fpmul(x_2, A2);
+    uint32_t term3 = fpmul(x_3, A3);
+    uint32_t term4 = fpmul(x_4, A4);
+    uint32_t term5 = fpmul(x_5, A5);
+    uint32_t result = x;
+    uint32_t constant = 0x3f800000; 
     result = fpadd(constant,term1);
     result = fpadd(result,term2);
     result = fpadd(result,term3);
@@ -811,46 +853,67 @@ float32_t float_Cos_Taylor_series(float32_t x) {
 
 
 // Function to compute the cos using polynomial approximation
-int fp_Cos(int x) {
+uint32_t fp_Cos(uint32_t x) {
 // Constants for the polynomial approximation
 // display_print(0,0,"value to enter cosed: ");display_print(1,x,"");
     uint32_t sign = fp_ExtractSign(x);
     if(sign)
         x &= 0x7FFFFFFF;
 // Bring x to the range of -pi and pi
-    int y = fpdiv(x,0x40c90fdb);
+    uint32_t y = fpdiv(x,0x40c90fdb);
     y = cast_Fp_To_Int(y);
     y = int_to_float(y);
     x = fpsub(x,fpmul(y,0x40c90fdb));
+    uint32_t flag_singed_reverse = 0;
+    if(fp_ExtractSign(fpsub(x,0x3fc90fdb))){
+        x = fpsub(0x40490fdb,x);
+        flag_singed_reverse = 1;
+    }
+    else if(fp_ExtractSign(fpsub(0x4096cbe4,x))){
+        x = fpsub(0x4116cbe4,x);
+        flag_singed_reverse = 1;
+    }
+
     x = fpsub(x,0x40490fdb);
     // display_print(0,0,"value to be cosed: ");display_print(1,x,"");
-    int A2 = 0x3f000000;//0.5
-    int A4 = 0xbd2aaaab;//-0.041666668 = -1/24
-    int A6 = 0x3ab60b60;//0.0013888888 = 1/720
-    int A8 = 0xb7d00998;//-0.0000248 = -1/40320
-    int A10 = 0x3493f27e;//0.000000275573192 = 1/3628800
+    uint32_t A2 = 0x3f000000;//0.5
+    uint32_t A4 = 0xbd2aaaab;//-0.041666668 = -1/24
+    uint32_t A6 = 0x3ab60b60;//0.0013888888 = 1/720
+    uint32_t A8 = 0xb7d00998;//-0.0000248 = -1/40320
+    uint32_t A10 = 0x3493f27e;//0.000000275573192 = 1/3628800
+    uint32_t A12 = 0xb2b35479;
 
     // Compute cos using the polynomial approximation
-    int x_2 = fpmul(x, x);
-    int x_4 = fpmul(x_2, x_2);
-    int x_6 = fpmul(x_4, x_2);
-    int x_8 = fpmul(x_6, x_2);
-    int x_10 = fpmul(x_8, x_2);
+    uint32_t x_2 = fpmul(x, x);
+    uint32_t x_4 = fpmul(x_2, x_2);
+    uint32_t x_6 = fpmul(x_4, x_2);
+    uint32_t x_8 = fpmul(x_6, x_2);
+    uint32_t x_10 = fpmul(x_8, x_2);
+    uint32_t x_12 = fpmul(x_10, x_2);
 
-    int term2 = fpmul(x_2, A2);
-    int term4 = fpmul(x_4, A4);
-    int term6 = fpmul(x_6, A6);
-    int term8 = fpmul(x_8, A8);
-    int term10 = fpmul(x_10,A10);
+    uint32_t term2 = fpmul(x_2, A2);
+    uint32_t term4 = fpmul(x_4, A4);
+    uint32_t term6 = fpmul(x_6, A6);
+    uint32_t term8 = fpmul(x_8, A8);
+    uint32_t term10 = fpmul(x_10,A10);
+    uint32_t term12 = fpmul(x_12,A12);
 
-    int result = x;
-    int constant = 0xbf800000; 
+    uint32_t result = x;
+    uint32_t constant = 0xbf800000; 
     result = fpadd(constant,term2);
     result = fpadd(result,term4);
     result = fpadd(result,term6);
     result = fpadd(result,term8);
     result = fpadd(result,term10);
+    result = fpadd(result,term12);
     // display_print(0,0,"cos results ");display_print(1,result,"");
+    if(flag_singed_reverse){
+        if(fp_ExtractSign(result))
+            result &= 0x7FFFFFFF;
+        else
+            result |= 0x80000000;
+    }
+        
     return result;
 }
 
@@ -862,40 +925,47 @@ uint32_t fp_Sin(uint32_t x){
     if(sign)
         x &= 0x7FFFFFFF;
 // Bring x to the range of 0 and 2*pi
-    int y = fpdiv(x,0x40c90fdb);
+    uint32_t y = fpdiv(x,0x40c90fdb);
     y = cast_Fp_To_Int(y);
     y = int_to_float(y);
     x = fpsub(x,fpmul(y,0x40c90fdb));
+    if(fp_ExtractSign(fpsub(x,0x3fc90fdb)))
+        x = fpsub(0x40490fdb,x);
+    else if(fp_ExtractSign(fpsub(0x4096cbe4,x)))
+        x = fpsub(0x4116cbe4,x);
     x = fpsub(x,0x40490fdb);
     // if(sign)
     //     x = fpsub(0,x);
     // display_print(0,0,"value to be sined: ");display_print(1,x,"");
-    int A1 = 0xbf800000;//-1
-    int A3 = 0x3e2aaaab;//0.1666666667 = 1/6
-    int A5 = 0xbc088889;//0.008333333333 = -1/120
-    int A7 = 0x39500d01;//0.000198412698 = 1/5040
-    int A9 = 0xb493f27e;//-0.000000275573192 = -1/3628800
-
+    uint32_t A1 = 0xbf800000;//-1
+    uint32_t A3 = 0x3e2aaaab;//0.1666666667 = 1/6
+    uint32_t A5 = 0xbc088889;//0.008333333333 = -1/120
+    uint32_t A7 = 0x39500d01;//0.000198412698 = 1/5040
+    uint32_t A9 = 0xb493f27e;//-0.000000275573192 = -1/3628800
+    uint32_t A11 = 0x32d7322b;
     // Compute cos using the polynomial approximation
-    int x_1 = x;
-    int x_2 = fpmul(x_1,x_1);
-    int x_3 = fpmul(x_1, x_2);
-    int x_5 = fpmul(x_3, x_2);
-    int x_7 = fpmul(x_5, x_2);
-    int x_9 = fpmul(x_7, x_2);
+    uint32_t x_1 = x;
+    uint32_t x_2 = fpmul(x_1,x_1);
+    uint32_t x_3 = fpmul(x_1, x_2);
+    uint32_t x_5 = fpmul(x_3, x_2);
+    uint32_t x_7 = fpmul(x_5, x_2);
+    uint32_t x_9 = fpmul(x_7, x_2);
+    uint32_t x_11 = fpmul(x_9, x_2);
 
-    int term1 = fpmul(x_1, A1);
-    int term3 = fpmul(x_3, A3);
-    int term5 = fpmul(x_5, A5);
-    int term7 = fpmul(x_7, A7);
-    int term9 = fpmul(x_9, A9);
+    uint32_t term1 = fpmul(x_1, A1);
+    uint32_t term3 = fpmul(x_3, A3);
+    uint32_t term5 = fpmul(x_5, A5);
+    uint32_t term7 = fpmul(x_7, A7);
+    uint32_t term9 = fpmul(x_9, A9);
+    uint32_t term11 = fpmul(x_11, A11);
 
-    int result = x;
+    uint32_t result = x;
     // int constant = 0x3f800000; 
     result = fpadd(term1,term3);
     result = fpadd(result,term5);
     result = fpadd(result,term7);
     result = fpadd(result,term9);
+    result = fpadd(result,term11);
     if(sign)
         result = fpsub(0,result);
     // display_print(0,0,"sin results ");display_print(1,result,"");
@@ -925,7 +995,7 @@ float32_t power(float32_t base, float32_t exponent_t) {
 
 // Function to compute the pow(x,y) using polynomial approximation 
 //  Here we assume that exponent is normalized and not in the denormalized range
-int fp_Pow(int base, int exponent) {
+uint32_t fp_Pow(uint32_t base, uint32_t exponent) {
 
     // if exponent is zero return 1.0
     int result = 0x3f800000;// result  = 1.0
@@ -973,30 +1043,30 @@ int fp_Pow(int base, int exponent) {
 // }
 
 // calculate absolute value of floating point number x
-int fp_Fabs(int x) {
+uint32_t fp_Fabs(uint32_t x) {
     if(fp_ExtractExponent(x))
         x &= 0x7FFFFFFF;
     return x;
 }
 
-int fp_Reg2deg(int x){
+uint32_t fp_Reg2deg(uint32_t x){
     int coeff = 0x3c8ee7a7;
     return fpmul(coeff,x);
 }
 
-int eg2rad(int x){
+uint32_t eg2rad(uint32_t x){
     int coeff = 0x42654ca3;
     return fpmul(coeff,x);
 }
 
-int fp_Acos(int x){
+uint32_t fp_Acos(uint32_t x){
     int Pi_2 = 0x3fc8f5c3;
    return fpsub(Pi_2 , fp_Asin(x));
 }
 
 
 // Function to convert an integer to a string
-void intToString(int num, char* str) {
+void intToString(uint32_t num, char* str) {
     if (num == 0) {
         str[0] = '0';
         str[1] = '\0';
@@ -1024,31 +1094,104 @@ void intToString(int num, char* str) {
     }
 }
 
-int fp_Exp(int x){
-    return x;
+uint32_t fp_Exp(uint32_t x){                                              //|//     double integer = trunc(x);          
+    uint32_t Exponent = fp_ExtractExponent(x);                            //|//     // X is now the fractional part of the number.                                                                    
+    uint32_t Fraction = fp_ExtractFraction(x);                            //|//     x = x - integer;                                       
+    uint32_t Sign = fp_ExtractSign(x);                                //|//                                   
+    uint32_t X_Fraction = 0x3F800000 | (Fraction);          //|//     // Use a 4-part polynomial to approximate exp(x);                                                        
+    uint32_t Integer;
+    uint32_t Decimal_Fraction;
+
+    float* valF = &x;
+
+    // printf("\ninput to exp %f\n",*valF);
+    if(Exponent <127){
+        Integer = 0;
+        Decimal_Fraction = (x & 0x7FFFFFFF);
+    }
+    else if(Exponent>=127 && Exponent <=150){
+        Integer = ((Fraction | 0x800000) >> (150-Exponent));
+        if(Integer > 88){//printf("\nIngeter is big sign is %d",Sign);
+            if(Sign)
+                return 0;
+            else{
+                printf("\nThe fp_exp recieved a very big number");
+                exit(1);
+            }
+        }
+        Decimal_Fraction = Fraction  << (Exponent - 118);
+        Decimal_Fraction >>= (9);
+       
+        int shift = 0;
+        if(Decimal_Fraction != 0){        
+
+        while(!(Decimal_Fraction & 0x400000)){
+            shift+=1;
+            Decimal_Fraction <<=1;
+        }
+        Decimal_Fraction = ((Decimal_Fraction <<1)&0x7FFFFF) | ((127 - shift-1)<<23);
+        }
+    }    
+    else if(Exponent > 150){
+        printf("\nThe fp_exp recieved very big number");
+        exit(1);
+    }    
+    uint32_t A1 = 0x3e8f8857;                                             //|//                      
+    uint32_t A2 = 0x3ed9c12f;                                             //|//     // Use Horner's method to evaluate the polynomial.                     
+    uint32_t A3 = 0x3f81a159;                                             //|     double val = c[3] + x * (c[2] + x * (c[1] + x * (c[0])));                     
+    uint32_t A4 = 0x3f8006dd;                                             //|//     return val * EXP_TABLE[(unsigned)integer + table_zero_idx];                     
+
+    uint32_t expA_1 = fpmul(Decimal_Fraction,A1);
+    uint32_t expA_2 = fpadd(expA_1,A2);
+    uint32_t expA_3 = fpmul(Decimal_Fraction,expA_2);
+    uint32_t expA_4 = fpadd(expA_3,A3);
+    uint32_t expA_5 = fpmul(Decimal_Fraction,expA_4);
+    uint32_t expA_6 = fpadd(expA_5,A4);
+
+    uint32_t expInteger[104] = {  0x3f800000, 0x402df854, 0x40ec7326, 0x41a0af2e, 0x425a6481, 0x431469c5, 0x43c9b6e3, 0x44891443
+                                , 0x453a4f54, 0x45fd38ac, 0x46ac14ee, 0x4769e224, 0x481ef0b3, 0x48d805ad, 0x4992cd62, 0x4a478665
+                                , 0x4b07975f, 0x4bb849a4, 0x4c7a7910, 0x4d2a36c8, 0x4de75844, 0x4e9d3710, 0x4f55ad6e, 0x5011357a
+                                , 0x50c55bfe, 0x51861e9d, 0x52364993, 0x52f7c118, 0x53a85dd2, 0x5464d572, 0x551b8238, 0x55d35bb3
+                                , 0x568fa1fe, 0x5743379a, 0x5804a9f1, 0x58b44f11, 0x597510ad, 0x5a2689fe, 0x5ae2599a, 0x5b99d21f
+                                , 0x5c51106a, 0x5d0e12e4, 0x5dc1192b, 0x5e833952, 0x5f325a0e, 0x5ff267bb, 0x60a4bb3e, 0x615fe4a9
+                                , 0x621826b5, 0x62cecb81, 0x638c881f, 0x643f009e, 0x6501ccb3, 0x65b06a7b, 0x666fc62d, 0x6722f184
+                                , 0x67dd768b, 0x68967ff0, 0x694c8ce5, 0x6a0b01a3, 0x6abcede5, 0x6b806408, 0x6c2e804a, 0x6ced2bef
+                                , 0x6da12cc1, 0x6e5b0f2e, 0x6f14ddc1, 0x6fca5487, 0x70897f64, 0x713ae0ee, 0x71fdfe91, 0x72ac9b6a
+                                , 0x736a98ec, 0x741f6ce9, 0x74d8ae7f, 0x7593401c, 0x76482254, 0x77080156, 0x77b8d9aa, 0x787b3ccf
+                                , 0x792abbce, 0x79e80d11, 0x7a9db1ed, 0x7b56546b, 0x7c11a6f5, 0x7cc5f63b, 0x7d86876d, 0x7e36d809
+                                , 0x7ef882b7, 0x7f800000, 0x7f800000, 0x7f800000, 0x7f800000, 0x7f800000, 0x7f800000, 0x7f800000
+                                , 0x7f800000, 0x7f800000, 0x7f800000, 0x7f800000, 0x7f800000, 0x7f800000, 0x7f800000, 0x7f800000};
+    
+    uint32_t result = fpmul(expInteger[Integer],expA_6);
+    if(Sign)
+        return fpdiv(0x3f800000,result);
+    return result;
 }
 // Casting float to integer. if x is greater than the range of integer the result is invalid
 // This is equivalent of (int)x where x is a float
-int cast_Fp_To_Int(int x){
+int cast_Fp_To_Int(uint32_t x){
     uint32_t S = fp_ExtractSign(x);
     uint32_t F = fp_ExtractFraction(x);
     uint32_t E = fp_ExtractExponent(x);
     int exponent = E - 127; 
-    int result = F | 0x800000;
-
+    uint32_t result = F | 0x800000;
+// float* xf = &x;printf("\nin cast %f %d %u",*xf, exponent,F);
     if (exponent >= 23) {
         result <<= (exponent - 23);  // Shift left if exponent is larger
     } else if (exponent >= 0) {
         result >>= (23 - exponent);  // Shift right if exponent is smaller
     } else {
-        result = 0;  // If the exponent is too small, the result is 0 (as integer)
+          // If the exponent is too small, the result is 0 (as integer)
+        return 0;
     }
 
     // Apply the sign bit
+    
+    int result_int = result;
     if (S) {
-        result = -result;
+        result_int = -1*(int)result;
     }
-    return result;
+    return result_int;
 }
 
 
@@ -1062,7 +1205,7 @@ uint32_t int_to_float(int x) {
     uint32_t sign = x < 0 ? 1 : 0;
 
     // Step 2: Compute the absolute value
-    uint32_t abs_x = x < 0 ? -x : x;
+    uint32_t abs_x = sign ? -x : x;
 
     // Step 3: Find the position of the highest set bit (MSB)
     uint32_t exponent = 0;
@@ -1091,8 +1234,77 @@ uint32_t int_to_float(int x) {
 
     return result;
 }
-void memset_Char_t(unsigned char* ptr,char value,int size){}
+void memset_Char_t(unsigned char* ptr,char value,uint32_t size){}
 
-void memset_Int_t(int* ptr,int value,int size){}
+void memset_Int_t(uint32_t* ptr,uint32_t value,uint32_t size){}
 
 
+
+
+// uint32_t call_fpmul_py_CAPI(uint32_t RS1,uint32_t RS2){
+//     float *af = &RS1;
+//     float *bf = &RS2;
+//     // printf("\na = %f, b = %f",*af,*bf);
+//    // Set PYTHONPATH TO working directory
+//     setenv("PYTHONPATH", ".", 1);
+//     unsigned int result;
+//     PyObject *pName, *pModule, *pDict, *pFunc, *pArgs, *pResult;
+
+//     // Initialize the Python Interpreter
+//     Py_Initialize();
+
+//     // Build the name object
+//     pName = PyUnicode_FromString("AFPM");
+
+//     // Load the module object
+//     pModule = PyImport_Import(pName);
+
+//     // Check if the module was loaded successfully
+//     if (pModule != NULL) {
+//         // pDict is a borrowed reference 
+//         pDict = PyModule_GetDict(pModule);
+
+//         // pFunc is also a borrowed reference 
+//         pFunc = PyDict_GetItemString(pDict, "AFPM");
+
+//         if (PyCallable_Check(pFunc)) {
+//             // Prepare the arguments (two unsigned integers)
+//             pArgs = Py_BuildValue("(II)", RS1, RS2);
+
+//             // Call the Python function with the arguments
+//             pResult = PyObject_CallObject(pFunc, pArgs);
+
+//             // Check for errors in the function call
+//             if (pResult != NULL) {
+//                 // Convert the result back to an unsigned int
+//                 result = (unsigned int)PyLong_AsUnsignedLong(pResult);
+//                 // printf("Result is %u\n", result);
+
+//                 // Decrement the reference count for the result
+//                 Py_DECREF(pResult);
+//             } else {
+//                 PyErr_Print();
+//             }
+
+//             // Decrement the reference count for the arguments
+//             Py_DECREF(pArgs);
+//         } else {
+//             PyErr_Print();
+//         }
+
+//         // Decrement the reference count for the module and name objects
+//         Py_DECREF(pModule);
+//         Py_DECREF(pName);
+//     } else {
+//         PyErr_Print();
+//     }
+
+//     // Finish the Python Interpreter
+//     Py_Finalize();
+//     return result;
+// }
+
+void pr_uint32(char space,uint32_t x){
+    float *y = &x;
+    printf("%c%5.20f",space,*y); 
+}
