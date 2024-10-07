@@ -1,0 +1,27 @@
+\begin{table*}[!t] % Priority to place the figure: b=Bottom, t=Top, h=Her
+    \renewcommand{\arraystretch}{1.75}
+    \centering
+    \caption{Task-set}
+    \label{tab_task_set}
+\begin{tabular}{|c|cc|c|cc|c|}
+\hline
+\multirow{2}{*}{Program} & \multirow{2}{*}{Multiplication Data-Type} & \multirow{2}{*}{Multiplication error-tolerant} & \multicolumn{2}{c|}{Execution time $C_i$ in ms} & \multirow{2}{*}{Difference in ms}&  \multicolumn{2}{c|}{Energy Consumption in mj} & \multirow{2}{*}{Difference in mj} \\ \cline{4-5} \cline{7-8}
+                    & exact            & approx        &                & exact           & approx      & \\ \hline      \hline
+FFT               & Float           &  \checkmark   & 709308.24         & 709308.24     & 0              & 6533.438199     & 6221.342573 & 312.0956256      \\ \hline           
+Susan             & Int and Float   &  \checkmark   & 146710.00         & 144603.93     & 2103.07        & 1331.946799     & 1268.32107  & 63.6257292       \\ \hline           
+BasicMath         & None            &  \times       & 55010             & 55010         & 0              & 506.69711       & 482.49271   & 24.2044          \\ \hline           
+Stringsearch      & None            &  --           & 530               & 530           & 0              & 4.88183         & 4.64863     & 0.2332           \\ \hline           
+CRC32             & None            &  --           & 23686             & 23686         & 0              & 218.171746      & 207.749906  & 10.42184         \\ \hline           
+AES               & Int             &  --           & 1651.60           & 1651.60       & 0              & 15.2128876      & 14.4861836  & 0.726704         \\ \hline           
+Blowfish          & Int             &  --           & 397.57            & 397.57        & 0              & 3.66201727      & 3.48708647  & 0.1749308        \\ \hline           
+Dhrystone         & Int             &  \checkmark   & 26.63             & 26.52         & 0.12           & 0.24427572      & 0.23260692  & 0.0116688        \\ \hline           
+Grayscale         & Int             &  \checkmark   & 89.83             & 25.55         & 64.28          & 0.23534105      & 0.22409905  & 0.011242         \\ \hline           
+Msort             & Int             &  --           & 21.45             & 21.45         & 0              & 0.19757595      & 0.18813795  & 0.009438         \\ \hline           
+Norx              & Int             &  --           & 57.09             & 57.09         & 0              & 0.52585599      & 0.50073639  & 0.0251196        \\ \hline           
+Primes            & Int             &  --           & 2.69              & 2.69          & 0              & 0.02477759      & 0.02359399  & 0.0011836        \\ \hline           
+Qsort             & Int             &  \times       & 26.93             & 5.22          & 21.71          & 0.04808142      & 0.04578462  & 0.0022968        \\ \hline           
+Sha256            & Int             &  \times       & 50.50             & 50.44         & 0.06           & 0.46460284      & 0.44240924  & 0.0221936        \\ \hline           
+Sharpen           & Int             &  \checkmark   & 95.57             & 78.07         & 17.50          & 0.71910277      & 0.68475197  & 0.0343508        \\ \hline           
+Square\_mmult     & Int             &  \checkmark   & 9.61              & 7.67          & 1.94           & 0.07064837      & 0.06727357  & 0.0033748        \\ \hline           
+\end{tabular}
+\end{table*}
